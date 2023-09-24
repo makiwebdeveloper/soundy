@@ -1,5 +1,16 @@
+import MusicPlayer from "@/components/music-player";
+import Sidebar from "@/components/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { PropsWithChildren } from "react";
 
 export default function SiteLayout({ children }: PropsWithChildren) {
-  return <main>{children}</main>;
+  return (
+    <main>
+      <article className="fixed top-0 md:top-[45%] md:translate-y-[-50%] left-0 md:left-[50%] md:translate-x-[-50%] w-full md:w-[750px] lg:w-[900px] 2xl:w-[1200px] h-[calc(100vh-80px)] md:h-[400px] lg:h-[500px] 2xl:h-[700px] flex bg-white/20 dark:bg-black/20 md:border border-white/40 dark:border-black/40 backdrop-blur-md md:rounded-3xl">
+        <Sidebar />
+        <ScrollArea>{children}</ScrollArea>
+      </article>
+      <MusicPlayer />
+    </main>
+  );
 }
