@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { findProfileByUserId } from "./services/profiles.service";
 
 export default authMiddleware({
-  publicRoutes: ["/api/uploadthing"],
+  publicRoutes: ["/api/:path*"],
   async afterAuth(auth, req, evt) {
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: req.url });

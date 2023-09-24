@@ -2,10 +2,9 @@
 
 import "@uploadthing/react/styles.css";
 
+import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { UploadDropzone } from "@/utils/uploadthing";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -14,8 +13,13 @@ import {
 } from "@/lib/validators/profile";
 import ProfileImageUploader from "../uploaders/profile-image-uploader";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CreateProfileForm() {
+  const router = useRouter();
+  const { toast } = useToast();
+
   const form = useForm<CreateProfileValidatorType>({
     resolver: zodResolver(createProfileValidator),
     defaultValues: {
@@ -25,7 +29,19 @@ export default function CreateProfileForm() {
   });
 
   async function onSubmit(values: CreateProfileValidatorType) {
-    console.log(values);
+    try {
+      await axios.post("/api/profiles", { ...values });
+      toast({
+        title: "Successfully created profile",
+        variant: "success",
+      });
+      router.push("/");
+    } catch (error) {
+      toast({
+        title: "Failed to create profile",
+        variant: "destructive",
+      });
+    }
   }
 
   return (

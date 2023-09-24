@@ -7,8 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getCurrentProfile } from "@/services/profiles.service";
+import { redirect } from "next/navigation";
 
-export default function CreateProfile() {
+export default async function CreateProfile() {
+  const profile = await getCurrentProfile();
+
+  if (profile) {
+    redirect("/");
+  }
+
   return (
     <>
       <main className="w-full h-screen flex-center">
@@ -24,7 +32,7 @@ export default function CreateProfile() {
           </CardContent>
         </Card>
       </main>
-      <div className="absolute bottom-10 right-10">
+      <div className="absolute top-5 right-5 sm:top-10 sm:right-10">
         <ModeToggle />
       </div>
     </>
