@@ -1,7 +1,7 @@
 "use client";
 
 import { PropsWithChildren } from "react";
-import { useMount } from "@/hooks/useMount";
+import { useMount } from "@/hooks/use-mount";
 import Loader from "@/components/loader";
 
 export default function AuthLayout({ children }: PropsWithChildren) {
