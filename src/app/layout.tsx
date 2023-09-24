@@ -1,3 +1,5 @@
+import Providers from "@/components/providers";
+import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/cn";
 import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -33,7 +35,8 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={cn(inter.className, "relative h-screen text-white")}>
           <div className="fixed z-[-1] top-0 left-0 w-full h-screen bg-background bg-no-repeat bg-center bg-cover bg-fixed scale-[1.1]"></div>
-          {children}
+          <Providers>{children}</Providers>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
