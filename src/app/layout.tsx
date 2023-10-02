@@ -1,13 +1,16 @@
-import Providers from "@/components/providers";
-import { Toaster } from "@/components/ui/toaster";
-import { cn } from "@/lib/cn";
 import "@/styles/globals.css";
+import Providers from "@/components/providers";
+import type { Metadata } from "next";
+import { cn } from "@/lib/cn";
+import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Poppins({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Soundy",

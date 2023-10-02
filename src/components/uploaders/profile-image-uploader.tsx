@@ -1,5 +1,6 @@
+"use client";
+
 import { UploadDropzone } from "@/utils/uploadthing";
-import { uploaderAppearance } from "./utils";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { Button } from "../ui/button";
@@ -20,7 +21,17 @@ export default function ProfileImageUploader({ image, setImage }: Props) {
   const dropzone = (
     <UploadDropzone
       endpoint="profileImage"
-      appearance={uploaderAppearance}
+      appearance={{
+        container:
+          "transition p-10 mt-1 cursor-pointer border border-dashed rounded-3xl border-white/40 dark:border-black/60 bg-white/10 dark:bg-black/20 hover:bg-white/20 dark:hover:bg-black/30 group",
+        uploadIcon: "transition text-white/50 group-hover:text-white w-20 h-20",
+        label: "transition text-white/40 group-hover:text-white",
+        allowedContent: "transition text-white/20 group-hover:text-white/60",
+        button: "bg-white/30 dark:bg-black/40 mt-2 px-4",
+      }}
+      content={{
+        label: "Choose profile image or drag and drop",
+      }}
       onClientUploadComplete={(res) => {
         if (res) {
           if (res.length > 1) {
@@ -33,13 +44,14 @@ export default function ProfileImageUploader({ image, setImage }: Props) {
             setImage(res[0].url);
             toast({
               title: "Success",
-              description: "Your image was uploading",
+              description: "Your image was uploaded",
               variant: "success",
             });
           }
         }
       }}
       onUploadError={(error) => {
+        setImage("");
         toast({
           title: "Something went wrong",
           description: "Try again and make sure you upload only one image",
@@ -56,7 +68,7 @@ export default function ProfileImageUploader({ image, setImage }: Props) {
           src={image}
           fill
           alt="profile image"
-          className="peer/image object-cover rounded-full bg-white/20"
+          className="peer/image object-cover rounded-full bg-white/20 dark:bg-black/20"
         />
         <Button
           onClick={remove}
