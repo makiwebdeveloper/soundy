@@ -29,7 +29,7 @@ export default function SidebarItems({ profileId, className }: Props) {
               }),
               "justify-start gap-2",
               pathname === item.path &&
-                "bg-white/20 dark:bg-black/50 hover:bg-white/20 dark:hover:bg-black/50"
+                "bg-white/20 dark:bg-black/60 hover:bg-white/20 dark:hover:bg-black/50"
             )}
           >
             <item.icon className="w-5 h-5" /> {item.title}

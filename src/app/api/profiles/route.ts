@@ -1,4 +1,4 @@
-import { createProfileValidator } from "@/lib/validators/profile";
+import { createProfileValidator } from "@/lib/validators/profiles";
 import {
   createProfile,
   findProfileByUserId,

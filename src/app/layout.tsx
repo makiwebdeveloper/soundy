@@ -37,7 +37,7 @@ export default function RootLayout({
     >
       <html lang="en" suppressHydrationWarning>
         <body className={cn(inter.className, "relative h-screen text-white")}>
-          <div className="fixed z-[-1] top-0 left-0 w-full h-screen bg-background bg-no-repeat bg-center bg-cover bg-fixed scale-[1.1]"></div>
+          <div className="fixed z-[-1] top-0 left-0 w-full h-screen bg-background-2 bg-no-repeat bg-center bg-cover bg-fixed scale-[1.1]"></div>
           <Providers>{children}</Providers>
           <Toaster />
         </body>

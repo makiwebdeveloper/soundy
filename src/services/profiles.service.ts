@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
-import { CreateProfileValidatorType } from "@/lib/validators/profile";
+import { CreateProfileValidatorType } from "@/lib/validators/profiles";
 import { auth } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
 

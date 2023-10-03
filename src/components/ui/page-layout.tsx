@@ -31,7 +31,9 @@ interface TitleProps {
 
 export function PageTitle({ children, className }: TitleProps) {
   return (
-    <h1 className={cn("text-2xl font-semibold", className)}>{children}</h1>
+    <h1 className={cn("text-2xl 2xl:text-4xl font-semibold", className)}>
+      {children}
+    </h1>
   );
 }
 
