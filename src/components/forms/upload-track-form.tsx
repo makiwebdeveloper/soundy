@@ -23,6 +23,9 @@ import { Combobox } from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 interface Props {
   track: AudioFileType;
@@ -30,6 +33,8 @@ interface Props {
 }
 
 export default function UploadTrackForm({ track, cancel }: Props) {
+  const { toast } = useToast();
+
   const form = useForm<UploadTrackValidatorType>({
     resolver: zodResolver(uploadTrackValidator),
     defaultValues: {
@@ -43,12 +48,33 @@ export default function UploadTrackForm({ track, cancel }: Props) {
   });
   const [customGenre, setCustomGenre] = useState("");
 
-  function onSubmit(values: UploadTrackValidatorType) {
+  const { mutateAsync: createTrack, isLoading } = useMutation({
+    mutationFn: async (data: UploadTrackValidatorType) => {
+      const res = await axios.post<{ trackId: number }>("/api/tracks", data);
+      return res;
+    },
+
+    onSuccess: (data) => {
+      toast({
+        title: "Successfully created track",
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Failed track creation",
+        variant: "destructive",
+      });
+    },
+  });
+
+  async function onSubmit(values: UploadTrackValidatorType) {
     const data: UploadTrackValidatorType = {
       ...values,
       genre: values.genre === "Custom" ? customGenre : values.genre,
     };
-    alert(JSON.stringify(data, null, 2));
+    const res = await createTrack(data);
+    console.log("RES", res.data.trackId);
   }
 
   return (
@@ -171,7 +197,9 @@ export default function UploadTrackForm({ track, cancel }: Props) {
         />
         <div className="flex gap-2 justify-end">
           <CancelUploadDialog cancel={cancel} />
-          <Button variant="secondary">Upload</Button>
+          <Button variant="secondary" loading={isLoading}>
+            Upload
+          </Button>
         </div>
       </form>
     </Form>
