@@ -28,6 +28,6 @@ export default function Upload() {
   if (type === "track") {
     return <UploadTrackForm track={audioFiles[0]} cancel={cancel} />;
   } else {
-    return <UploadAlbumForm tracks={audioFiles} />;
+    return <UploadAlbumForm audioFiles={audioFiles} cancel={cancel} />;
   }
 }

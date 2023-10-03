@@ -30,7 +30,7 @@ export default function TrackImageUploader({ image, setImage }: Props) {
         button: "bg-white/30 dark:bg-black/40 mt-2 px-4",
       }}
       content={{
-        label: `Choose track image or drag and drop`,
+        label: `Choose image or drag and drop`,
       }}
       onClientUploadComplete={(res) => {
         if (res) {
