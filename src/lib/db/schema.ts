@@ -30,9 +30,14 @@ export const tracks = pgTable("tracks", {
   isPublic: boolean("is_public").notNull(),
   audioUrl: text("audio_url").notNull(),
 
+  position: integer("position"),
+
   profileId: integer("profile_id")
     .references(() => profiles.id, { onDelete: "cascade" })
     .notNull(),
+  albumId: integer("album_id").references(() => albums.id, {
+    onDelete: "cascade",
+  }),
 });
 
 export const tracksRelations = relations(tracks, ({ one }) => ({
@@ -40,4 +45,29 @@ export const tracksRelations = relations(tracks, ({ one }) => ({
     fields: [tracks.profileId],
     references: [profiles.id],
   }),
+  album: one(albums, {
+    fields: [tracks.albumId],
+    references: [albums.id],
+  }),
+}));
+
+/****************** ALBUMS ******************/
+export const albums = pgTable("albums", {
+  id: serial("id").primaryKey(),
+  imageUrl: text("image_url").notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: text("description"),
+  genre: varchar("genre", { length: 256 }),
+
+  profileId: integer("profile_id")
+    .references(() => profiles.id, { onDelete: "cascade" })
+    .notNull(),
+});
+
+export const albumsRelations = relations(albums, ({ one, many }) => ({
+  profile: one(profiles, {
+    fields: [albums.profileId],
+    references: [profiles.id],
+  }),
+  tracks: many(tracks),
 }));

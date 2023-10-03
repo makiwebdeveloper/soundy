@@ -5,6 +5,8 @@ import { UploadTrackValidatorType } from "@/lib/validators/tracks";
 export async function createTrack(
   data: UploadTrackValidatorType & {
     profileId: number;
+    position?: number;
+    albumId?: number;
   }
 ) {
   try {
@@ -16,6 +18,8 @@ export async function createTrack(
       imageUrl,
       audioUrl,
       profileId,
+      position,
+      albumId,
     } = data;
 
     const dbTrack = await db
@@ -28,6 +32,8 @@ export async function createTrack(
         imageUrl,
         audioUrl,
         profileId,
+        position,
+        albumId,
       })
       .returning({ trackId: tracks.id });
 

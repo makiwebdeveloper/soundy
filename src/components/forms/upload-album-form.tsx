@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { genres } from "@/utils/default-genres";
@@ -29,6 +29,9 @@ import {
 } from "../ui/hover-card";
 import { Info, Trash2 } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 interface Props {
   audioFiles: AudioFileType[];
@@ -36,6 +39,8 @@ interface Props {
 }
 
 export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
+  const { toast } = useToast();
+
   const form = useForm<UploadAlbumValidatorType>({
     resolver: zodResolver(uploadAlbumValidator),
     defaultValues: {
@@ -48,14 +53,34 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
   const [customGenre, setCustomGenre] = useState("");
   const [tracks, setTracks] = useState(audioFiles);
 
-  function onSubmit(values: UploadAlbumValidatorType) {
+  const { mutateAsync: createAlbum, isLoading } = useMutation({
+    mutationFn: async (data: UploadAlbumValidatorType) => {
+      const res = await axios.post<{ albumId: number }>("/api/albums", data);
+      return res;
+    },
+
+    onSuccess: (data) => {
+      toast({
+        title: "Successfully created ablum",
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Failed ablum creation",
+        variant: "destructive",
+      });
+    },
+  });
+
+  async function onSubmit(values: UploadAlbumValidatorType) {
     if (tracks.every((f) => f.name)) {
       const data: UploadAlbumValidatorType = {
         ...values,
         genre: values.genre === "Custom" ? customGenre : values.genre,
         audioFiles: tracks,
       };
-      alert(JSON.stringify(data, null, 2));
+      const res = await createAlbum(data);
     }
   }
 
@@ -189,7 +214,7 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
         </div>
         <div className="flex gap-2 justify-end">
           <CancelUploadDialog cancel={cancel} />
-          <Button type="submit" variant="secondary">
+          <Button type="submit" variant="secondary" loading={isLoading}>
             Upload
           </Button>
         </div>

@@ -74,7 +74,6 @@ export default function UploadTrackForm({ track, cancel }: Props) {
       genre: values.genre === "Custom" ? customGenre : values.genre,
     };
     const res = await createTrack(data);
-    console.log("RES", res.data.trackId);
   }
 
   return (
