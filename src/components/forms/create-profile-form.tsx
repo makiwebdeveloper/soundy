@@ -1,7 +1,5 @@
 "use client";
 
-import "@uploadthing/react/styles.css";
-
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,15 +8,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CreateProfileValidatorType,
   createProfileValidator,
-} from "@/lib/validators/profile";
-import ProfileImageUploader from "../uploaders/profile-image-uploader";
+} from "@/lib/validators/profiles";
+import { ProfileImageUploader } from "@/components/uploaders";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 export default function CreateProfileForm() {
   const router = useRouter();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<CreateProfileValidatorType>({
     resolver: zodResolver(createProfileValidator),
@@ -30,23 +30,26 @@ export default function CreateProfileForm() {
 
   async function onSubmit(values: CreateProfileValidatorType) {
     try {
+      setIsLoading(true);
       await axios.post("/api/profiles", { ...values });
       toast({
         title: "Successfully created profile",
         variant: "success",
       });
+      setIsLoading(false);
       router.push("/");
     } catch (error) {
       toast({
         title: "Failed to create profile",
         variant: "destructive",
       });
+      setIsLoading(false);
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="imageUrl"
@@ -79,7 +82,7 @@ export default function CreateProfileForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="mt-3 w-full">
+        <Button loading={isLoading} type="submit" className="mt-3 w-full">
           Create
         </Button>
       </form>

@@ -7,3 +7,10 @@
     @apply flex items-center justify-center;
   }
 }
+
+::selection {
+  background: rgb(255 255 255 / 0.2)
+}
+::-moz-selection {
+  background: rgb(255 255 255 / 0.2)
+}

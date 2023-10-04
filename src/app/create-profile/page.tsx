@@ -1,4 +1,4 @@
-import CreateProfileForm from "@/components/forms/create-profile-form";
+import { CreateProfileForm } from "@/components/forms";
 import { ModeToggle } from "@/components/mode-toggle";
 import {
   Card,

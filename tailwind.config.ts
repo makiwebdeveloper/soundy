@@ -11,6 +11,7 @@ const config: Config = {
     extend: {
       backgroundImage: {
         background: "url('/images/background.jpg')",
+        "background-2": "url('/images/background-2.jpg')",
       },
       keyframes: {
         "accordion-down": {

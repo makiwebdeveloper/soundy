@@ -1,3 +1,5 @@
+"use client";
+
 import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -7,23 +9,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { getCurrentProfile } from "@/services/profiles.service";
-import { redirect } from "next/navigation";
 import SidebarItems from "./sidebar-items";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 interface Props {
   className?: string;
+  currentProfileId: number;
 }
 
-export default async function SidebarSheet({ className }: Props) {
-  const currentProfile = await getCurrentProfile();
+export default function SidebarSheet({ className, currentProfileId }: Props) {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
-  if (!currentProfile) {
-    redirect("/create-profile");
-  }
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={() => setOpen((prev) => !prev)}>
       <SheetTrigger asChild className={className}>
         <Button variant="ghost">
           <Menu className="w-4 h-4" />
@@ -33,7 +37,7 @@ export default async function SidebarSheet({ className }: Props) {
         <SheetHeader>
           <SheetTitle>Soundy</SheetTitle>
         </SheetHeader>
-        <SidebarItems profileId={currentProfile.id} className="pt-2 pb-4" />
+        <SidebarItems profileId={currentProfileId} className="pt-2 pb-4" />
       </SheetContent>
     </Sheet>
   );

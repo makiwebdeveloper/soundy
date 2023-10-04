@@ -1,0 +1,34 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1696366521965,
+      "tag": "0000_misty_leech",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1696369330010,
+      "tag": "0001_clever_carmella_unuscione",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1696369757214,
+      "tag": "0002_wakeful_ikaris",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1696369962428,
+      "tag": "0003_opposite_grandmaster",
+      "breakpoints": true
+    }
+  ]
+}
