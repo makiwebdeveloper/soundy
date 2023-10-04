@@ -36,8 +36,8 @@ export default function CreateProfileForm() {
         title: "Successfully created profile",
         variant: "success",
       });
-      setIsLoading(false);
       router.push("/");
+      setIsLoading(false);
     } catch (error) {
       toast({
         title: "Failed to create profile",

@@ -27,7 +27,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "../ui/hover-card";
-import { Info, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Info, Trash2 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -89,6 +89,16 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
       cancel();
     }
   }, [tracks]);
+
+  function removeTrack(position: number) {
+    let tracksArray = tracks.filter((f) => f.position !== position);
+    for (let i = 0; i < tracksArray.length; i++) {
+      if (i >= position) {
+        tracksArray[i].position -= 1;
+      }
+    }
+    setTracks(tracksArray);
+  }
 
   return (
     <Form {...form}>
@@ -186,30 +196,72 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
             </HoverCard>
           </Label>
           <div className="space-y-2">
-            {tracks.map((track) => (
-              <div key={track.url} className="flex gap-2">
-                <Input
-                  border
-                  value={track.name}
-                  onChange={(e) =>
-                    setTracks((prev) =>
-                      prev.map((f) =>
-                        f.url === track.url ? { ...f, name: e.target.value } : f
+            {tracks
+              .sort((a, b) => a.position - b.position)
+              .map((track) => (
+                <div key={track.url} className="flex gap-2">
+                  <div className="flex gap-2">
+                    <Button
+                      border
+                      type="button"
+                      disabled={track.position === 0}
+                      onClick={() =>
+                        setTracks((prev) =>
+                          prev.map((f) =>
+                            f.position === track.position
+                              ? { ...f, position: track.position - 1 }
+                              : f.position === track.position - 1
+                              ? { ...f, position: f.position + 1 }
+                              : f
+                          )
+                        )
+                      }
+                    >
+                      <ChevronUp className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      border
+                      type="button"
+                      disabled={
+                        track.position === tracks[tracks.length - 1].position
+                      }
+                      onClick={() =>
+                        setTracks((prev) =>
+                          prev.map((f) =>
+                            f.position === track.position
+                              ? { ...f, position: track.position + 1 }
+                              : f.position === track.position + 1
+                              ? { ...f, position: f.position - 1 }
+                              : f
+                          )
+                        )
+                      }
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <Input
+                    border
+                    value={track.name}
+                    onChange={(e) =>
+                      setTracks((prev) =>
+                        prev.map((f) =>
+                          f.url === track.url
+                            ? { ...f, name: e.target.value }
+                            : f
+                        )
                       )
-                    )
-                  }
-                />
-                <Button
-                  type="button"
-                  border
-                  onClick={() =>
-                    setTracks(tracks.filter((f) => f.url !== track.url))
-                  }
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            ))}
+                    }
+                  />
+                  <Button
+                    type="button"
+                    border
+                    onClick={() => removeTrack(track.position)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
           </div>
         </div>
         <div className="flex gap-2 justify-end">
