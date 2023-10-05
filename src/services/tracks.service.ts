@@ -1,6 +1,15 @@
 import { db } from "@/lib/db";
 import { tracks } from "@/lib/db/schema";
 import { UploadTrackValidatorType } from "@/lib/validators/tracks";
+import { eq } from "drizzle-orm";
+
+export async function getTrackById(trackId: number) {
+  const track = await db.query.tracks.findFirst({
+    where: eq(tracks.id, trackId),
+  });
+
+  return track;
+}
 
 export async function createTrack(
   data: UploadTrackValidatorType & {

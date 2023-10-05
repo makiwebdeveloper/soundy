@@ -5,7 +5,11 @@ import { AudioFileType } from "@/types/tracks.types";
 import { TracksAudioUploader } from "@/components/uploaders";
 import { UploadTrackForm, UploadAlbumForm } from "@/components/forms";
 
-export default function Upload() {
+interface Props {
+  profileId: number;
+}
+
+export default function Upload({ profileId }: Props) {
   const [audioFiles, setAudioFiles] = useState<AudioFileType[]>([]);
   const type = useMemo(
     () =>
@@ -26,7 +30,13 @@ export default function Upload() {
   }
 
   if (type === "track") {
-    return <UploadTrackForm track={audioFiles[0]} cancel={cancel} />;
+    return (
+      <UploadTrackForm
+        track={audioFiles[0]}
+        cancel={cancel}
+        profileId={profileId}
+      />
+    );
   } else {
     return <UploadAlbumForm audioFiles={audioFiles} cancel={cancel} />;
   }

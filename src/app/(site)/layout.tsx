@@ -23,7 +23,9 @@ export default async function SiteLayout({ children }: PropsWithChildren) {
           />
         </div>
         <Sidebar />
-        <ScrollArea className="w-full relative h-full">{children}</ScrollArea>
+        <ScrollArea className="w-full relative h-[calc(100vh-120px)] md:h-full">
+          {children}
+        </ScrollArea>
       </article>
       <MusicPlayer />
     </main>

@@ -32,6 +32,7 @@ import { cn } from "@/lib/cn";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface Props {
   audioFiles: AudioFileType[];
@@ -40,6 +41,7 @@ interface Props {
 
 export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<UploadAlbumValidatorType>({
     resolver: zodResolver(uploadAlbumValidator),
@@ -81,6 +83,7 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
         audioFiles: tracks,
       };
       const res = await createAlbum(data);
+      router.push(`/albums/${res.data.albumId}`);
     }
   }
 

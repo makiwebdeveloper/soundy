@@ -26,22 +26,22 @@ export function getSidebarLinks(profileId: number) {
     {
       title: "Likes",
       icon: Heart,
-      path: `/profile/${profileId}/likes`,
+      path: `/profiles/${profileId}/likes`,
     },
     {
       title: "Tracks",
       icon: Music2,
-      path: `/profile/${profileId}/tracks`,
+      path: `/profiles/${profileId}/tracks`,
     },
     {
       title: "Albums",
       icon: Music3,
-      path: `/profile/${profileId}/albums`,
+      path: `/profiles/${profileId}/albums`,
     },
     {
       title: "Playlists",
       icon: FolderHeart,
-      path: `/profile/${profileId}/playlists`,
+      path: `/profiles/${profileId}/playlists`,
     },
     {
       title: "History",
@@ -56,7 +56,7 @@ export function getSidebarLinks(profileId: number) {
     {
       title: "Profile",
       icon: User2,
-      path: `/profile/${profileId}`,
+      path: `/profiles/${profileId}`,
     },
   ];
 

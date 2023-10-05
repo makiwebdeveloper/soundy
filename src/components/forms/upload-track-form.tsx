@@ -26,14 +26,17 @@ import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface Props {
+  profileId: number;
   track: AudioFileType;
   cancel: () => void;
 }
 
-export default function UploadTrackForm({ track, cancel }: Props) {
+export default function UploadTrackForm({ track, cancel, profileId }: Props) {
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<UploadTrackValidatorType>({
     resolver: zodResolver(uploadTrackValidator),
@@ -74,6 +77,7 @@ export default function UploadTrackForm({ track, cancel }: Props) {
       genre: values.genre === "Custom" ? customGenre : values.genre,
     };
     const res = await createTrack(data);
+    router.push(`/profiles/${profileId}/tracks/${res.data.trackId}`);
   }
 
   return (

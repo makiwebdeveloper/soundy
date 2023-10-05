@@ -4,10 +4,18 @@ import {
   PageHeader,
   PageLayout,
   PageTitle,
-} from "@/components/ui/page-layout";
+} from "@/components/page-layout";
 import Upload from "@/components/upload";
+import { getCurrentProfile } from "@/services/profiles.service";
+import { redirect } from "next/navigation";
 
-export default function UploadPage() {
+export default async function UploadPage() {
+  const currentProfile = await getCurrentProfile();
+
+  if (!currentProfile) {
+    redirect("/create-profile");
+  }
+
   return (
     <PageLayout>
       <PageHeader>
@@ -18,7 +26,7 @@ export default function UploadPage() {
         </PageDescription>
       </PageHeader>
       <PageContent>
-        <Upload />
+        <Upload profileId={currentProfile.id} />
       </PageContent>
     </PageLayout>
   );
