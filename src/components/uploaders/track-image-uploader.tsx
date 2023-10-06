@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { UploadDropzone } from "@/utils/uploadthing";
 import { Button } from "@/components/ui/button";
 import { XIcon } from "lucide-react";
+import { EditImageDialog } from "@/components/dialogs";
 
 interface Props {
   image: string;
@@ -63,13 +64,13 @@ export default function TrackImageUploader({ image, setImage }: Props) {
   );
 
   const preview = (
-    <div>
+    <div className="flex flex-col items-center">
       <div className="relative w-[250px] h-[250px] md:w-[150px] md:lg:w-[200px] 2xl:w-[250px] md:h-[150px] lg:h-[200px] 2xl:h-[250px] mx-auto my-5">
         <Image
           src={image}
           fill
           alt="profile image"
-          className="peer/image object-cover rounded-md bg-white/20 dark:bg-black/20"
+          className="peer/image object-contain rounded-md bg-white/20 dark:bg-black/20"
         />
         <Button
           onClick={removeImage}
@@ -79,6 +80,7 @@ export default function TrackImageUploader({ image, setImage }: Props) {
           <XIcon className="w-4 h-4" />
         </Button>
       </div>
+      <EditImageDialog type="track" imageUrl={image} setImage={setImage} />
     </div>
   );
 
