@@ -5,6 +5,7 @@ import {
   pgTable,
   serial,
   text,
+  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -29,8 +30,9 @@ export const tracks = pgTable("tracks", {
   genre: varchar("genre", { length: 256 }),
   isPublic: boolean("is_public").notNull(),
   audioUrl: text("audio_url").notNull(),
-
+  duration: varchar("duration", { length: 256 }).notNull(),
   position: integer("position"),
+  createdAt: timestamp("created_at").defaultNow(),
 
   profileId: integer("profile_id")
     .references(() => profiles.id, { onDelete: "cascade" })

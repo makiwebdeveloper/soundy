@@ -14,5 +14,13 @@ export const uploadAlbumValidator = z.object({
       })
     )
     .optional(),
+  audioDurations: z
+    .array(
+      z.object({
+        url: z.string(),
+        duration: z.string(),
+      })
+    )
+    .optional(),
 });
 export type UploadAlbumValidatorType = z.infer<typeof uploadAlbumValidator>;

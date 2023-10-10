@@ -29,6 +29,7 @@ export async function createTrack(
       profileId,
       position,
       albumId,
+      duration,
     } = data;
 
     const dbTrack = await db
@@ -43,6 +44,7 @@ export async function createTrack(
         profileId,
         position,
         albumId,
+        duration: duration || "00:00",
       })
       .returning({ trackId: tracks.id });
 

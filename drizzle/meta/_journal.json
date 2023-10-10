@@ -29,6 +29,20 @@
       "when": 1696369962428,
       "tag": "0003_opposite_grandmaster",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1696938739188,
+      "tag": "0004_first_victor_mancha",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1696938825880,
+      "tag": "0005_mushy_masque",
+      "breakpoints": true
     }
   ]
 }

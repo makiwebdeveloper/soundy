@@ -33,6 +33,8 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { formatTime } from "@/utils/format-time";
+import * as mm from "music-metadata-browser";
 
 interface Props {
   audioFiles: AudioFileType[];
@@ -42,6 +44,11 @@ interface Props {
 export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
   const { toast } = useToast();
   const router = useRouter();
+  const [customGenre, setCustomGenre] = useState("");
+  const [tracks, setTracks] = useState(audioFiles);
+  const [tracksDuration, setTracksDuration] = useState<
+    { url: string; duration: string }[]
+  >([]);
 
   const form = useForm<UploadAlbumValidatorType>({
     resolver: zodResolver(uploadAlbumValidator),
@@ -52,8 +59,6 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
       genre: "",
     },
   });
-  const [customGenre, setCustomGenre] = useState("");
-  const [tracks, setTracks] = useState(audioFiles);
 
   const { mutateAsync: createAlbum, isLoading } = useMutation({
     mutationFn: async (data: UploadAlbumValidatorType) => {
@@ -81,6 +86,7 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
         ...values,
         genre: values.genre === "Custom" ? customGenre : values.genre,
         audioFiles: tracks,
+        audioDurations: tracksDuration,
       };
       const res = await createAlbum(data);
       router.push(`/albums/${res.data.albumId}`);
@@ -102,6 +108,23 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
     }
     setTracks(tracksArray);
   }
+
+  useEffect(() => {
+    async function fun() {
+      const array = [];
+      for (let i = 0; i < tracks.length; i++) {
+        const metadata = await mm.fetchFromUrl(tracks[i].url);
+        array.push({
+          url: tracks[i].url,
+          duration: formatTime(Math.floor(metadata.format.duration || 0)),
+        });
+      }
+
+      setTracksDuration(array);
+    }
+
+    fun();
+  }, []);
 
   return (
     <Form {...form}>
@@ -269,7 +292,11 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
         </div>
         <div className="flex gap-2 justify-end">
           <CancelUploadDialog cancel={cancel} />
-          <Button type="submit" variant="secondary" loading={isLoading}>
+          <Button
+            type="submit"
+            variant="secondary"
+            loading={isLoading || tracksDuration.length !== tracks.length}
+          >
             Upload
           </Button>
         </div>

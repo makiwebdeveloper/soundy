@@ -2,13 +2,20 @@ import { UploadAlbumValidatorType } from "@/lib/validators/albums";
 import { createTrack } from "./tracks.service";
 import { db } from "@/lib/db";
 import { albums } from "@/lib/db/schema";
-import { NextResponse } from "next/server";
 
 export async function createAlbum(
   data: UploadAlbumValidatorType & { profileId: number }
 ) {
   try {
-    const { title, description, genre, imageUrl, audioFiles, profileId } = data;
+    const {
+      title,
+      description,
+      genre,
+      imageUrl,
+      audioFiles,
+      profileId,
+      audioDurations,
+    } = data;
 
     if (!audioFiles) {
       return null;
@@ -38,6 +45,8 @@ export async function createAlbum(
         isPublic: true,
         position: audioFiles[i].position,
         albumId,
+        duration: audioDurations?.find((d) => d.url === audioFiles[i].url)
+          ?.duration,
       });
     }
 

@@ -7,5 +7,6 @@ export const uploadTrackValidator = z.object({
   isPublic: z.boolean(),
   imageUrl: z.string().min(1, "Image is required"),
   audioUrl: z.string().min(1),
+  duration: z.string().optional(),
 });
 export type UploadTrackValidatorType = z.infer<typeof uploadTrackValidator>;

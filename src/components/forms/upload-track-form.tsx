@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -27,6 +27,8 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { formatTime } from "@/utils/format-time";
+import * as mm from "music-metadata-browser";
 
 interface Props {
   profileId: number;
@@ -37,6 +39,8 @@ interface Props {
 export default function UploadTrackForm({ track, cancel, profileId }: Props) {
   const { toast } = useToast();
   const router = useRouter();
+  const [customGenre, setCustomGenre] = useState("");
+  const [trackDuration, setTrackDuration] = useState<string>("00:00");
 
   const form = useForm<UploadTrackValidatorType>({
     resolver: zodResolver(uploadTrackValidator),
@@ -49,7 +53,6 @@ export default function UploadTrackForm({ track, cancel, profileId }: Props) {
       audioUrl: track.url,
     },
   });
-  const [customGenre, setCustomGenre] = useState("");
 
   const { mutateAsync: createTrack, isLoading } = useMutation({
     mutationFn: async (data: UploadTrackValidatorType) => {
@@ -75,10 +78,20 @@ export default function UploadTrackForm({ track, cancel, profileId }: Props) {
     const data: UploadTrackValidatorType = {
       ...values,
       genre: values.genre === "Custom" ? customGenre : values.genre,
+      duration: trackDuration,
     };
     const res = await createTrack(data);
     router.push(`/profiles/${profileId}/tracks/${res.data.trackId}`);
   }
+
+  useEffect(() => {
+    async function fun() {
+      const metadata = await mm.fetchFromUrl(track.url);
+      setTrackDuration(formatTime(Math.floor(metadata.format.duration || 0)));
+    }
+
+    fun();
+  }, []);
 
   return (
     <Form {...form}>
@@ -200,7 +213,7 @@ export default function UploadTrackForm({ track, cancel, profileId }: Props) {
         />
         <div className="flex gap-2 justify-end">
           <CancelUploadDialog cancel={cancel} />
-          <Button variant="secondary" loading={isLoading}>
+          <Button variant="secondary" loading={isLoading || !trackDuration}>
             Upload
           </Button>
         </div>

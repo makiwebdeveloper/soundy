@@ -1,0 +1,1 @@
+ALTER TABLE "tracks" ADD COLUMN "duration" varchar(256) NOT NULL;
