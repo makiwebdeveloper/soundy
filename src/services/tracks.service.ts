@@ -6,6 +6,9 @@ import { eq } from "drizzle-orm";
 export async function getTrackById(trackId: number) {
   const track = await db.query.tracks.findFirst({
     where: eq(tracks.id, trackId),
+    with: {
+      profile: true,
+    },
   });
 
   return track;
