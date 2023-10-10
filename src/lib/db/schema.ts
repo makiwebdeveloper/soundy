@@ -17,8 +17,13 @@ export const profiles = pgTable("profiles", {
   userId: varchar("user_id", { length: 256 }).notNull(),
 });
 
-export const profilesRelations = relations(profiles, ({ many }) => ({
+export const profilesRelations = relations(profiles, ({ many, one }) => ({
   tracks: many(tracks),
+  playingTrack: one(playingTracks, {
+    fields: [profiles.id],
+    references: [playingTracks.profileId],
+  }),
+  favoriteTracks: many(favoriteTracks),
 }));
 
 /****************** TRACKS ******************/
@@ -42,7 +47,7 @@ export const tracks = pgTable("tracks", {
   }),
 });
 
-export const tracksRelations = relations(tracks, ({ one }) => ({
+export const tracksRelations = relations(tracks, ({ one, many }) => ({
   profile: one(profiles, {
     fields: [tracks.profileId],
     references: [profiles.id],
@@ -51,6 +56,8 @@ export const tracksRelations = relations(tracks, ({ one }) => ({
     fields: [tracks.albumId],
     references: [albums.id],
   }),
+  playings: many(playingTracks),
+  favoriteTracks: many(favoriteTracks),
 }));
 
 /****************** ALBUMS ******************/
@@ -72,4 +79,48 @@ export const albumsRelations = relations(albums, ({ one, many }) => ({
     references: [profiles.id],
   }),
   tracks: many(tracks),
+}));
+
+/****************** PLAYING TRACK ******************/
+export const playingTracks = pgTable("playing_tracks", {
+  id: serial("id").primaryKey(),
+  profileId: integer("profile_id")
+    .references(() => profiles.id)
+    .notNull(),
+  trackId: integer("track_id")
+    .references(() => tracks.id)
+    .notNull(),
+});
+
+export const playingTracksRelations = relations(playingTracks, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [playingTracks.profileId],
+    references: [profiles.id],
+  }),
+  track: one(tracks, {
+    fields: [playingTracks.trackId],
+    references: [tracks.id],
+  }),
+}));
+
+/****************** FAVORITE TRACK ******************/
+export const favoriteTracks = pgTable("favorite_tracks", {
+  id: serial("id").primaryKey(),
+  profileId: integer("profile_id")
+    .references(() => profiles.id)
+    .notNull(),
+  trackId: integer("track_id")
+    .references(() => tracks.id)
+    .notNull(),
+});
+
+export const favoriteTracksRelations = relations(favoriteTracks, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [favoriteTracks.profileId],
+    references: [profiles.id],
+  }),
+  track: one(tracks, {
+    fields: [favoriteTracks.trackId],
+    references: [tracks.id],
+  }),
 }));

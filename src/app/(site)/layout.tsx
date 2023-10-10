@@ -2,6 +2,7 @@ import MusicPlayer from "@/components/music-player";
 import Sidebar from "@/components/sidebar/sidebar";
 import SidebarSheet from "@/components/sidebar/sidebar-sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getPlayingTrack } from "@/services/playing-tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
@@ -12,6 +13,10 @@ export default async function SiteLayout({ children }: PropsWithChildren) {
   if (!currentProfile) {
     redirect("/create-profile");
   }
+
+  const playingTrack = await getPlayingTrack(currentProfile.id);
+
+  console.log(playingTrack);
 
   return (
     <main>
@@ -27,7 +32,7 @@ export default async function SiteLayout({ children }: PropsWithChildren) {
           {children}
         </ScrollArea>
       </article>
-      <MusicPlayer />
+      <MusicPlayer initialPlaingTrack={playingTrack} />
     </main>
   );
 }

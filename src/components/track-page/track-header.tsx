@@ -1,10 +1,12 @@
 import Image from "next/image";
-import { PageDescription, PageTitle } from "../page-layout";
+import { PageDescription, PageTitle } from "@/components/page-layout";
+import Link from "next/link";
 
 interface Props {
   title: string;
   imageUrl: string;
-  creator: string;
+  profileId: number;
+  profileName: string;
 }
 
 export default function TrackHeader(props: Props) {
@@ -21,7 +23,15 @@ export default function TrackHeader(props: Props) {
       <div className="flex-1">
         <div>
           <PageTitle className="break-all">{props.title}</PageTitle>
-          <PageDescription>Made by: {props.creator}</PageDescription>
+          <PageDescription>
+            Made by:{" "}
+            <Link
+              className="transition hover:text-white hover:underline"
+              href={`/profiles/${props.profileId}`}
+            >
+              {props.profileName}
+            </Link>
+          </PageDescription>
         </div>
       </div>
     </div>

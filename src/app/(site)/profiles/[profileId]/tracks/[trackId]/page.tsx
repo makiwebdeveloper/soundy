@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { TrackHeader } from "@/components/track-page";
+import { TrackHeader, TrackTools } from "@/components/track-page";
 import { PageLayout } from "@/components/page-layout";
 import { getTrackById } from "@/services/tracks.service";
 
@@ -22,8 +22,10 @@ export default async function TrackPage({ params }: Props) {
       <TrackHeader
         title={track.title}
         imageUrl={track.imageUrl}
-        creator={track.profile.name}
+        profileId={track.profile.id}
+        profileName={track.profile.name}
       />
+      <TrackTools trackId={track.id} />
     </PageLayout>
   );
 }

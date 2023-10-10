@@ -9,7 +9,7 @@ interface LayoutProps {
 
 export function PageLayout({ children, className }: LayoutProps) {
   return (
-    <div className={cn("p-3 2xl:p-5 space-y-2", className)}>{children}</div>
+    <div className={cn("p-3 2xl:p-5 space-y-3", className)}>{children}</div>
   );
 }
 
