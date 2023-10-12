@@ -17,7 +17,7 @@ export default function TracksAudioUploader({ setAudioFiles }: Props) {
         endpoint="tracksAudio"
         appearance={{
           container:
-            "transition p-14 mt-1 cursor-pointer border border-dashed rounded-3xl border-white/40 dark:border-black/60 bg-white/10 dark:bg-black/20 hover:bg-white/20 dark:hover:bg-black/30 group",
+            "transition py-14 mt-1 cursor-pointer border border-dashed rounded-3xl border-white/40 dark:border-black/60 bg-white/10 dark:bg-black/20 hover:bg-white/20 dark:hover:bg-black/30 group",
           uploadIcon:
             "transition text-white/50 group-hover:text-white w-20 h-20",
           label: "transition text-white group-hover:text-white",

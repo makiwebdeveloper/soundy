@@ -15,3 +15,8 @@ export const playTrackValidator = z.object({
   trackId: z.number(),
 });
 export type PlayTrackValidatorType = z.infer<typeof playTrackValidator>;
+
+export const favoriteTrackValidator = z.object({
+  trackId: z.number(),
+});
+export type FavoriteTrackValidatorType = z.infer<typeof favoriteTrackValidator>;

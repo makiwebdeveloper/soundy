@@ -85,10 +85,10 @@ export const albumsRelations = relations(albums, ({ one, many }) => ({
 export const playingTracks = pgTable("playing_tracks", {
   id: serial("id").primaryKey(),
   profileId: integer("profile_id")
-    .references(() => profiles.id)
+    .references(() => profiles.id, { onDelete: "cascade" })
     .notNull(),
   trackId: integer("track_id")
-    .references(() => tracks.id)
+    .references(() => tracks.id, { onDelete: "cascade" })
     .notNull(),
 });
 
@@ -107,10 +107,10 @@ export const playingTracksRelations = relations(playingTracks, ({ one }) => ({
 export const favoriteTracks = pgTable("favorite_tracks", {
   id: serial("id").primaryKey(),
   profileId: integer("profile_id")
-    .references(() => profiles.id)
+    .references(() => profiles.id, { onDelete: "cascade" })
     .notNull(),
   trackId: integer("track_id")
-    .references(() => tracks.id)
+    .references(() => tracks.id, { onDelete: "cascade" })
     .notNull(),
 });
 
