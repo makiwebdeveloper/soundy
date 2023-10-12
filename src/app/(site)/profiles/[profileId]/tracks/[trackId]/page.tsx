@@ -1,7 +1,9 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { TrackHeader, TrackTools } from "@/components/track-page";
 import { PageLayout } from "@/components/page-layout";
 import { getTrackById } from "@/services/tracks.service";
+import { getFavoriteTrack } from "@/services/favorite-tracks.service";
+import { getCurrentProfile } from "@/services/profiles.service";
 
 interface Props {
   params: {
@@ -11,11 +13,21 @@ interface Props {
 }
 
 export default async function TrackPage({ params }: Props) {
+  const currentProfile = await getCurrentProfile();
   const track = await getTrackById(Number(params.trackId));
+
+  if (!currentProfile) {
+    redirect("/create-profile");
+  }
 
   if (!track) {
     notFound();
   }
+
+  const favoriteTrack = await getFavoriteTrack({
+    profileId: currentProfile.id,
+    trackId: track.id,
+  });
 
   return (
     <PageLayout>
@@ -25,7 +37,7 @@ export default async function TrackPage({ params }: Props) {
         profileId={track.profile.id}
         profileName={track.profile.name}
       />
-      <TrackTools trackId={track.id} />
+      <TrackTools trackId={track.id} initialFavoriteTrack={favoriteTrack} />
     </PageLayout>
   );
 }

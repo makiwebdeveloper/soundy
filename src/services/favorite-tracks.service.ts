@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { favoriteTracks } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
-export type FavoriteTrackType = {
+export type FavoriteTrackCreationType = {
   profileId: number;
   trackId: number;
 };
@@ -10,7 +10,7 @@ export type FavoriteTrackType = {
 export async function getFavoriteTrack({
   profileId,
   trackId,
-}: FavoriteTrackType) {
+}: FavoriteTrackCreationType) {
   const dbFavoriteTracks = await db.query.favoriteTracks.findMany({
     where: eq(favoriteTracks.profileId, profileId),
   });
@@ -24,7 +24,7 @@ export async function getFavoriteTrack({
 export async function createFavoriteTrack({
   profileId,
   trackId,
-}: FavoriteTrackType) {
+}: FavoriteTrackCreationType) {
   const dbFavoriteTrack = await db
     .insert(favoriteTracks)
     .values({ profileId, trackId })

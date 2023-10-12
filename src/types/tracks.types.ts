@@ -3,3 +3,9 @@ export type AudioFileType = {
   url: string;
   position: number;
 };
+
+export type FavoriteTrackType = {
+  id: number;
+  profileId: number;
+  trackId: number;
+};
