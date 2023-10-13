@@ -37,6 +37,7 @@ export interface ButtonProps
   asChild?: boolean;
   border?: boolean;
   loading?: boolean;
+  disabledLoadingIcon?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -49,6 +50,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       variant,
       size,
+      disabledLoadingIcon,
       asChild = false,
       ...props
     },
@@ -64,7 +66,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
         disabled={disabled || loading}
       >
-        {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+        {loading && !disabledLoadingIcon && (
+          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+        )}
         {children}
       </button>
     );

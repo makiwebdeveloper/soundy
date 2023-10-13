@@ -1,12 +1,9 @@
-import {
-  PageDescription,
-  PageHeader,
-  PageLayout,
-  PageTitle,
-} from "@/components/page-layout";
+import { notFound, redirect } from "next/navigation";
+import { TrackHeader, TrackTools } from "@/components/track-page";
+import { PageLayout } from "@/components/page-layout";
 import { getTrackById } from "@/services/tracks.service";
-import Image from "next/image";
-import { notFound } from "next/navigation";
+import { getFavoriteTrack } from "@/services/favorite-tracks.service";
+import { getCurrentProfile } from "@/services/profiles.service";
 
 interface Props {
   params: {
@@ -16,31 +13,31 @@ interface Props {
 }
 
 export default async function TrackPage({ params }: Props) {
+  const currentProfile = await getCurrentProfile();
   const track = await getTrackById(Number(params.trackId));
+
+  if (!currentProfile) {
+    redirect("/create-profile");
+  }
 
   if (!track) {
     notFound();
   }
 
+  const favoriteTrack = await getFavoriteTrack({
+    profileId: currentProfile.id,
+    trackId: track.id,
+  });
+
   return (
     <PageLayout>
-      <PageHeader>
-        <div className="relative w-[300px] h-[300px] aspect-[500/300]">
-          <Image
-            src={track.imageUrl}
-            alt={track.title}
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div>
-          <PageTitle>{track.title}</PageTitle>
-          <PageDescription>
-            If you want to upload a track, add one file, and if you want to
-            upload an album, add several.
-          </PageDescription>
-        </div>
-      </PageHeader>
+      <TrackHeader
+        title={track.title}
+        imageUrl={track.imageUrl}
+        profileId={track.profile.id}
+        profileName={track.profile.name}
+      />
+      <TrackTools track={track} initialFavoriteTrack={favoriteTrack} />
     </PageLayout>
   );
 }

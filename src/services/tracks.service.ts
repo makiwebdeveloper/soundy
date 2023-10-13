@@ -2,10 +2,20 @@ import { db } from "@/lib/db";
 import { tracks } from "@/lib/db/schema";
 import { UploadTrackValidatorType } from "@/lib/validators/tracks";
 import { eq } from "drizzle-orm";
+import {
+  PlayingTrackCreationType,
+  createPlayingTrack,
+  getPlayingTrack,
+  updatePlayingTrack,
+} from "@/services/playing-tracks.service";
 
 export async function getTrackById(trackId: number) {
   const track = await db.query.tracks.findFirst({
     where: eq(tracks.id, trackId),
+    with: {
+      profile: true,
+      album: true,
+    },
   });
 
   return track;
@@ -53,4 +63,19 @@ export async function createTrack(
   } catch (error) {
     throw new Error("Failed track creation");
   }
+}
+
+export async function playTrack({
+  profileId,
+  trackId,
+}: PlayingTrackCreationType) {
+  const existPlayingTrack = await getPlayingTrack(profileId);
+
+  if (existPlayingTrack) {
+    const playingTrackId = await updatePlayingTrack({ profileId, trackId });
+    return playingTrackId;
+  }
+
+  const playingTrackId = await createPlayingTrack({ profileId, trackId });
+  return playingTrackId;
 }

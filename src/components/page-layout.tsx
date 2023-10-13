@@ -9,7 +9,7 @@ interface LayoutProps {
 
 export function PageLayout({ children, className }: LayoutProps) {
   return (
-    <div className={cn("p-3 2xl:p-5 space-y-2", className)}>{children}</div>
+    <div className={cn("p-3 2xl:p-5 space-y-3", className)}>{children}</div>
   );
 }
 
@@ -44,7 +44,16 @@ interface DescriptionProps {
 }
 
 export function PageDescription({ children, className }: DescriptionProps) {
-  return <p className={cn("text-sm text-white/50", className)}>{children}</p>;
+  return (
+    <p
+      className={cn(
+        "text-sm text-white/70 dark:text-white/50 font-medium",
+        className
+      )}
+    >
+      {children}
+    </p>
+  );
 }
 
 /* Content */
