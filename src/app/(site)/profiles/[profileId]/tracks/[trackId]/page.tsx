@@ -37,7 +37,7 @@ export default async function TrackPage({ params }: Props) {
         profileId={track.profile.id}
         profileName={track.profile.name}
       />
-      <TrackTools trackId={track.id} initialFavoriteTrack={favoriteTrack} />
+      <TrackTools track={track} initialFavoriteTrack={favoriteTrack} />
     </PageLayout>
   );
 }

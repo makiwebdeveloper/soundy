@@ -14,6 +14,7 @@ export async function getTrackById(trackId: number) {
     where: eq(tracks.id, trackId),
     with: {
       profile: true,
+      album: true,
     },
   });
 

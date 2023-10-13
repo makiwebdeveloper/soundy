@@ -45,7 +45,12 @@ interface DescriptionProps {
 
 export function PageDescription({ children, className }: DescriptionProps) {
   return (
-    <p className={cn("text-sm text-white/50 font-medium", className)}>
+    <p
+      className={cn(
+        "text-sm text-white/70 dark:text-white/50 font-medium",
+        className
+      )}
+    >
       {children}
     </p>
   );

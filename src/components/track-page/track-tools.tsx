@@ -1,30 +1,30 @@
 "use client";
 
-import { FavoriteTrackType } from "@/types/tracks.types";
 import {
   PlayTrackButton,
   ToggleFavoriteButton,
   CopyLinkButton,
   AddToPlaylistButton,
-  DetailsButton,
 } from "./buttons";
+import { TrackDetailsDialog } from "@/components/dialogs";
+import { FavoriteTrackType, FullTrackType } from "@/types/tracks.types";
 
 interface Props {
-  trackId: number;
+  track: FullTrackType;
   initialFavoriteTrack: FavoriteTrackType | undefined;
 }
 
-export default function TrackTools({ trackId, initialFavoriteTrack }: Props) {
+export default function TrackTools({ track, initialFavoriteTrack }: Props) {
   return (
     <div className="flex gap-3">
-      <PlayTrackButton trackId={trackId} />
+      <PlayTrackButton trackId={track.id} />
       <ToggleFavoriteButton
-        trackId={trackId}
+        trackId={track.id}
         initialFavoriteTrack={initialFavoriteTrack}
       />
       <CopyLinkButton />
       <AddToPlaylistButton />
-      <DetailsButton />
+      <TrackDetailsDialog track={track} />
     </div>
   );
 }
