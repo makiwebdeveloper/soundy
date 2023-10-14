@@ -1,4 +1,4 @@
-import { tracks } from "@/lib/db/schema";
+import { playingTracks, tracks } from "@/lib/db/schema";
 import { AlbumType } from "./albums.types";
 import { ProfileType } from "./profiles.types";
 
@@ -18,5 +18,12 @@ export type TrackType = typeof tracks.$inferSelect;
 
 export type FullTrackType = TrackType & {
   album: AlbumType | null;
+  profile: ProfileType;
+};
+
+export type PlayingTrackType = typeof playingTracks.$inferSelect;
+
+export type FullPlayingTrackType = PlayingTrackType & {
+  track: TrackType;
   profile: ProfileType;
 };

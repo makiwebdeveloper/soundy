@@ -1,11 +1,11 @@
-import MusicPlayer from "@/components/music-player";
+import { PropsWithChildren } from "react";
+import { redirect } from "next/navigation";
 import Sidebar from "@/components/sidebar/sidebar";
+import MusicPlayer from "@/components/music-player/music-player";
 import SidebarSheet from "@/components/sidebar/sidebar-sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
-import { redirect } from "next/navigation";
-import { PropsWithChildren } from "react";
 
 export default async function SiteLayout({ children }: PropsWithChildren) {
   const currentProfile = await getCurrentProfile();
