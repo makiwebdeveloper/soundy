@@ -45,7 +45,7 @@ export default function AddToPlaylistDialog({
           Add to playlist
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[400px] min-h-[330px]">
+      <DialogContent className="max-w-[350px] sm:max-w-[400px] min-h-[330px]">
         <Tabs
           value={type}
           onValueChange={(v) => setType(v as "add" | "create")}
