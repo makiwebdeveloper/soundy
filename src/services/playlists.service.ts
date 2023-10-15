@@ -1,0 +1,61 @@
+import { db } from "@/lib/db";
+import { playlistTracks, playlists } from "@/lib/db/schema";
+import {
+  AddToPlaylistValidatorType,
+  CreatePlaylistValidatorType,
+} from "@/lib/validators/playlists";
+import { PlaylistWithTracksType } from "@/types/playlists.types";
+import { eq } from "drizzle-orm";
+
+export async function getProfilePlaylists(
+  profileId: number
+): Promise<PlaylistWithTracksType[]> {
+  const dbPlatlists = await db.query.playlists.findMany({
+    where: eq(playlists.profileId, profileId),
+    with: {
+      playlistTracks: {
+        with: {
+          track: true,
+        },
+      },
+    },
+  });
+
+  return dbPlatlists.map((item) => {
+    const { playlistTracks, ...data } = item;
+    return {
+      tracks: playlistTracks.map((track) => track.track),
+      ...data,
+    };
+  });
+}
+
+export async function createPlaylist(
+  data: CreatePlaylistValidatorType & { profileId: number }
+) {
+  try {
+    const dbPlaylist = await db
+      .insert(playlists)
+      .values(data)
+      .returning({ playlistId: playlists.id });
+
+    const playlistId = dbPlaylist[0].playlistId;
+    return playlistId;
+  } catch (error) {
+    throw new Error("Failed playlist creation");
+  }
+}
+
+export async function addToPlaylist(data: AddToPlaylistValidatorType) {
+  try {
+    const dbPlaylist = await db
+      .insert(playlistTracks)
+      .values(data)
+      .returning({ playlistTrackId: playlistTracks.id });
+
+    const playlistTrackId = dbPlaylist[0].playlistTrackId;
+    return playlistTrackId;
+  } catch (error) {
+    throw new Error("Failed track adding to playlist");
+  }
+}

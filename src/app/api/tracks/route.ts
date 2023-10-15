@@ -26,6 +26,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: error.issues }, { status: 400 });
     }
 
-    return NextResponse.json({ message: "Internal error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Failed to create track" },
+      { status: 500 }
+    );
   }
 }

@@ -24,11 +24,6 @@ export default async function TrackPage({ params }: Props) {
     notFound();
   }
 
-  const favoriteTrack = await getFavoriteTrack({
-    profileId: currentProfile.id,
-    trackId: track.id,
-  });
-
   return (
     <PageLayout>
       <TrackHeader
@@ -37,7 +32,7 @@ export default async function TrackPage({ params }: Props) {
         profileId={track.profile.id}
         profileName={track.profile.name}
       />
-      <TrackTools track={track} initialFavoriteTrack={favoriteTrack} />
+      <TrackTools track={track} profileId={currentProfile.id} />
     </PageLayout>
   );
 }

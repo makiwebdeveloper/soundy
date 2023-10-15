@@ -58,6 +58,7 @@ export const tracksRelations = relations(tracks, ({ one, many }) => ({
   }),
   playings: many(playingTracks),
   favoriteTracks: many(favoriteTracks),
+  playlistTracks: many(playlistTracks),
 }));
 
 /****************** ALBUMS ******************/
@@ -124,3 +125,48 @@ export const favoriteTracksRelations = relations(favoriteTracks, ({ one }) => ({
     references: [tracks.id],
   }),
 }));
+
+/****************** PLAYLISTS ******************/
+export const playlists = pgTable("playlists", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 256 }).notNull(),
+  isPublic: boolean("is_public").notNull(),
+  profileId: integer("profile_id")
+    .references(() => profiles.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+});
+
+export const playlistsRelations = relations(playlists, ({ one, many }) => ({
+  profile: one(profiles, {
+    fields: [playlists.profileId],
+    references: [profiles.id],
+  }),
+  playlistTracks: many(playlistTracks),
+}));
+
+/****************** PLAYLIST TRACKS ******************/
+export const playlistTracks = pgTable("playlist_tracks", {
+  id: serial("id").primaryKey(),
+  playlistId: integer("playlist_id")
+    .references(() => playlists.id, { onDelete: "cascade" })
+    .notNull(),
+  trackId: integer("track_id")
+    .references(() => tracks.id, { onDelete: "cascade" })
+    .notNull(),
+});
+
+export const playlistTracksRelations = relations(
+  playlistTracks,
+  ({ one, many }) => ({
+    playlist: one(playlists, {
+      fields: [playlistTracks.playlistId],
+      references: [playlists.id],
+    }),
+    track: one(tracks, {
+      fields: [playlistTracks.trackId],
+      references: [tracks.id],
+    }),
+  })
+);

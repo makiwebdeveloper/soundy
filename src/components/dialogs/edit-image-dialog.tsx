@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useUploadThing } from "@/utils/uploadthing";
 import { v4 as uuidv4 } from "uuid";
-import { CropperRef, Cropper, RectangleStencil } from "react-advanced-cropper";
+import { CropperRef, Cropper } from "react-advanced-cropper";
 import "react-advanced-cropper/dist/style.css";
 
 interface Props {

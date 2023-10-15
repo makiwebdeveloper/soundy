@@ -1,29 +1,39 @@
-"use client";
-
 import {
   PlayTrackButton,
   ToggleFavoriteButton,
   CopyLinkButton,
-  AddToPlaylistButton,
 } from "./buttons";
-import { TrackDetailsDialog } from "@/components/dialogs";
-import { FavoriteTrackType, FullTrackType } from "@/types/tracks.types";
+import { AddToPlaylistDialog, TrackDetailsDialog } from "@/components/dialogs";
+import { getFavoriteTrack } from "@/services/favorite-tracks.service";
+import { getProfilePlaylists } from "@/services/playlists.service";
+import { FullTrackType } from "@/types/tracks.types";
 
 interface Props {
   track: FullTrackType;
-  initialFavoriteTrack: FavoriteTrackType | undefined;
+  profileId: number;
 }
 
-export default function TrackTools({ track, initialFavoriteTrack }: Props) {
+export default async function TrackTools({ track, profileId }: Props) {
+  const favoriteTrackData = getFavoriteTrack({
+    profileId: profileId,
+    trackId: track.id,
+  });
+  const playlistsData = getProfilePlaylists(profileId);
+
+  const [favoriteTrack, playlists] = await Promise.all([
+    favoriteTrackData,
+    playlistsData,
+  ]);
+
   return (
     <div className="flex gap-3 flex-col sm:flex-row justify-center md:justify-normal">
       <PlayTrackButton trackId={track.id} />
       <ToggleFavoriteButton
         trackId={track.id}
-        initialFavoriteTrack={initialFavoriteTrack}
+        initialFavoriteTrack={favoriteTrack}
       />
       <CopyLinkButton />
-      <AddToPlaylistButton />
+      <AddToPlaylistDialog trackId={track.id} initialPlaylists={playlists} />
       <TrackDetailsDialog track={track} />
     </div>
   );
