@@ -15,7 +15,7 @@ interface Props {
 
 export default function MusicPlayer({ initialPlaingTrack }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const { status, toggleStatus } = usePlayingTrackStore();
+  const { status } = usePlayingTrackStore();
 
   const [volume, setVolume] = useState(0.8);
   const [volumeBeforeMute, setVolumeBeforeMute] = useState(volume);
@@ -23,27 +23,35 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
   const [durationSeconds, setDurationSeconds] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
-  const { data } = useQuery<{ playingTrack: FullPlayingTrackType | undefined }>(
-    {
-      queryKey: ["playing track"],
-      queryFn: async () => {
-        const res = await axios.get("/api/tracks/play");
-        return res.data;
-      },
-      initialData: { playingTrack: initialPlaingTrack },
+  const { data } = useQuery<{
+    playingTrack: FullPlayingTrackType | undefined;
+  }>({
+    queryKey: ["playing track"],
+    queryFn: async () => {
+      const res = await axios.get("/api/tracks/play");
+      return res.data;
+    },
+    initialData: { playingTrack: initialPlaingTrack },
+  });
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    setDurationSeconds(audioRef.current.duration);
+  }, [audioRef.current]);
+
+  useEffect(() => {
+    if (status === "play") {
+      audioRef.current?.play();
+    } else {
+      audioRef.current?.pause();
     }
-  );
+  }, [status, data]);
 
   if (!data?.playingTrack) {
     return null;
   }
 
   const { track, profile } = data.playingTrack;
-
-  useEffect(() => {
-    if (!audioRef.current) return;
-    setDurationSeconds(audioRef.current.duration);
-  }, []);
 
   function handleVolumeChange(volumeValue: number) {
     if (!audioRef.current) return;
@@ -62,14 +70,6 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
       setVolume(volumeBeforeMute);
     }
   }
-
-  useEffect(() => {
-    if (status === "play") {
-      audioRef.current?.play();
-    } else {
-      audioRef.current?.pause();
-    }
-  }, [status, data]);
 
   return (
     <div

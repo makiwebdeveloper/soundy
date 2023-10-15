@@ -16,7 +16,7 @@ interface Props {
 
 export default function TrackTools({ track, initialFavoriteTrack }: Props) {
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-3 flex-col sm:flex-row justify-center md:justify-normal">
       <PlayTrackButton trackId={track.id} />
       <ToggleFavoriteButton
         trackId={track.id}

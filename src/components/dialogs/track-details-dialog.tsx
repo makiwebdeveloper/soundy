@@ -25,7 +25,7 @@ export default function TrackDetailsDialog({ track }: Props) {
           Details
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[350px] gap-2">
+      <DialogContent className="max-w-[350px] gap-2">
         <DialogTitle className="text-2xl break-all">{track.title}</DialogTitle>
         <div>
           {track.description && (

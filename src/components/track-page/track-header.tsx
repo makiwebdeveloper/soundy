@@ -20,19 +20,17 @@ export default function TrackHeader(props: Props) {
           className="object-contain rounded-md bg-white/20 dark:bg-black/20"
         />
       </div>
-      <div className="flex-1">
-        <div>
-          <PageTitle className="break-all">{props.title}</PageTitle>
-          <PageDescription>
-            Made by:{" "}
-            <Link
-              className="transition hover:text-white hover:underline"
-              href={`/profiles/${props.profileId}`}
-            >
-              {props.profileName}
-            </Link>
-          </PageDescription>
-        </div>
+      <div className="flex-1 text-center md:text-start">
+        <PageTitle className="break-all">{props.title}</PageTitle>
+        <PageDescription>
+          Made by:{" "}
+          <Link
+            className="transition hover:text-white hover:underline"
+            href={`/profiles/${props.profileId}`}
+          >
+            {props.profileName}
+          </Link>
+        </PageDescription>
       </div>
     </div>
   );
