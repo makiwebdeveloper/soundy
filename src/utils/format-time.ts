@@ -6,3 +6,19 @@ export function formatTime(seconds: number) {
     .filter((a) => a)
     .join(":");
 }
+
+export function formatTimeToSeconds(timeString: string): number {
+  const timeParts = timeString.split(":").map(Number);
+
+  if (timeParts.length < 2 || timeParts.some(isNaN)) {
+    throw new Error("Invalid time format");
+  }
+
+  while (timeParts.length < 3) {
+    timeParts.unshift(0);
+  }
+
+  const [hours, minutes, seconds] = timeParts;
+
+  return hours * 3600 + minutes * 60 + seconds;
+}

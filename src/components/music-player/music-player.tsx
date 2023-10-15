@@ -8,6 +8,7 @@ import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
 import PlayerInfo from "./player-info";
 import PlayerVolume from "./player-volume";
 import PlayerAudio from "./player-audio";
+import { formatTimeToSeconds } from "@/utils/format-time";
 
 interface Props {
   initialPlaingTrack: any;
@@ -15,7 +16,7 @@ interface Props {
 
 export default function MusicPlayer({ initialPlaingTrack }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const { status } = usePlayingTrackStore();
+  const { status, trackId } = usePlayingTrackStore();
 
   const [volume, setVolume] = useState(0.8);
   const [volumeBeforeMute, setVolumeBeforeMute] = useState(volume);
@@ -35,9 +36,9 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
   });
 
   useEffect(() => {
-    if (!audioRef.current) return;
-    setDurationSeconds(audioRef.current.duration);
-  }, [audioRef.current]);
+    if (!audioRef.current || !data.playingTrack) return;
+    setDurationSeconds(formatTimeToSeconds(data.playingTrack.track.duration));
+  }, [audioRef.current, data]);
 
   useEffect(() => {
     if (status === "play") {

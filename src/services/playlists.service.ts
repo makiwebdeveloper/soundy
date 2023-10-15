@@ -7,6 +7,13 @@ import {
 import { PlaylistWithTracksType } from "@/types/playlists.types";
 import { eq } from "drizzle-orm";
 
+type PlaylistCreationType = Pick<
+  CreatePlaylistValidatorType,
+  "title" | "isPublic"
+> & {
+  profileId: number;
+};
+
 export async function getProfilePlaylists(
   profileId: number
 ): Promise<PlaylistWithTracksType[]> {
@@ -30,9 +37,7 @@ export async function getProfilePlaylists(
   });
 }
 
-export async function createPlaylist(
-  data: CreatePlaylistValidatorType & { profileId: number }
-) {
+export async function createPlaylist(data: PlaylistCreationType) {
   try {
     const dbPlaylist = await db
       .insert(playlists)
@@ -46,7 +51,7 @@ export async function createPlaylist(
   }
 }
 
-export async function addToPlaylist(data: AddToPlaylistValidatorType) {
+export async function createPlaylistTrack(data: AddToPlaylistValidatorType) {
   try {
     const dbPlaylist = await db
       .insert(playlistTracks)
@@ -58,4 +63,22 @@ export async function addToPlaylist(data: AddToPlaylistValidatorType) {
   } catch (error) {
     throw new Error("Failed track adding to playlist");
   }
+}
+
+export async function deletePlaylistTrack(playlistTrackId: number) {
+  await db.delete(playlistTracks).where(eq(playlistTracks.id, playlistTrackId));
+}
+
+export async function getPlaylistTrack({
+  playlistId,
+  trackId,
+}: AddToPlaylistValidatorType) {
+  const dbPlatlistTrack = await db.query.playlistTracks.findMany({
+    where: eq(playlistTracks.playlistId, playlistId),
+  });
+
+  const playlistTrack = dbPlatlistTrack.find(
+    (item) => item.trackId === trackId
+  );
+  return playlistTrack;
 }

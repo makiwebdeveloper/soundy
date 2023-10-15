@@ -1,6 +1,7 @@
 import { createPlaylistValidator } from "@/lib/validators/playlists";
 import {
   createPlaylist,
+  createPlaylistTrack,
   getProfilePlaylists,
 } from "@/services/playlists.service";
 import { getCurrentProfile } from "@/services/profiles.service";
@@ -16,13 +17,15 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { title, isPublic } = createPlaylistValidator.parse(body);
+    const { title, isPublic, trackId } = createPlaylistValidator.parse(body);
 
     const playlistId = await createPlaylist({
       title,
       isPublic,
       profileId: currentProfile.id,
     });
+
+    await createPlaylistTrack({ playlistId, trackId });
 
     return NextResponse.json({ playlistId }, { status: 200 });
   } catch (error) {
