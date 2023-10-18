@@ -73,7 +73,7 @@ export default function TrackDetailsDialog({ track }: Props) {
           <p className="flex justify-between gap-2">
             Date:{" "}
             <span className="text-white/70 dark:text-white/50 break-all">
-              {track.createdAt?.toLocaleDateString()}
+              {new Date(track.createdAt).toLocaleDateString()}
             </span>
           </p>
         </div>

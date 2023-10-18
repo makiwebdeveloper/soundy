@@ -16,7 +16,7 @@ interface Props {
 
 export default function MusicPlayer({ initialPlaingTrack }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const { status, trackId } = usePlayingTrackStore();
+  const { status } = usePlayingTrackStore();
 
   const [volume, setVolume] = useState(0.8);
   const [volumeBeforeMute, setVolumeBeforeMute] = useState(volume);
@@ -49,7 +49,13 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
   }, [status, data]);
 
   if (!data?.playingTrack) {
-    return null;
+    return (
+      <div
+        className={
+          "fixed flex gap-3 bottom-0 md:bottom-5 h-20 w-full md:w-[650px] lg:w-[800px] left-0 md:left-[50%] md:translate-x-[-50%] bg-white/20 dark:bg-black/50 md:dark:bg-black/20 backdrop-blur-md md:rounded-3xl border-t md:border border-white/40 dark:border-black/40 p-3"
+        }
+      ></div>
+    );
   }
 
   const { track, profile } = data.playingTrack;
@@ -78,7 +84,7 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
         "fixed flex gap-3 bottom-0 md:bottom-5 h-20 w-full md:w-[650px] lg:w-[800px] left-0 md:left-[50%] md:translate-x-[-50%] bg-white/20 dark:bg-black/50 md:dark:bg-black/20 backdrop-blur-md md:rounded-3xl border-t md:border border-white/40 dark:border-black/40 p-3"
       }
     >
-      <PlayerInfo track={track} profile={profile} />
+      <PlayerInfo track={track} />
       <PlayerAudio
         audioRef={audioRef}
         track={track}

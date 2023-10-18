@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -12,6 +12,9 @@ import {
 /****************** PROFILES ******************/
 export const profiles = pgTable("profiles", {
   id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   name: varchar("name", { length: 256 }).notNull(),
   imageUrl: text("image_url").notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
@@ -24,11 +27,15 @@ export const profilesRelations = relations(profiles, ({ many, one }) => ({
     references: [playingTracks.profileId],
   }),
   favoriteTracks: many(favoriteTracks),
+  comments: many(comments),
 }));
 
 /****************** TRACKS ******************/
 export const tracks = pgTable("tracks", {
   id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   imageUrl: text("image_url").notNull(),
   title: varchar("title", { length: 256 }).notNull(),
   description: text("description"),
@@ -37,7 +44,6 @@ export const tracks = pgTable("tracks", {
   audioUrl: text("audio_url").notNull(),
   duration: varchar("duration", { length: 256 }).notNull(),
   position: integer("position"),
-  createdAt: timestamp("created_at").defaultNow(),
 
   profileId: integer("profile_id")
     .references(() => profiles.id, { onDelete: "cascade" })
@@ -59,11 +65,15 @@ export const tracksRelations = relations(tracks, ({ one, many }) => ({
   playings: many(playingTracks),
   favoriteTracks: many(favoriteTracks),
   playlistTracks: many(playlistTracks),
+  comments: many(comments),
 }));
 
 /****************** ALBUMS ******************/
 export const albums = pgTable("albums", {
   id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   imageUrl: text("image_url").notNull(),
   title: varchar("title", { length: 256 }).notNull(),
   description: text("description"),
@@ -85,6 +95,9 @@ export const albumsRelations = relations(albums, ({ one, many }) => ({
 /****************** PLAYING TRACK ******************/
 export const playingTracks = pgTable("playing_tracks", {
   id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   profileId: integer("profile_id")
     .references(() => profiles.id, { onDelete: "cascade" })
     .notNull(),
@@ -107,6 +120,9 @@ export const playingTracksRelations = relations(playingTracks, ({ one }) => ({
 /****************** FAVORITE TRACK ******************/
 export const favoriteTracks = pgTable("favorite_tracks", {
   id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   profileId: integer("profile_id")
     .references(() => profiles.id, { onDelete: "cascade" })
     .notNull(),
@@ -129,6 +145,9 @@ export const favoriteTracksRelations = relations(favoriteTracks, ({ one }) => ({
 /****************** PLAYLISTS ******************/
 export const playlists = pgTable("playlists", {
   id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   title: varchar("title", { length: 256 }).notNull(),
   isPublic: boolean("is_public").notNull(),
   profileId: integer("profile_id")
@@ -149,6 +168,9 @@ export const playlistsRelations = relations(playlists, ({ one, many }) => ({
 /****************** PLAYLIST TRACKS ******************/
 export const playlistTracks = pgTable("playlist_tracks", {
   id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   playlistId: integer("playlist_id")
     .references(() => playlists.id, { onDelete: "cascade" })
     .notNull(),
@@ -170,3 +192,29 @@ export const playlistTracksRelations = relations(
     }),
   })
 );
+
+/****************** COMMENTS ******************/
+export const comments = pgTable("comments", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  text: varchar("text", { length: 256 }).notNull(),
+  trackId: integer("track_id")
+    .references(() => tracks.id, { onDelete: "cascade" })
+    .notNull(),
+  profileId: integer("profile_id")
+    .references(() => profiles.id, { onDelete: "cascade" })
+    .notNull(),
+});
+
+export const commentsRelations = relations(comments, ({ one, many }) => ({
+  track: one(tracks, {
+    fields: [comments.trackId],
+    references: [tracks.id],
+  }),
+  profile: one(profiles, {
+    fields: [comments.profileId],
+    references: [profiles.id],
+  }),
+}));

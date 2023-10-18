@@ -24,6 +24,8 @@ export type FullTrackType = TrackType & {
 export type PlayingTrackType = typeof playingTracks.$inferSelect;
 
 export type FullPlayingTrackType = PlayingTrackType & {
-  track: TrackType;
+  track: TrackType & {
+    profile: ProfileType;
+  };
   profile: ProfileType;
 };
