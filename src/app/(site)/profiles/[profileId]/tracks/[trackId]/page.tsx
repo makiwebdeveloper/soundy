@@ -2,7 +2,6 @@ import { notFound, redirect } from "next/navigation";
 import { Comments, TrackHeader, TrackTools } from "@/components/track-page";
 import { PageLayout } from "@/components/page-layout";
 import { getTrackById } from "@/services/tracks.service";
-import { getFavoriteTrack } from "@/services/favorite-tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { getCommentsByTrackId } from "@/services/comments.service";
 

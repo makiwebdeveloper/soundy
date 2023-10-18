@@ -8,13 +8,18 @@ import {
   getPlayingTrack,
   updatePlayingTrack,
 } from "@/services/playing-tracks.service";
+import { FullTrackType } from "@/types/tracks.types";
 
-export async function getTrackById(trackId: number) {
+export async function getTrackById(
+  trackId: number
+): Promise<FullTrackType | undefined> {
   const track = await db.query.tracks.findFirst({
     where: eq(tracks.id, trackId),
     with: {
-      profile: true,
       album: true,
+      profile: true,
+      listenings: true,
+      favoriteTracks: true,
     },
   });
 

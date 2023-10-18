@@ -30,6 +30,7 @@ export default function PlayTrackButton({ trackId }: Props) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["playing track"]);
+      queryClient.invalidateQueries([`track ${trackId}`]);
       setTrackId(trackId);
       setStatus("play");
     },

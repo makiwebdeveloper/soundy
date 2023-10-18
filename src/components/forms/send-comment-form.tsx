@@ -71,7 +71,8 @@ export default function SendCommentForm({ trackId }: Props) {
           disabled={form.getFieldState("text").invalid}
           loading={isLoading}
         >
-          Send <SendIcon className="w-4 h-4" />
+          <span className="hidden sm:block">Send</span>{" "}
+          <SendIcon className="w-4 h-4" />
         </Button>
       </form>
     </Form>

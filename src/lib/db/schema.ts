@@ -28,6 +28,7 @@ export const profilesRelations = relations(profiles, ({ many, one }) => ({
   }),
   favoriteTracks: many(favoriteTracks),
   comments: many(comments),
+  listenings: many(listenings),
 }));
 
 /****************** TRACKS ******************/
@@ -66,6 +67,7 @@ export const tracksRelations = relations(tracks, ({ one, many }) => ({
   favoriteTracks: many(favoriteTracks),
   playlistTracks: many(playlistTracks),
   comments: many(comments),
+  listenings: many(listenings),
 }));
 
 /****************** ALBUMS ******************/
@@ -216,5 +218,30 @@ export const commentsRelations = relations(comments, ({ one, many }) => ({
   profile: one(profiles, {
     fields: [comments.profileId],
     references: [profiles.id],
+  }),
+}));
+
+/****************** LISTENINGS ******************/
+export const listenings = pgTable("listenings", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  profileId: integer("profile_id")
+    .references(() => profiles.id, { onDelete: "cascade" })
+    .notNull(),
+  trackId: integer("track_id")
+    .references(() => tracks.id, { onDelete: "cascade" })
+    .notNull(),
+});
+
+export const listeningsRelations = relations(listenings, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [listenings.profileId],
+    references: [profiles.id],
+  }),
+  track: one(tracks, {
+    fields: [listenings.trackId],
+    references: [tracks.id],
   }),
 }));
