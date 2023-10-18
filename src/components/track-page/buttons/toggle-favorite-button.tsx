@@ -42,6 +42,7 @@ export default function ToggleFavoriteButton({
       },
       onSuccess: () => {
         queryClient.invalidateQueries([`favorite track ${trackId}`]);
+        queryClient.invalidateQueries([`track ${trackId}`]);
       },
     });
 

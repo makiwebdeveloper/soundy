@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { z } from "zod";
 import { uploadTrackValidator } from "@/lib/validators/tracks";
-import { createTrack } from "@/services/tracks.service";
+import { createTrack, getTrackById } from "@/services/tracks.service";
 
 export async function POST(req: Request) {
   try {
@@ -31,4 +31,16 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+}
+
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const trackId = searchParams.get("trackId");
+
+  if (trackId) {
+    const track = await getTrackById(Number(trackId));
+    return NextResponse.json({ track }, { status: 200 });
+  }
+
+  return NextResponse.json({ tracks: [] }, { status: 200 });
 }
