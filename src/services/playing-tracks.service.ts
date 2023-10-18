@@ -11,7 +11,11 @@ export async function getPlayingTrack(profileId: number) {
   const dbPlayingTrack = await db.query.playingTracks.findFirst({
     where: eq(playingTracks.profileId, profileId),
     with: {
-      track: true,
+      track: {
+        with: {
+          profile: true,
+        },
+      },
       profile: true,
     },
   });
