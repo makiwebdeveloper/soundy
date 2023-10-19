@@ -25,6 +25,12 @@ export default async function TrackPage({ params }: Props) {
     notFound();
   }
 
+  const isCreator = track.profileId === currentProfile.id;
+
+  if (track.isPublic && !isCreator) {
+    notFound();
+  }
+
   const comments = await getCommentsByTrackId(track.id);
 
   return (

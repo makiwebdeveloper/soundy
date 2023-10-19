@@ -13,7 +13,7 @@ import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
 
 interface Props {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
-  track: Pick<TrackType, "audioUrl" | "duration">;
+  track: Pick<TrackType, "audioUrl" | "duration" | "id">;
   volume: number;
   currentTime: number;
   setCurrentTime: (v: number) => void;
@@ -28,7 +28,7 @@ export default function PlayerAudio({
   setCurrentTime,
   durationSeconds,
 }: Props) {
-  const { status, toggleStatus } = usePlayingTrackStore();
+  const { status, toggleStatus, setTrackId } = usePlayingTrackStore();
 
   return (
     <div className="flex-1 flex flex-col justify-between">
@@ -47,7 +47,10 @@ export default function PlayerAudio({
         </button>
         <button
           className="transition flex-center rounded-full "
-          onClick={toggleStatus}
+          onClick={() => {
+            toggleStatus();
+            setTrackId(track.id);
+          }}
         >
           {status === "play" ? (
             <PauseCircleIcon className="w-7 h-7" />

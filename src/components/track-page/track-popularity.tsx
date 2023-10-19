@@ -1,6 +1,7 @@
 "use client";
 
 import { FullTrackType } from "@/types/tracks.types";
+import { formatNumber } from "@/utils/format-number";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { HeartIcon, PlayIcon } from "lucide-react";
@@ -20,14 +21,15 @@ export default function TrackPopularity({ initialTrack }: Props) {
     },
     initialData: initialTrack,
   });
+
   return (
     <div className="flex items-center gap-4">
       <p className="flex items-center gap-2 text-white/70 dark:text-white/50">
-        <PlayIcon className="w-4 h-4" /> {track.listenings.length}
+        <PlayIcon className="w-4 h-4" /> {formatNumber(track.listenings.length)}
       </p>
       <p className="flex items-center gap-2 text-white/70 dark:text-white/50">
         <HeartIcon className="w-4 h-4" />
-        {track.favoriteTracks.length}
+        {formatNumber(track.favoriteTracks.length)}
       </p>
     </div>
   );
