@@ -50,7 +50,13 @@ export default function PlayTrackButton({ trackId }: Props) {
 
   return (
     <Button
-      onClick={() => playTrack(trackId)}
+      onClick={() => {
+        if (playingTrackId === trackId) {
+          setStatus("play");
+        } else {
+          playTrack(trackId);
+        }
+      }}
       loading={isPlayTrackLoading}
       disabledLoadingIcon
     >

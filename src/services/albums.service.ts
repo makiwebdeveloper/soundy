@@ -2,6 +2,8 @@ import { UploadAlbumValidatorType } from "@/lib/validators/albums";
 import { createTrack } from "./tracks.service";
 import { db } from "@/lib/db";
 import { albums } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { FullAlbumType } from "@/types/albums.types";
 
 export async function createAlbum(
   data: UploadAlbumValidatorType & { profileId: number }
@@ -54,4 +56,20 @@ export async function createAlbum(
   } catch (error) {
     throw new Error("Failed album creation");
   }
+}
+
+export async function getAlbumById(
+  albumId: number
+): Promise<FullAlbumType | undefined> {
+  return db.query.albums.findFirst({
+    where: eq(albums.id, albumId),
+    with: {
+      profile: true,
+      tracks: {
+        with: {
+          listenings: true,
+        },
+      },
+    },
+  });
 }

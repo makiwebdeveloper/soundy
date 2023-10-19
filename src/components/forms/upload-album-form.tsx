@@ -39,9 +39,14 @@ import * as mm from "music-metadata-browser";
 interface Props {
   audioFiles: AudioFileType[];
   cancel: () => void;
+  profileId: number;
 }
 
-export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
+export default function UploadAlbumForm({
+  audioFiles,
+  cancel,
+  profileId,
+}: Props) {
   const { toast } = useToast();
   const router = useRouter();
   const [customGenre, setCustomGenre] = useState("");
@@ -89,7 +94,7 @@ export default function UploadAlbumForm({ audioFiles, cancel }: Props) {
         audioDurations: tracksDuration,
       };
       const res = await createAlbum(data);
-      router.push(`/albums/${res.data.albumId}`);
+      router.push(`/profiles/${profileId}/albums/${res.data.albumId}`);
     }
   }
 

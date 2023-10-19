@@ -38,6 +38,12 @@ export default function Upload({ profileId }: Props) {
       />
     );
   } else {
-    return <UploadAlbumForm audioFiles={audioFiles} cancel={cancel} />;
+    return (
+      <UploadAlbumForm
+        audioFiles={audioFiles}
+        cancel={cancel}
+        profileId={profileId}
+      />
+    );
   }
 }
