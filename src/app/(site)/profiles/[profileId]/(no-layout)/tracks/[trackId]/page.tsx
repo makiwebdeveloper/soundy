@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { Comments, TrackHeader, TrackTools } from "@/components/track-page";
+import { Comments, TrackHeader, TrackTools } from "@/components/pages/track";
 import { PageLayout } from "@/components/page-layout";
 import { getTrackById } from "@/services/tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";

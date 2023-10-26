@@ -69,6 +69,7 @@ export async function getAlbumById(
         with: {
           listenings: true,
         },
+        orderBy: (tracks, { asc }) => [asc(tracks.position)],
       },
     },
   });

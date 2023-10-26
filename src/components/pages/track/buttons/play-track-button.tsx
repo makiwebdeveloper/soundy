@@ -1,9 +1,9 @@
 "use client";
 
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { PauseCircleIcon, PlayCircleIcon } from "lucide-react";
 
 interface Props {

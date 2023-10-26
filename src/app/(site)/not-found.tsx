@@ -14,7 +14,7 @@ export default function NotFound() {
           <p className="text-sm">Could not find requested resource</p>
           <Link
             href="/"
-            className="flex items-center gap-1 text-sm mx-auto text-white/70 dark:text-white/50 transition hover:text-white dark:hover:text-white hover:underline"
+            className="flex items-center justify-center gap-1 text-sm mx-auto text-white/70 dark:text-white/50 transition hover:text-white dark:hover:text-white hover:underline"
           >
             Return Home <Undo2Icon className="w-4 h-4" />
           </Link>

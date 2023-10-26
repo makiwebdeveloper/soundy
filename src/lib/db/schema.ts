@@ -22,6 +22,7 @@ export const profiles = pgTable("profiles", {
 
 export const profilesRelations = relations(profiles, ({ many, one }) => ({
   tracks: many(tracks),
+  albums: many(albums),
   playingTrack: one(playingTracks, {
     fields: [profiles.id],
     references: [playingTracks.profileId],
@@ -29,6 +30,8 @@ export const profilesRelations = relations(profiles, ({ many, one }) => ({
   favoriteTracks: many(favoriteTracks),
   comments: many(comments),
   listenings: many(listenings),
+  followers: many(followings, { relationName: "followers" }),
+  followings: many(followings, { relationName: "followings" }),
 }));
 
 /****************** TRACKS ******************/
@@ -243,5 +246,32 @@ export const listeningsRelations = relations(listenings, ({ one }) => ({
   track: one(tracks, {
     fields: [listenings.trackId],
     references: [tracks.id],
+  }),
+}));
+
+/****************** FOLLOWING ******************/
+export const followings = pgTable("followings", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  followerId: integer("follower_id")
+    .references(() => profiles.id, { onDelete: "cascade" })
+    .notNull(),
+  followingId: integer("following_id")
+    .references(() => profiles.id, { onDelete: "cascade" })
+    .notNull(),
+});
+
+export const followingsRelations = relations(followings, ({ one }) => ({
+  follower: one(profiles, {
+    fields: [followings.followerId],
+    references: [profiles.id],
+    relationName: "followers",
+  }),
+  following: one(profiles, {
+    fields: [followings.followingId],
+    references: [profiles.id],
+    relationName: "followings",
   }),
 }));

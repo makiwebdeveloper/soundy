@@ -87,9 +87,12 @@ export default function AlbumTrackItem({ track, profile }: Props) {
         <p className="w-5 flex justify-center text-sm text-white/70 dark:text-white/50">
           {track.position ? track.position + 1 : 1}
         </p>
-        <p className="text-sm text-white/70 dark:text-white/50">
+        <Link
+          href={`/profiles/${profile.id}`}
+          className="text-sm text-white/70 dark:text-white/50 transition hover:underline hover:text-white dark:hover:text-white"
+        >
           {profile.name}
-        </p>
+        </Link>
         <p className="text-sm">{track.title}</p>
       </div>
       <div>

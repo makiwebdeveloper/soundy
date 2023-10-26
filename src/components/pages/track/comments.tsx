@@ -3,7 +3,7 @@
 import { FullCommentType } from "@/types/comments.types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { SendCommentForm } from "../forms";
+import { SendCommentForm } from "@/components/forms";
 import CommentItem from "./comment-item";
 
 interface Props {
