@@ -34,7 +34,7 @@ export default async function ProfileLayout({ children, params }: Props) {
     <PageLayout>
       <ProfileHeader
         initialProfile={profile}
-        isCurrentProfile={profile.id === currentProfile.id}
+        currentProfileId={currentProfile.id}
       />
       <ProfileLinks profileId={profile.id} />
       <div>{children}</div>

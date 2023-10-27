@@ -8,14 +8,16 @@ import FollowingButton from "./following-button";
 
 interface Props {
   initialProfile: FullProfileType;
-  isCurrentProfile: boolean;
+  currentProfileId: number;
 }
 
 export default function ProfileHeader({
   initialProfile,
-  isCurrentProfile,
+  currentProfileId,
 }: Props) {
   const profile = initialProfile;
+
+  const isCurrentProfile = profile.id === currentProfileId;
 
   return (
     <div className="flex flex-col md:flex-row items-center md:items-start gap-3 2xl:gap-5">
@@ -29,7 +31,12 @@ export default function ProfileHeader({
       </div>
       <div className="flex-1 flex flex-col justify-between items-center gap-3 md:items-start md:h-[125px] lg:h-[150px] 2xl:h-[200px]">
         <PageTitle className="break-all">{profile.name}</PageTitle>
-        {!isCurrentProfile && <FollowingButton />}
+        {!isCurrentProfile && (
+          <FollowingButton
+            profileId={profile.id}
+            currentProfileId={currentProfileId}
+          />
+        )}
       </div>
       <ProfilePopularity
         followers={profile.followers.length}
