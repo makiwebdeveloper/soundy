@@ -1,5 +1,5 @@
 import { PageLayout } from "@/components/page-layout";
-import { ProfileHeader } from "@/components/pages/profile";
+import { ProfileHeader, ProfileLinks } from "@/components/pages/profile";
 import {
   getCurrentProfile,
   getFullProfileById,
@@ -32,7 +32,11 @@ export default async function ProfileLayout({ children, params }: Props) {
 
   return (
     <PageLayout>
-      <ProfileHeader />
+      <ProfileHeader
+        initialProfile={profile}
+        isCurrentProfile={profile.id === currentProfile.id}
+      />
+      <ProfileLinks profileId={profile.id} />
       <div>{children}</div>
     </PageLayout>
   );
