@@ -5,6 +5,8 @@ import { FullProfileType } from "@/types/profiles.types";
 import Image from "next/image";
 import ProfilePopularity from "./profile-popularity";
 import FollowingButton from "./following-button";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 interface Props {
   initialProfile: FullProfileType;
@@ -15,7 +17,17 @@ export default function ProfileHeader({
   initialProfile,
   currentProfileId,
 }: Props) {
-  const profile = initialProfile;
+  const { data: profile } = useQuery({
+    queryKey: [`profile ${initialProfile.id}`],
+    queryFn: async () => {
+      const res = await axios.get<{ profile: FullProfileType }>(
+        `/api/profiles?profileId=${initialProfile.id}`
+      );
+
+      return res.data.profile;
+    },
+    initialData: initialProfile,
+  });
 
   const isCurrentProfile = profile.id === currentProfileId;
 
@@ -35,6 +47,11 @@ export default function ProfileHeader({
           <FollowingButton
             profileId={profile.id}
             currentProfileId={currentProfileId}
+            isFollow={
+              !!profile.followers.some(
+                (item) => item.followerId === currentProfileId
+              )
+            }
           />
         )}
       </div>

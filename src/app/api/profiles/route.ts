@@ -1,10 +1,11 @@
 import { createProfileValidator } from "@/lib/validators/profiles";
 import {
   createProfile,
-  findProfileByUserId,
+  getFullProfileById,
+  getProfileByUserId,
 } from "@/services/profiles.service";
 import { auth } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -17,7 +18,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { name, imageUrl } = createProfileValidator.parse(body);
 
-    const existProfile = await findProfileByUserId(userId);
+    const existProfile = await getProfileByUserId(userId);
 
     if (existProfile) {
       return NextResponse.json({ profileId: existProfile.id }, { status: 200 });
@@ -38,4 +39,16 @@ export async function POST(req: Request) {
       }
     );
   }
+}
+
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const profileId = searchParams.get("profileId");
+  const profile = await getFullProfileById(Number(profileId));
+
+  if (!profile) {
+    return NextResponse.json({ error: "Profile not fount" }, { status: 404 });
+  }
+
+  return NextResponse.json({ profile }, { status: 200 });
 }

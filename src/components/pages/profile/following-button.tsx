@@ -11,22 +11,20 @@ import { useToast } from "@/hooks/use-toast";
 interface Props {
   profileId: number;
   currentProfileId: number;
+  isFollow: boolean;
 }
 
-export default function FollowingButton({
-  profileId,
-  currentProfileId,
-}: Props) {
+export default function FollowingButton({ profileId, isFollow }: Props) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
-
-  const isFollow = true;
 
   const { mutate: follow, isLoading: isFollowLoading } = useMutation({
     mutationFn: async (values: FollowProfileValidatorType) => {
       await axios.post("/api/followings/", values);
     },
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries([`profile ${profileId}`]);
+    },
     onError: () => {
       toast({
         title: "Failed to follow profile",
@@ -40,7 +38,9 @@ export default function FollowingButton({
     mutationFn: async () => {
       await axios.delete(`/api/followings/${profileId}`);
     },
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries([`profile ${profileId}`]);
+    },
     onError: () => {
       toast({
         title: "Failed to unfollow profile",

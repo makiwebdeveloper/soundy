@@ -15,10 +15,12 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { profileId } = followProfileValidator.parse(body);
 
-    const existFollowing = await getFollowing({
+    const data = {
       followerId: currentProfile.id,
       followingId: profileId,
-    });
+    };
+
+    const existFollowing = await getFollowing(data);
 
     if (existFollowing) {
       return NextResponse.json(
@@ -27,10 +29,7 @@ export async function POST(req: Request) {
       );
     }
 
-    await followProfile({
-      followerId: currentProfile.id,
-      followingId: profileId,
-    });
+    await followProfile(data);
 
     return NextResponse.json({ message: "OK" }, { status: 200 });
   } catch (error) {

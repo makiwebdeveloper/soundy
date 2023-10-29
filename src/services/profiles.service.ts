@@ -4,6 +4,7 @@ import { CreateProfileValidatorType } from "@/lib/validators/profiles";
 import { FullProfileType, ProfileType } from "@/types/profiles.types";
 import { auth } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
+import { getProfilePopularity } from "./followings.service";
 
 export async function getCurrentProfile() {
   const { userId } = auth();
@@ -36,16 +37,23 @@ export async function getProfileById(
 export async function getFullProfileById(
   profileId: number
 ): Promise<FullProfileType | undefined> {
-  return db.query.profiles.findFirst({
+  const profile = await db.query.profiles.findFirst({
     where: eq(profiles.id, profileId),
     with: {
       tracks: true,
       albums: true,
       favoriteTracks: true,
-      followers: true,
-      followings: true,
     },
   });
+
+  if (!profile) return undefined;
+
+  const popularity = await getProfilePopularity(profile.id);
+
+  return {
+    ...profile,
+    ...popularity,
+  };
 }
 
 export async function createProfile(
