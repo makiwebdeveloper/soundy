@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { getAlbumById } from "@/services/albums.service";
 import { PageLayout } from "@/components/page-layout";
-import { AlbumHeader, AlbumTracks } from "@/components/album-page";
+import { AlbumHeader, AlbumTracks } from "@/components/pages/album";
 
 interface Props {
   params: {

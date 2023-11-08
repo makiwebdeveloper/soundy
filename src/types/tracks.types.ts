@@ -28,3 +28,7 @@ export type FullPlayingTrackType = PlayingTrackType & {
   };
   profile: ProfileType;
 };
+
+export type TrackWithListeningsType = TrackType & {
+  listenings: ListeningType[];
+};

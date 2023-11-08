@@ -26,7 +26,7 @@ export function getSidebarLinks(profileId: number) {
     {
       title: "Likes",
       icon: Heart,
-      path: `/profiles/${profileId}/likes`,
+      path: `/profiles/${profileId}/favorites`,
     },
     {
       title: "Tracks",

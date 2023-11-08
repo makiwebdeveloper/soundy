@@ -78,7 +78,7 @@ export default function AddToPlaylistDialog({
                   </p>
                   <p
                     onClick={() => setType("create")}
-                    className="text-sm text-white/70 dark:text-white/50 transition hover:underline hover:text-white dark:hover:text-white cursor-pointer"
+                    className="text-sm text-white/70 dark:text-white/50 transition hover:underline underline-offset-2 hover:text-white dark:hover:text-white cursor-pointer"
                   >
                     Create new one
                   </p>

@@ -22,7 +22,6 @@ export default function AlbumTrackItem({ track, profile }: Props) {
     setTrackId,
     setStatus,
     status,
-    toggleStatus,
     trackId: playingTrackId,
   } = usePlayingTrackStore();
 
@@ -47,10 +46,7 @@ export default function AlbumTrackItem({ track, profile }: Props) {
   });
 
   return (
-    <Link
-      href={`/profiles/${profile.id}/tracks/${track.id}`}
-      className="group flex items-center gap-3 transition hover:bg-white/20 dark:hover:bg-black/40 cursor-pointer p-2 rounded-md"
-    >
+    <div className="group flex items-center gap-3 transition hover:bg-white/20 dark:hover:bg-black/40 p-2 rounded-md">
       <div className="relative w-[40px] h-[40px]">
         <Image
           fill
@@ -77,7 +73,7 @@ export default function AlbumTrackItem({ track, profile }: Props) {
           className="hidden rounded-full group-hover:flex absolute top-[50%] translate-x-[-50%] left-[50%] translate-y-[-50%] w-[26px] h-[26px] p-0 flex-center bg-green-500/80 hover:bg-green-500"
         >
           {status === "play" && track.id === playingTrackId ? (
-            <PauseIcon className="w-[16px] h-[16px] absolute top-[50%] translate-x-[-50%] left-[55%] translate-y-[-50%]" />
+            <PauseIcon className="w-[16px] h-[16px] absolute top-[50%] translate-x-[-55%] left-[55%] translate-y-[-50%]" />
           ) : (
             <PlayIcon className="w-[16px] h-[16px] absolute top-[50%] translate-x-[-50%] left-[55%] translate-y-[-50%]" />
           )}
@@ -87,10 +83,18 @@ export default function AlbumTrackItem({ track, profile }: Props) {
         <p className="w-5 flex justify-center text-sm text-white/70 dark:text-white/50">
           {track.position ? track.position + 1 : 1}
         </p>
-        <p className="text-sm text-white/70 dark:text-white/50">
+        <Link
+          href={`/profiles/${profile.id}`}
+          className="text-sm text-white/70 dark:text-white/50 transition hover:underline underline-offset-2 hover:text-white dark:hover:text-white"
+        >
           {profile.name}
-        </p>
-        <p className="text-sm">{track.title}</p>
+        </Link>
+        <Link
+          href={`/profiles/${profile.id}/tracks/${track.id}`}
+          className="text-sm hover:underline underline-offset-2"
+        >
+          {track.title}
+        </Link>
       </div>
       <div>
         <p className="flex items-center gap-2 text-white/70 ">
@@ -98,6 +102,6 @@ export default function AlbumTrackItem({ track, profile }: Props) {
           {formatNumber(track.listenings.length)}
         </p>
       </div>
-    </Link>
+    </div>
   );
 }

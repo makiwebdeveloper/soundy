@@ -3,7 +3,7 @@ import { createTrack } from "./tracks.service";
 import { db } from "@/lib/db";
 import { albums } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { FullAlbumType } from "@/types/albums.types";
+import { AlbumType, FullAlbumType } from "@/types/albums.types";
 
 export async function createAlbum(
   data: UploadAlbumValidatorType & { profileId: number }
@@ -69,7 +69,18 @@ export async function getAlbumById(
         with: {
           listenings: true,
         },
+        orderBy: (tracks, { asc }) => [asc(tracks.position)],
       },
     },
+  });
+}
+
+export async function getAlbumsByProfileId(
+  profileId: number,
+  limit?: number
+): Promise<AlbumType[]> {
+  return db.query.albums.findMany({
+    where: eq(albums.profileId, profileId),
+    limit,
   });
 }

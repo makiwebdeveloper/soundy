@@ -1,10 +1,10 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "../../ui/button";
 import axios from "axios";
-import { FavoriteTrackType } from "@/types/tracks.types";
 import { useMemo } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { FavoriteTrackType } from "@/types/tracks.types";
 import { HeartHandshakeIcon, HeartIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 

@@ -1,11 +1,10 @@
 import { db } from "@/lib/db";
 import { favoriteTracks } from "@/lib/db/schema";
+import {
+  FavoriteTrackCreationType,
+  FullFavoriteTrackType,
+} from "@/types/favorite-tracks.types";
 import { eq } from "drizzle-orm";
-
-export type FavoriteTrackCreationType = {
-  profileId: number;
-  trackId: number;
-};
 
 export async function getFavoriteTrack({
   profileId,
@@ -36,4 +35,22 @@ export async function createFavoriteTrack({
 
 export async function deleteFavoriteTrack(favoriteTrackId: number) {
   await db.delete(favoriteTracks).where(eq(favoriteTracks.id, favoriteTrackId));
+}
+
+export async function getFavoriteTracksByProfileId(
+  profileId: number,
+  limit?: number
+): Promise<FullFavoriteTrackType[]> {
+  return db.query.favoriteTracks.findMany({
+    where: eq(favoriteTracks.profileId, profileId),
+    with: {
+      profile: true,
+      track: {
+        with: {
+          listenings: true,
+        },
+      },
+    },
+    limit,
+  });
 }

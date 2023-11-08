@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { Comments, TrackHeader, TrackTools } from "@/components/track-page";
+import { Comments, TrackHeader, TrackTools } from "@/components/pages/track";
 import { PageLayout } from "@/components/page-layout";
 import { getTrackById } from "@/services/tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
@@ -27,7 +27,7 @@ export default async function TrackPage({ params }: Props) {
 
   const isCreator = track.profileId === currentProfile.id;
 
-  if (track.isPublic && !isCreator) {
+  if (!track.isPublic && !isCreator) {
     notFound();
   }
 

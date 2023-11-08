@@ -1,6 +1,6 @@
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import { findProfileByUserId } from "./services/profiles.service";
+import { getProfileByUserId } from "./services/profiles.service";
 
 export default authMiddleware({
   publicRoutes: ["/api/:path*"],
@@ -14,7 +14,7 @@ export default authMiddleware({
       !auth.isPublicRoute &&
       req.nextUrl.pathname !== "/create-profile"
     ) {
-      const existProfile = await findProfileByUserId(auth.userId);
+      const existProfile = await getProfileByUserId(auth.userId);
       if (!existProfile) {
         return NextResponse.redirect(new URL("/create-profile", req.url));
       }

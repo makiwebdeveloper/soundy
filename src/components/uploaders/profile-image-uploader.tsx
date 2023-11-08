@@ -73,7 +73,7 @@ export default function ProfileImageUploader({ image, setImage }: Props) {
         <Button
           onClick={remove}
           variant="destructive"
-          className="transition hidden hover:block peer-hover/image:block absolute top-0 right-0 p-1 h-auto"
+          className="transition md:hidden hover:block peer-hover/image:block absolute top-0 right-0 p-1 h-auto"
         >
           <X className="w-4 h-4" />
         </Button>
