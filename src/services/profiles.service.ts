@@ -73,8 +73,11 @@ export async function updateProfile(
   data: EditProfileValidatorType,
   profile: ProfileType
 ) {
-  await db.update(profiles).set({
-    name: data.name ? data.name : profile.name,
-    imageUrl: data.imageUrl ? data.imageUrl : profile.imageUrl,
-  });
+  await db
+    .update(profiles)
+    .set({
+      name: data.name ? data.name : profile.name,
+      imageUrl: data.imageUrl ? data.imageUrl : profile.imageUrl,
+    })
+    .where(eq(profiles.id, profile.id));
 }

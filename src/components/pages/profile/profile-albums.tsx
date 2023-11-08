@@ -10,6 +10,10 @@ interface Props {
 }
 
 export default function ProfileAlbums({ albums, profile }: Props) {
+  if (albums.length === 0) {
+    return null;
+  }
+
   return (
     <div>
       <div className="mx-2 flex items-center justify-between">

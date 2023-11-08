@@ -10,6 +10,10 @@ interface Props {
 }
 
 export default function ProfilePlaylists({ playlists, profile }: Props) {
+  if (playlists.length === 0) {
+    return null;
+  }
+
   return (
     <div>
       <div className="mx-2 flex items-center justify-between">
