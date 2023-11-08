@@ -27,7 +27,7 @@ export default async function TrackPage({ params }: Props) {
 
   const isCreator = track.profileId === currentProfile.id;
 
-  if (track.isPublic && !isCreator) {
+  if (!track.isPublic && !isCreator) {
     notFound();
   }
 

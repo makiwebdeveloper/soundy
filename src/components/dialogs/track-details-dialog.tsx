@@ -48,7 +48,7 @@ export default function TrackDetailsDialog({ track }: Props) {
               Album:{" "}
               <Link
                 href={`/profiles/${track.album.profileId}/albums/${track.album.id}`}
-                className="break-all transition text-white/70 dark:text-white/50 hover:text-white dark:hover:text-white hover:underline"
+                className="break-all transition text-white/70 dark:text-white/50 hover:text-white dark:hover:text-white hover:underline underline-offset-2"
               >
                 {track.album.title}
               </Link>
@@ -64,7 +64,7 @@ export default function TrackDetailsDialog({ track }: Props) {
             Made by:{" "}
             <Link
               href={`/profiles/${track.profile.id}`}
-              className="break-all transition text-white/70 dark:text-white/50 hover:text-white dark:hover:text-white hover:underline"
+              className="break-all transition text-white/70 dark:text-white/50 hover:text-white dark:hover:text-white hover:underline underline-offset-2"
             >
               {track.profile.name}
             </Link>

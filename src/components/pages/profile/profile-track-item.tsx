@@ -1,22 +1,23 @@
 "use client";
 
-import Image from "next/image";
+import axios from "axios";
 import Link from "next/link";
-import { PauseIcon, PlayIcon } from "lucide-react";
-import { TrackWithListeningsType } from "@/types/albums.types";
+import Image from "next/image";
+import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
+import { TrackType } from "@/types/tracks.types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { LockIcon, PauseIcon, PlayIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ProfileType } from "@/types/profiles.types";
 import { formatNumber } from "@/utils/format-number";
-import { Button } from "@/components/ui/button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
-import axios from "axios";
+import { cn } from "@/lib/cn";
 
 interface Props {
-  track: TrackWithListeningsType;
+  track: TrackType;
   profile: Pick<ProfileType, "id" | "name">;
 }
 
-export default function AlbumTrackItem({ track, profile }: Props) {
+export default function ProfileTrackItem({ track, profile }: Props) {
   const queryClient = useQueryClient();
   const {
     setTrackId,
@@ -47,7 +48,7 @@ export default function AlbumTrackItem({ track, profile }: Props) {
 
   return (
     <div className="group flex items-center gap-3 transition hover:bg-white/20 dark:hover:bg-black/40 p-2 rounded-md">
-      <div className="relative w-[40px] h-[40px]">
+      <div className={`relative w-[80px] h-[80px] rounded-md z-[0]`}>
         <Image
           fill
           src={track.imageUrl}
@@ -70,37 +71,42 @@ export default function AlbumTrackItem({ track, profile }: Props) {
           }}
           disabled={isPlayTrackLoading}
           variant="ghost"
-          className="hidden rounded-full group-hover:flex absolute top-[50%] translate-x-[-50%] left-[50%] translate-y-[-50%] w-[26px] h-[26px] p-0 flex-center bg-green-500/80 hover:bg-green-500"
+          className="hidden rounded-full group-hover:flex absolute top-[50%] translate-x-[-50%] left-[50%] translate-y-[-50%] w-[42px] h-[42px] p-0 flex-center bg-green-500/80 hover:bg-green-500"
         >
           {status === "play" && track.id === playingTrackId ? (
-            <PauseIcon className="w-[16px] h-[16px] absolute top-[50%] translate-x-[-55%] left-[55%] translate-y-[-50%]" />
+            <PauseIcon className="w-[28px] h-[28px] absolute top-[50%] translate-x-[-55%] left-[55%] translate-y-[-50%]" />
           ) : (
-            <PlayIcon className="w-[16px] h-[16px] absolute top-[50%] translate-x-[-50%] left-[55%] translate-y-[-50%]" />
+            <PlayIcon className="w-[28px] h-[28px] absolute top-[50%] translate-x-[-50%] left-[55%] translate-y-[-50%]" />
           )}
         </Button>
       </div>
-      <div className="flex-1 flex items-center gap-3">
-        <p className="w-5 flex justify-center text-sm text-white/70 dark:text-white/50">
-          {track.position ? track.position + 1 : 1}
-        </p>
+      <div className="flex-1 flex flex-col">
         <Link
-          href={`/profiles/${profile.id}`}
-          className="text-sm text-white/70 dark:text-white/50 transition hover:underline underline-offset-2 hover:text-white dark:hover:text-white"
-        >
-          {profile.name}
-        </Link>
-        <Link
-          href={`/profiles/${profile.id}/tracks/${track.id}`}
-          className="text-sm hover:underline underline-offset-2"
+          href={`/profiles/${track.profileId}/tracks/${track.id}`}
+          className="text-sm hover:underline underline-offset-2 w-fit"
         >
           {track.title}
         </Link>
-      </div>
-      <div>
-        <p className="flex items-center gap-2 text-white/70 ">
-          <PlayIcon className="w-4 h-4" />{" "}
-          {formatNumber(track.listenings.length)}
-        </p>
+        <Link
+          href={`/profiles/${profile.id}`}
+          passHref={true}
+          className="w-fit text-sm text-white/70 dark:text-white/50 transition hover:underline underline-offset-2 hover:text-white dark:hover:text-white"
+        >
+          {profile.name}
+        </Link>
+        <div className="flex gap-2 items-center">
+          <p className="flex items-center gap-2 text-white/70">
+            <PlayIcon className="w-4 h-4" /> {formatNumber(4)}
+          </p>
+          <span className="text-white/70">·</span>
+          <p className="text-white/70">{track.duration}</p>
+          {!track.isPublic && (
+            <>
+              <span className="text-white/70">·</span>
+              <LockIcon className="w-4 h-4 text-white/70" />
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

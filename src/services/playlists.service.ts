@@ -4,7 +4,7 @@ import {
   AddToPlaylistValidatorType,
   CreatePlaylistValidatorType,
 } from "@/lib/validators/playlists";
-import { PlaylistWithTracksType } from "@/types/playlists.types";
+import { PlaylistType, PlaylistWithTracksType } from "@/types/playlists.types";
 import { eq } from "drizzle-orm";
 
 type PlaylistCreationType = Pick<
@@ -15,7 +15,8 @@ type PlaylistCreationType = Pick<
 };
 
 export async function getProfilePlaylists(
-  profileId: number
+  profileId: number,
+  limit?: number
 ): Promise<PlaylistWithTracksType[]> {
   const dbPlatlists = await db.query.playlists.findMany({
     where: eq(playlists.profileId, profileId),
@@ -26,6 +27,7 @@ export async function getProfilePlaylists(
         },
       },
     },
+    limit,
   });
 
   return dbPlatlists.map((item) => {
@@ -81,4 +83,14 @@ export async function getPlaylistTrack({
     (item) => item.trackId === trackId
   );
   return playlistTrack;
+}
+
+export async function getPlaylistsByProfileId(
+  profileId: number,
+  limit?: number
+): Promise<PlaylistType[]> {
+  return db.query.playlists.findMany({
+    where: eq(playlists.profileId, profileId),
+    limit,
+  });
 }

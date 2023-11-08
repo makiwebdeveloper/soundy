@@ -8,7 +8,7 @@ import {
   getPlayingTrack,
   updatePlayingTrack,
 } from "@/services/playing-tracks.service";
-import { FullTrackType } from "@/types/tracks.types";
+import { FullTrackType, TrackType } from "@/types/tracks.types";
 
 export async function getTrackById(
   trackId: number
@@ -83,4 +83,14 @@ export async function playTrack({
 
   const playingTrackId = await createPlayingTrack({ profileId, trackId });
   return playingTrackId;
+}
+
+export async function getTracksByProfileId(
+  profileId: number,
+  limit?: number
+): Promise<TrackType[]> {
+  return db.query.tracks.findMany({
+    where: eq(tracks.profileId, profileId),
+    limit,
+  });
 }

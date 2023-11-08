@@ -26,7 +26,7 @@ export default function AlbumHeader({ album, profile }: Props) {
         <PageDescription>
           Made by:{" "}
           <Link
-            className="transition hover:text-white hover:underline"
+            className="transition hover:text-white hover:underline underline-offset-2"
             href={`/profiles/${profile.id}`}
           >
             {profile.name}

@@ -25,7 +25,7 @@ export default function TrackHeader(props: Props) {
         <PageDescription>
           Made by:{" "}
           <Link
-            className="transition hover:text-white hover:underline"
+            className="transition hover:text-white hover:underline underline-offset-2"
             href={`/profiles/${props.profileId}`}
           >
             {props.profileName}
