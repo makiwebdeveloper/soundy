@@ -8,7 +8,11 @@ import {
   getPlayingTrack,
   updatePlayingTrack,
 } from "@/services/playing-tracks.service";
-import { FullTrackType, TrackType } from "@/types/tracks.types";
+import {
+  FullTrackType,
+  TrackType,
+  TrackWithListeningsType,
+} from "@/types/tracks.types";
 
 export async function getTrackById(
   trackId: number
@@ -88,9 +92,12 @@ export async function playTrack({
 export async function getTracksByProfileId(
   profileId: number,
   limit?: number
-): Promise<TrackType[]> {
+): Promise<TrackWithListeningsType[]> {
   return db.query.tracks.findMany({
     where: eq(tracks.profileId, profileId),
     limit,
+    with: {
+      listenings: true,
+    },
   });
 }

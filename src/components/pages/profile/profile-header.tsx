@@ -4,9 +4,10 @@ import { PageTitle } from "@/components/page-layout";
 import { FullProfileType } from "@/types/profiles.types";
 import Image from "next/image";
 import ProfilePopularity from "./profile-popularity";
-import FollowingButton from "./following-button";
+import FollowingButton from "./buttons/following-button";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import EditProfileDialog from "@/components/dialogs/edit-profile-dialog";
 
 interface Props {
   initialProfile: FullProfileType;
@@ -43,7 +44,9 @@ export default function ProfileHeader({
       </div>
       <div className="flex-1 flex flex-col justify-between items-center gap-3 md:items-start md:h-[125px] lg:h-[150px] 2xl:h-[200px]">
         <PageTitle className="break-all">{profile.name}</PageTitle>
-        {!isCurrentProfile && (
+        {isCurrentProfile ? (
+          <EditProfileDialog profile={profile} />
+        ) : (
           <FollowingButton
             profileId={profile.id}
             currentProfileId={currentProfileId}

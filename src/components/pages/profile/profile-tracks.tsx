@@ -1,10 +1,10 @@
-import { TrackType } from "@/types/tracks.types";
+import { TrackWithListeningsType } from "@/types/tracks.types";
 import ProfileTrackItem from "./profile-track-item";
 import { ProfileType } from "@/types/profiles.types";
 import Link from "next/link";
 
 interface Props {
-  tracks: TrackType[];
+  tracks: TrackWithListeningsType[];
   profile: ProfileType;
   type: "tracks" | "favorites";
 }

@@ -45,7 +45,11 @@ export async function getFavoriteTracksByProfileId(
     where: eq(favoriteTracks.profileId, profileId),
     with: {
       profile: true,
-      track: true,
+      track: {
+        with: {
+          listenings: true,
+        },
+      },
     },
     limit,
   });

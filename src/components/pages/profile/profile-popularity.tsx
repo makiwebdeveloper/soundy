@@ -1,5 +1,5 @@
 import Link from "next/link";
-import FollowingButton from "./following-button";
+import FollowingButton from "./buttons/following-button";
 
 interface Props {
   followers: number;

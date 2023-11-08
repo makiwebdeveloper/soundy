@@ -4,16 +4,15 @@ import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
-import { TrackType } from "@/types/tracks.types";
+import { TrackWithListeningsType } from "@/types/tracks.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LockIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileType } from "@/types/profiles.types";
 import { formatNumber } from "@/utils/format-number";
-import { cn } from "@/lib/cn";
 
 interface Props {
-  track: TrackType;
+  track: TrackWithListeningsType;
   profile: Pick<ProfileType, "id" | "name">;
 }
 
@@ -96,7 +95,8 @@ export default function ProfileTrackItem({ track, profile }: Props) {
         </Link>
         <div className="flex gap-2 items-center">
           <p className="flex items-center gap-2 text-white/70">
-            <PlayIcon className="w-4 h-4" /> {formatNumber(4)}
+            <PlayIcon className="w-4 h-4" />{" "}
+            {formatNumber(track.listenings.length)}
           </p>
           <span className="text-white/70">·</span>
           <p className="text-white/70">{track.duration}</p>

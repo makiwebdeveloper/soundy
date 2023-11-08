@@ -1,6 +1,9 @@
 import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
-import { CreateProfileValidatorType } from "@/lib/validators/profiles";
+import {
+  CreateProfileValidatorType,
+  EditProfileValidatorType,
+} from "@/lib/validators/profiles";
 import { FullProfileType, ProfileType } from "@/types/profiles.types";
 import { auth } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
@@ -64,4 +67,14 @@ export async function createProfile(
     .values(data)
     .returning({ id: profiles.id });
   return createdProfile[0].id;
+}
+
+export async function updateProfile(
+  data: EditProfileValidatorType,
+  profile: ProfileType
+) {
+  await db.update(profiles).set({
+    name: data.name ? data.name : profile.name,
+    imageUrl: data.imageUrl ? data.imageUrl : profile.imageUrl,
+  });
 }
