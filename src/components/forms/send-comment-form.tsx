@@ -35,7 +35,7 @@ export default function SendCommentForm({ trackId }: Props) {
       await axios.post("/api/comments", values);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([`comments ${trackId}`]);
+      queryClient.invalidateQueries([`track ${trackId} comments`]);
       form.reset();
     },
     onError: () => {

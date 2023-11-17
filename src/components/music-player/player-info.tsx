@@ -1,6 +1,5 @@
 "use client";
 
-import { ProfileType } from "@/types/profiles.types";
 import { FullTrackType } from "@/types/tracks.types";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +11,7 @@ interface Props {
 export default function PlayerInfo({ track }: Props) {
   return (
     <Link
+      passHref
       href={`/profiles/${track.profile.id}/tracks/${track.id}`}
       className="transition w-[60px] md:w-[150px] cursor-pointer bg-white/20 dark:bg-black/30 hover:bg-white/30 hover:dark:bg-black/40 rounded-md flex items-center gap-2 px-2"
     >

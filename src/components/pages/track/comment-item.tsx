@@ -23,7 +23,7 @@ export default function CommentItem({ comment, currentProfileId }: Props) {
       await axios.delete(`/api/comments/${comment.id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([`comments ${comment.trackId}`]);
+      queryClient.invalidateQueries([`track ${comment.trackId} comments`]);
     },
     onError: () => {
       toast({

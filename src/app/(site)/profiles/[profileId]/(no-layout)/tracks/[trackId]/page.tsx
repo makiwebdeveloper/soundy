@@ -1,9 +1,9 @@
 import { notFound, redirect } from "next/navigation";
-import { Comments, TrackHeader, TrackTools } from "@/components/pages/track";
-import { PageLayout } from "@/components/page-layout";
 import { getTrackById } from "@/services/tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { getCommentsByTrackId } from "@/services/comments.service";
+import { Track } from "@/components/pages/track";
+import { getProfilePlaylists } from "@/services/playlists.service";
 
 interface Props {
   params: {
@@ -20,6 +20,7 @@ export default async function TrackPage({ params }: Props) {
   }
 
   const track = await getTrackById(Number(params.trackId));
+  const playlists = await getProfilePlaylists(currentProfile.id);
 
   if (!track) {
     notFound();
@@ -34,20 +35,11 @@ export default async function TrackPage({ params }: Props) {
   const comments = await getCommentsByTrackId(track.id);
 
   return (
-    <PageLayout>
-      <TrackHeader
-        title={track.title}
-        imageUrl={track.imageUrl}
-        profileId={track.profile.id}
-        profileName={track.profile.name}
-      />
-      <TrackTools track={track} profileId={currentProfile.id} />
-      <div className="h-[3px] bg-white/20 dark:bg-black/40 w-full rounded-full"></div>
-      <Comments
-        initialComments={comments}
-        trackId={track.id}
-        currentProfileId={currentProfile.id}
-      />
-    </PageLayout>
+    <Track
+      currentProfile={currentProfile}
+      initialTrack={track}
+      initialComments={comments}
+      initialPlaylists={playlists}
+    />
   );
 }

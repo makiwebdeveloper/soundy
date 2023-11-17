@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PageDescription, PageTitle } from "@/components/page-layout";
+import { ProfileType } from "@/types/profiles.types";
 
 interface Props {
   title: string;
   imageUrl: string;
-  profileId: number;
-  profileName: string;
+  profile: Pick<ProfileType, "id" | "name">;
 }
 
 export default function TrackHeader(props: Props) {
@@ -26,9 +26,9 @@ export default function TrackHeader(props: Props) {
           Made by:{" "}
           <Link
             className="transition hover:text-white hover:underline underline-offset-2"
-            href={`/profiles/${props.profileId}`}
+            href={`/profiles/${props.profile.id}`}
           >
-            {props.profileName}
+            {props.profile.name}
           </Link>
         </PageDescription>
       </div>

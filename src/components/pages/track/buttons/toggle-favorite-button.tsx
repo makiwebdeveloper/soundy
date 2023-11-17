@@ -1,39 +1,21 @@
 "use client";
 
 import axios from "axios";
-import { useMemo } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { FavoriteTrackType } from "@/types/tracks.types";
 import { HeartHandshakeIcon, HeartIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 interface Props {
   trackId: number;
-  initialFavoriteTrack: FavoriteTrackType | undefined;
+  isFavoriteTrack: boolean;
 }
 
 export default function ToggleFavoriteButton({
   trackId,
-  initialFavoriteTrack,
+  isFavoriteTrack,
 }: Props) {
   const queryClient = useQueryClient();
-
-  const { data: favoriteTrackData } = useQuery({
-    queryKey: [`favorite track ${trackId}`],
-    queryFn: async () => {
-      const res = await axios.get<{
-        favoriteTrack: FavoriteTrackType | undefined;
-      }>(`/api/tracks/favorites/${trackId}`);
-      return res.data;
-    },
-    initialData: { favoriteTrack: initialFavoriteTrack },
-  });
-
-  const isFavoriteTrack = useMemo(
-    () => (favoriteTrackData?.favoriteTrack ? true : false),
-    [favoriteTrackData]
-  );
 
   const { mutate: toggleFavorite, isLoading: isToggleFavoriteLoading } =
     useMutation({
@@ -41,7 +23,6 @@ export default function ToggleFavoriteButton({
         await axios.post("/api/tracks/favorites", { trackId });
       },
       onSuccess: () => {
-        queryClient.invalidateQueries([`favorite track ${trackId}`]);
         queryClient.invalidateQueries([`track ${trackId}`]);
       },
     });
