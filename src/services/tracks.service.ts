@@ -91,7 +91,8 @@ export async function playTrack({
 
 export async function getTracksByProfileId(
   profileId: number,
-  limit?: number
+  limit?: number,
+  orderBy?: "asc" | "desc"
 ): Promise<TrackWithListeningsType[]> {
   return db.query.tracks.findMany({
     where: eq(tracks.profileId, profileId),
@@ -100,5 +101,7 @@ export async function getTracksByProfileId(
       listenings: true,
       profile: true,
     },
+    orderBy: (tracks, { asc, desc }) =>
+      orderBy === "desc" ? [desc(tracks.createdAt)] : [asc(tracks.createdAt)],
   });
 }

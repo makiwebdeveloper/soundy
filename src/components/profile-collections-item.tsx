@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -9,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/cn";
 
 interface Props {
@@ -17,6 +19,7 @@ interface Props {
 }
 
 export default function ProfileCollectionsItem({ type, item }: Props) {
+  const queryClient = useQueryClient();
   const {
     setTrackId,
     setStatus,
@@ -24,7 +27,26 @@ export default function ProfileCollectionsItem({ type, item }: Props) {
     trackId: playingTrackId,
   } = usePlayingTrackStore();
 
-  if (type === "tracks") {
+  const { mutate: playTrack, isLoading: isPlayTrackLoading } = useMutation({
+    mutationFn: async (trackId: number) => {
+      const res = await axios.post<{ playingTrackId: number }>(
+        "/api/tracks/play",
+        { trackId }
+      );
+      return res;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["playing track"]);
+      setTrackId(item.id);
+      setStatus("play");
+    },
+    onError: () => {
+      setTrackId(null);
+      setStatus("pause");
+    },
+  });
+
+  if (type === "tracks" || type === "favorites") {
     return (
       <div className="group relative w-[100px] sm:w-[125px] md:w-full h-[100px] sm:h-[125px] lg:h-[135px] 2xl:h-[180px]">
         <Image
@@ -34,6 +56,20 @@ export default function ProfileCollectionsItem({ type, item }: Props) {
           className="object-cover rounded-md bg-white/20 dark:bg-black/20"
         />
         <Button
+          onClick={(e) => {
+            e.preventDefault();
+            setTrackId(item.id);
+            if (status === "play" && playingTrackId === item.id) {
+              setStatus("pause");
+            } else {
+              if (playingTrackId === item.id) {
+                setStatus("play");
+              } else {
+                playTrack(item.id);
+              }
+            }
+          }}
+          disabled={isPlayTrackLoading}
           variant="ghost"
           className="w-[60px] h-[60px] hidden rounded-full group-hover:flex absolute top-[50%] translate-x-[-50%] left-[50%] translate-y-[-50%] p-0 flex-center bg-green-500/80 hover:bg-green-500"
         >

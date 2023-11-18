@@ -39,7 +39,8 @@ export async function deleteFavoriteTrack(favoriteTrackId: number) {
 
 export async function getFavoriteTracksByProfileId(
   profileId: number,
-  limit?: number
+  limit?: number,
+  orderBy?: "asc" | "desc"
 ): Promise<FullFavoriteTrackType[]> {
   const dbFavoriteTracks = await db.query.favoriteTracks.findMany({
     where: eq(favoriteTracks.profileId, profileId),
@@ -52,6 +53,10 @@ export async function getFavoriteTracksByProfileId(
       },
     },
     limit,
+    orderBy: (favoriteTracks, { asc, desc }) =>
+      orderBy === "desc"
+        ? [desc(favoriteTracks.createdAt)]
+        : [asc(favoriteTracks.createdAt)],
   });
 
   return dbFavoriteTracks.map((fav) => ({

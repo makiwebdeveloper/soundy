@@ -87,7 +87,8 @@ export async function getAlbumsByProfileId(
 
 export async function getFullAlbumsByProfileId(
   profileId: number,
-  limit?: number
+  limit?: number,
+  orderBy?: "asc" | "desc"
 ): Promise<FullAlbumType[]> {
   return db.query.albums.findMany({
     where: eq(albums.profileId, profileId),
@@ -100,5 +101,7 @@ export async function getFullAlbumsByProfileId(
       profile: true,
     },
     limit,
+    orderBy: (albums, { asc, desc }) =>
+      orderBy === "desc" ? [desc(albums.createdAt)] : [asc(albums.createdAt)],
   });
 }

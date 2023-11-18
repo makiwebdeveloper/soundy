@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { AlbumType } from "@/types/albums.types";
+import { FullAlbumType } from "@/types/albums.types";
 import { ProfileType } from "@/types/profiles.types";
 import Image from "next/image";
 import { cn } from "@/lib/cn";
 
 interface Props {
   profile: ProfileType;
-  albums: AlbumType[];
+  albums: FullAlbumType[];
 }
 
 export default function ProfileAlbums({ albums, profile }: Props) {

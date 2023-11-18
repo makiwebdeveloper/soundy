@@ -8,7 +8,11 @@ interface Props {
 }
 
 export default async function AlbumsPage({ params }: Props) {
-  const albums = await getFullAlbumsByProfileId(Number(params.profileId));
+  const albums = await getFullAlbumsByProfileId(
+    Number(params.profileId),
+    undefined,
+    "desc"
+  );
 
   return (
     <ProfileCollectionsList

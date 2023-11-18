@@ -1,4 +1,4 @@
-import { getAlbumsByProfileId } from "@/services/albums.service";
+import { getFullAlbumsByProfileId } from "@/services/albums.service";
 import { getFavoriteTracksByProfileId } from "@/services/favorite-tracks.service";
 import { getProfilePlaylists } from "@/services/playlists.service";
 import { getTracksByProfileId } from "@/services/tracks.service";
@@ -23,10 +23,14 @@ export default async function ProfilePage({ params }: Props) {
   const profileData = getProfileById(profileId);
 
   const limit = 3;
-  const tracksData = getTracksByProfileId(profileId, 2);
-  const albumsData = getAlbumsByProfileId(profileId, limit);
-  const playlistsData = getProfilePlaylists(profileId, limit);
-  const favoriteTracksData = getFavoriteTracksByProfileId(profileId, limit);
+  const tracksData = getTracksByProfileId(profileId, 2, "desc");
+  const albumsData = getFullAlbumsByProfileId(profileId, limit, "desc");
+  const playlistsData = getProfilePlaylists(profileId, limit, "desc");
+  const favoriteTracksData = getFavoriteTracksByProfileId(
+    profileId,
+    limit,
+    "desc"
+  );
 
   const [profile, tracks, albums, playlists, favoriteTracks] =
     await Promise.all([

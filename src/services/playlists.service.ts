@@ -16,7 +16,8 @@ type PlaylistCreationType = Pick<
 
 export async function getProfilePlaylists(
   profileId: number,
-  limit?: number
+  limit?: number,
+  orderBy?: "asc" | "desc"
 ): Promise<PlaylistWithTracksType[]> {
   const dbPlatlists = await db.query.playlists.findMany({
     where: eq(playlists.profileId, profileId),
@@ -29,6 +30,10 @@ export async function getProfilePlaylists(
       profile: true,
     },
     limit,
+    orderBy: (playlists, { asc, desc }) =>
+      orderBy === "desc"
+        ? [desc(playlists.createdAt)]
+        : [asc(playlists.createdAt)],
   });
 
   return dbPlatlists.map((item) => {

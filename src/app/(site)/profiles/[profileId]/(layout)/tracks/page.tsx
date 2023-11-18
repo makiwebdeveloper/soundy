@@ -8,7 +8,11 @@ interface Props {
 }
 
 export default async function TracksPage({ params }: Props) {
-  const tracks = await getTracksByProfileId(Number(params.profileId));
+  const tracks = await getTracksByProfileId(
+    Number(params.profileId),
+    undefined,
+    "desc"
+  );
 
   return (
     <ProfileCollectionsList

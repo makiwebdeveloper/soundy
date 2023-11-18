@@ -8,7 +8,11 @@ interface Props {
 }
 
 export default async function PlaylistsPage({ params }: Props) {
-  const playlists = await getProfilePlaylists(Number(params.profileId));
+  const playlists = await getProfilePlaylists(
+    Number(params.profileId),
+    undefined,
+    "desc"
+  );
 
   return (
     <ProfileCollectionsList

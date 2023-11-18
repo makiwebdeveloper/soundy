@@ -10,7 +10,7 @@ export type CollectionsItemType = {
   profile: ProfileType;
 };
 
-export type CollectionsType = "tracks" | "albums" | "playlists";
+export type CollectionsType = "tracks" | "albums" | "playlists" | "favorites";
 
 interface Props {
   type: CollectionsType;
@@ -32,7 +32,7 @@ export default function ProfileCollectionsList({ type, items }: Props) {
   return (
     <div
       className={cn(
-        "mx-auto md:mx-0 grid gap-3 ",
+        "mx-auto md:mx-0 grid gap-3",
         items.length === 1 &&
           "grid-cols-1 w-[100px] sm:w-[125px] lg:w-[135px] 2xl:w-[180px]",
         items.length === 2 &&

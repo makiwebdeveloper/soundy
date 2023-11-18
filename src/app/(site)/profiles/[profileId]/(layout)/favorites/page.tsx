@@ -14,7 +14,7 @@ export default async function FavoritesPage({ params }: Props) {
 
   return (
     <ProfileCollectionsList
-      type="tracks"
+      type="favorites"
       items={favoriteTracks.map((fav) => ({
         id: fav.track.id,
         imageUrl: fav.track.imageUrl,
