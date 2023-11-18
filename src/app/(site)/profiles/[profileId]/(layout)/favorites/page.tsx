@@ -1,9 +1,26 @@
+import ProfileCollectionsList from "@/components/profile-collections-list";
+import { getFavoriteTracksByProfileId } from "@/services/favorite-tracks.service";
+
 interface Props {
   params: {
     profileId: string;
   };
 }
 
-export default function FavoritesPage({ params }: Props) {
-  return <div>FavoritesPage</div>;
+export default async function FavoritesPage({ params }: Props) {
+  const favoriteTracks = await getFavoriteTracksByProfileId(
+    Number(params.profileId)
+  );
+
+  return (
+    <ProfileCollectionsList
+      type="tracks"
+      items={favoriteTracks.map((fav) => ({
+        id: fav.track.id,
+        imageUrl: fav.track.imageUrl,
+        title: fav.track.title,
+        profile: fav.profile,
+      }))}
+    />
+  );
 }

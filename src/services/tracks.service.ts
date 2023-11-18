@@ -98,6 +98,7 @@ export async function getTracksByProfileId(
     limit,
     with: {
       listenings: true,
+      profile: true,
     },
   });
 }

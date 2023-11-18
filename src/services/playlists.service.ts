@@ -26,6 +26,7 @@ export async function getProfilePlaylists(
           track: true,
         },
       },
+      profile: true,
     },
     limit,
   });

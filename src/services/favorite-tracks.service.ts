@@ -41,7 +41,7 @@ export async function getFavoriteTracksByProfileId(
   profileId: number,
   limit?: number
 ): Promise<FullFavoriteTrackType[]> {
-  return db.query.favoriteTracks.findMany({
+  const dbFavoriteTracks = await db.query.favoriteTracks.findMany({
     where: eq(favoriteTracks.profileId, profileId),
     with: {
       profile: true,
@@ -53,4 +53,9 @@ export async function getFavoriteTracksByProfileId(
     },
     limit,
   });
+
+  return dbFavoriteTracks.map((fav) => ({
+    ...fav,
+    track: { ...fav.track, profile: fav.profile },
+  }));
 }

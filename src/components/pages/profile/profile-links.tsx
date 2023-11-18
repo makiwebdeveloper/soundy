@@ -14,7 +14,7 @@ export default function ProfileLinks({ profileId }: Props) {
   const pathname = usePathname();
 
   return (
-    <div className="hidden sm:flex">
+    <div className="flex">
       {profileLinks.map((link) => (
         <Link
           href={link.path}

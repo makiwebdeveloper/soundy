@@ -31,4 +31,5 @@ export type FullPlayingTrackType = PlayingTrackType & {
 
 export type TrackWithListeningsType = TrackType & {
   listenings: ListeningType[];
+  profile: ProfileType;
 };

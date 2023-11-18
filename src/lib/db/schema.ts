@@ -32,6 +32,7 @@ export const profilesRelations = relations(profiles, ({ many, one }) => ({
   listenings: many(listenings),
   followers: many(followings, { relationName: "followers" }),
   followings: many(followings, { relationName: "followings" }),
+  playlists: many(playlists),
 }));
 
 /****************** TRACKS ******************/
