@@ -4,7 +4,11 @@ import { playTrackValidator } from "@/lib/validators/tracks";
 import { playTrack } from "@/services/tracks.service";
 import { z } from "zod";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
-import { createListening, getListening } from "@/services/listenings.service";
+import {
+  createListening,
+  getListening,
+  updateListeningDate,
+} from "@/services/listenings.service";
 
 export async function POST(req: Request) {
   try {
@@ -28,6 +32,8 @@ export async function POST(req: Request) {
     });
     if (!existListening) {
       await createListening({ profileId: currentProfile.id, trackId });
+    } else {
+      await updateListeningDate(existListening.id);
     }
 
     return NextResponse.json({ playingTrackId }, { status: 200 });

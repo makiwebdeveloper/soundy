@@ -32,7 +32,7 @@ export default async function TrackPage({ params }: Props) {
     notFound();
   }
 
-  const comments = await getCommentsByTrackId(track.id);
+  const comments = await getCommentsByTrackId(track.id, "desc");
 
   return (
     <Track

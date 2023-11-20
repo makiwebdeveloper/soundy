@@ -10,7 +10,7 @@ import { z } from "zod";
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const trackId = searchParams.get("trackId");
-  const comments = await getCommentsByTrackId(Number(trackId));
+  const comments = await getCommentsByTrackId(Number(trackId), "desc");
 
   return NextResponse.json({ comments }, { status: 200 });
 }

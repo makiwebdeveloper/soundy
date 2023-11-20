@@ -231,6 +231,9 @@ export const listenings = pgTable("listenings", {
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
+  updatedAt: timestamp("updated_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   profileId: integer("profile_id")
     .references(() => profiles.id, { onDelete: "cascade" })
     .notNull(),

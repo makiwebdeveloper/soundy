@@ -18,7 +18,8 @@ export async function createComment(data: CommentCreationType) {
 }
 
 export async function getCommentsByTrackId(
-  trackId: number
+  trackId: number,
+  orderBy?: "asc" | "desc"
 ): Promise<FullCommentType[]> {
   return db.query.comments.findMany({
     where: eq(comments.trackId, trackId),
@@ -26,6 +27,10 @@ export async function getCommentsByTrackId(
       profile: true,
       track: true,
     },
+    orderBy: (comments, { asc, desc }) =>
+      orderBy === "desc"
+        ? [desc(comments.createdAt)]
+        : [asc(comments.createdAt)],
   });
 }
 
