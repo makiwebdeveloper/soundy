@@ -12,7 +12,6 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import {
   CreatePlaylistValidatorType,
@@ -25,9 +24,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface Props {
   close: () => void;
   trackId: number;
+  profileId: number;
 }
 
-export default function CreatePlaylistForm({ close, trackId }: Props) {
+export default function CreatePlaylistForm({
+  close,
+  trackId,
+  profileId,
+}: Props) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -45,7 +49,7 @@ export default function CreatePlaylistForm({ close, trackId }: Props) {
       await axios.post("/api/playlists", data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["playlists"]);
+      queryClient.invalidateQueries([`profile ${profileId} playlists`]);
       close();
       toast({
         title: "Successfully created playlist",

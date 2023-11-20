@@ -32,8 +32,8 @@ export default async function CreateProfile() {
           </CardContent>
         </Card>
       </main>
-      <div className="absolute top-5 left-5 sm:top-10 sm:left-10">
-        <ModeToggle />
+      <div className="absolute top-5 right-5 sm:top-10 sm:right-10">
+        <ModeToggle noText />
       </div>
     </>
   );

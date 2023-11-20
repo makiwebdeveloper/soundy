@@ -104,8 +104,9 @@ export default function UploadAlbumForm({
     }
   }, [tracks]);
 
-  function removeTrack(position: number) {
+  function removeTrack(position: number, url: string) {
     let tracksArray = tracks.filter((f) => f.position !== position);
+    setTracksDuration((prev) => prev.filter((t) => t.url !== url));
     for (let i = 0; i < tracksArray.length; i++) {
       if (i >= position) {
         tracksArray[i].position -= 1;
@@ -287,7 +288,7 @@ export default function UploadAlbumForm({
                   <Button
                     type="button"
                     border
-                    onClick={() => removeTrack(track.position)}
+                    onClick={() => removeTrack(track.position, track.url)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>

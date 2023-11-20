@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function ModeToggle() {
+export function ModeToggle({ noText }: { noText?: boolean }) {
   const { setTheme } = useTheme();
 
   return (
@@ -21,7 +21,7 @@ export function ModeToggle() {
         <Button variant="link" className="gap-2 justify-start">
           <Sun className="h-5 w-5 block dark:hidden" />
           <Moon className="h-5 w-5 dark:block hidden" />
-          <span className="">Theme</span>
+          {!noText && <span>Theme</span>}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

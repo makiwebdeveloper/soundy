@@ -81,6 +81,7 @@ export default function AddToPlaylistDialog({
                 setOpen(false);
                 setType("add");
               }}
+              profileId={profileId}
             />
           </TabsContent>
         </Tabs>
