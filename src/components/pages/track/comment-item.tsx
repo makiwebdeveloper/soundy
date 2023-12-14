@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FullCommentType } from "@/types/comments.types";
 import { formatRelativeTime } from "@/utils/format-time";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Props {
   comment: FullCommentType;
@@ -44,9 +45,12 @@ export default function CommentItem({ comment, currentProfileId }: Props) {
         />
       </div>
       <div className="flex-1">
-        <p className="text-sm break-all text-white/70 dark:text-white/50">
+        <Link
+          href={`/profiles/${comment.profile.id}`}
+          className="text-sm break-all text-white/70 dark:text-white/50 transition hover:text-white/80 dark:hover:text-white/60 hover:underline underline-offset-2"
+        >
           {comment.profile.name}
-        </p>
+        </Link>
         <p className="text-sm break-all">{comment.text}</p>
       </div>
       <div className="flex items-center gap-2">

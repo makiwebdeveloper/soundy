@@ -110,6 +110,7 @@ export const playingTracks = pgTable("playing_tracks", {
   trackId: integer("track_id")
     .references(() => tracks.id, { onDelete: "cascade" })
     .notNull(),
+  albumId: integer("album_id").references(() => albums.id),
 });
 
 export const playingTracksRelations = relations(playingTracks, ({ one }) => ({
@@ -120,6 +121,10 @@ export const playingTracksRelations = relations(playingTracks, ({ one }) => ({
   track: one(tracks, {
     fields: [playingTracks.trackId],
     references: [tracks.id],
+  }),
+  album: one(albums, {
+    fields: [playingTracks.albumId],
+    references: [albums.id],
   }),
 }));
 
