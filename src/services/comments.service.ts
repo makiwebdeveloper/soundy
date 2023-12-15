@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/lib/db";
 import { comments } from "@/lib/db/schema";
 import { CommentCreationType, FullCommentType } from "@/types/comments.types";

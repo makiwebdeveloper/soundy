@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/lib/db";
 import { favoriteTracks } from "@/lib/db/schema";
 import {

@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/lib/db";
 import { listenings } from "@/lib/db/schema";
 import { ListeningCreationType } from "@/types/listenings.types";

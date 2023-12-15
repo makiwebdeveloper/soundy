@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
 import {

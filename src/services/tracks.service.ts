@@ -1,7 +1,9 @@
+import "server-only";
+
 import { db } from "@/lib/db";
 import { tracks } from "@/lib/db/schema";
 import { UploadTrackValidatorType } from "@/lib/validators/tracks";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import {
   PlayingTrackCreationType,
   createPlayingTrack,
@@ -104,4 +106,17 @@ export async function getTracksByProfileId(
     orderBy: (tracks, { asc, desc }) =>
       orderBy === "desc" ? [desc(tracks.createdAt)] : [asc(tracks.createdAt)],
   });
+}
+
+export async function getRandomTrack(): Promise<FullTrackType> {
+  const dbTracks = await db.query.tracks.findMany({
+    with: {
+      album: true,
+      profile: true,
+      listenings: true,
+      favoriteTracks: true,
+    },
+  });
+
+  return dbTracks[Math.floor(Math.random() * dbTracks.length)];
 }

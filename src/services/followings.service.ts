@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/lib/db";
 import { followings } from "@/lib/db/schema";
 import { FollowingCreationType, FollowingType } from "@/types/followings.types";

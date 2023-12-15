@@ -1,4 +1,6 @@
-export default function Home() {
+import { getRandomTrack } from "@/services/tracks.service";
+
+export default async function Home() {
   return (
     <main>
       <h1>Home</h1>

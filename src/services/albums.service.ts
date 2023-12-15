@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { UploadAlbumValidatorType } from "@/lib/validators/albums";
