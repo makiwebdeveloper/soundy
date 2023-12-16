@@ -23,6 +23,7 @@ export default async function PlaylistsPage({ params }: Props) {
         title: playlist.title,
         profile: playlist.profile,
       }))}
+      context={{}}
     />
   );
 }

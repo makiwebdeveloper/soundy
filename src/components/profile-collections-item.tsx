@@ -12,13 +12,15 @@ import { PauseIcon, PlayIcon } from "lucide-react";
 import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/cn";
+import { IPlayingContext } from "@/types/playing-contexts.types";
 
 interface Props {
   type: CollectionsType;
   item: CollectionsItemType;
+  context: IPlayingContext;
 }
 
-export default function ProfileCollectionsItem({ type, item }: Props) {
+export default function ProfileCollectionsItem({ type, item, context }: Props) {
   const queryClient = useQueryClient();
   const {
     setTrackId,
@@ -31,7 +33,7 @@ export default function ProfileCollectionsItem({ type, item }: Props) {
     mutationFn: async (trackId: number) => {
       const res = await axios.post<{ playingTrackId: number }>(
         "/api/tracks/play",
-        { trackId }
+        { trackId, ...context }
       );
       return res;
     },

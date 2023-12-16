@@ -24,7 +24,7 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
   const [durationSeconds, setDurationSeconds] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
-  const { data } = useQuery<{
+  const { data, isLoading } = useQuery<{
     playingTrack: FullPlayingTrackType | undefined;
   }>({
     queryKey: ["playing track"],
@@ -62,7 +62,7 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
     );
   }
 
-  const { track, profile } = data.playingTrack;
+  const { track } = data.playingTrack;
 
   function handleVolumeChange(volumeValue: number) {
     if (!audioRef.current) return;
@@ -96,6 +96,7 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
         currentTime={currentTime}
         setCurrentTime={setCurrentTime}
         durationSeconds={durationSeconds}
+        isPlayingTrackLoading={isLoading}
       />
       <PlayerVolume
         volume={volume}

@@ -10,6 +10,9 @@ import {
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { cn } from "@/lib/cn";
 
 interface Props {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
@@ -18,6 +21,7 @@ interface Props {
   currentTime: number;
   setCurrentTime: (v: number) => void;
   durationSeconds: number;
+  isPlayingTrackLoading: boolean;
 }
 
 export default function PlayerAudio({
@@ -27,8 +31,33 @@ export default function PlayerAudio({
   currentTime,
   setCurrentTime,
   durationSeconds,
+  isPlayingTrackLoading,
 }: Props) {
-  const { status, toggleStatus, setTrackId } = usePlayingTrackStore();
+  const queryClient = useQueryClient();
+  const { status, toggleStatus, setTrackId, setStatus } =
+    usePlayingTrackStore();
+
+  const { mutate: playNextTrack, isLoading: isPlayTrackLoading } = useMutation({
+    mutationFn: async () => {
+      const res = await axios.post<{ playingTrackId: number; trackId: number }>(
+        "/api/tracks/play/next",
+        { trackId: track.id }
+      );
+      return res;
+    },
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries(["playing track"]);
+      queryClient.invalidateQueries([`track ${data.trackId}`]);
+      setTrackId(data.trackId);
+      setStatus("play");
+    },
+    onError: () => {
+      setTrackId(null);
+      setStatus("pause");
+    },
+  });
+
+  const isLoading = isPlayTrackLoading || isPlayingTrackLoading;
 
   return (
     <div className="flex-1 flex flex-col justify-between">
@@ -42,7 +71,10 @@ export default function PlayerAudio({
         }}
       ></audio>
       <div className="flex-center gap-2">
-        <button className="w-7 h-7 flex-center">
+        <button
+          disabled={isLoading}
+          className={cn("w-7 h-7 flex-center", isLoading && "text-white/50")}
+        >
           <SkipBackIcon className="w-4 h-4" />
         </button>
         <button
@@ -53,12 +85,20 @@ export default function PlayerAudio({
           }}
         >
           {status === "play" ? (
-            <PauseCircleIcon className="w-7 h-7" />
+            <PauseCircleIcon
+              className={cn("w-7 h-7 ", isLoading && "text-white/50")}
+            />
           ) : (
-            <PlayCircleIcon className="w-7 h-7" />
+            <PlayCircleIcon
+              className={cn("w-7 h-7 ", isLoading && "text-white/50")}
+            />
           )}
         </button>
-        <button className="w-7 h-7 flex-center">
+        <button
+          disabled={isLoading}
+          onClick={() => playNextTrack()}
+          className={cn("w-7 h-7 flex-center", isLoading && "text-white/50")}
+        >
           <SkipForwardIcon className="w-4 h-4" />
         </button>
       </div>

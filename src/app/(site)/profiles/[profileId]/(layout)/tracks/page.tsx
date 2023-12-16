@@ -23,6 +23,9 @@ export default async function TracksPage({ params }: Props) {
         title: track.title,
         profile: track.profile,
       }))}
+      context={{
+        tracksProfileId: Number(params.profileId),
+      }}
     />
   );
 }

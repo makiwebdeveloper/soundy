@@ -21,6 +21,9 @@ export default async function FavoritesPage({ params }: Props) {
         title: fav.track.title,
         profile: fav.profile,
       }))}
+      context={{
+        favoritesProfileId: Number(params.profileId),
+      }}
     />
   );
 }

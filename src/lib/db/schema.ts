@@ -110,7 +110,6 @@ export const playingTracks = pgTable("playing_tracks", {
   trackId: integer("track_id")
     .references(() => tracks.id, { onDelete: "cascade" })
     .notNull(),
-  albumId: integer("album_id").references(() => albums.id),
 });
 
 export const playingTracksRelations = relations(playingTracks, ({ one }) => ({
@@ -122,11 +121,25 @@ export const playingTracksRelations = relations(playingTracks, ({ one }) => ({
     fields: [playingTracks.trackId],
     references: [tracks.id],
   }),
-  album: one(albums, {
-    fields: [playingTracks.albumId],
-    references: [albums.id],
+  playingContext: one(playingContexts, {
+    fields: [playingTracks.id],
+    references: [playingContexts.playingTrackId],
   }),
 }));
+
+/****************** PLAYING CONTEXT ******************/
+export const playingContexts = pgTable("playing_contexts", {
+  id: serial("id").primaryKey(),
+  playingTrackId: integer("playing_track_id")
+    .references(() => playingTracks.id, { onDelete: "cascade" })
+    .notNull(),
+
+  albumId: integer("album_id"),
+  playlistId: integer("playlist_id"),
+  favoritesProfileId: integer("favorites_profile_id"),
+  tracksProfileId: integer("tracks_profile_id"),
+  history: boolean("history"),
+});
 
 /****************** FAVORITE TRACK ******************/
 export const favoriteTracks = pgTable("favorite_tracks", {

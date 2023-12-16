@@ -13,6 +13,11 @@ export type UploadTrackValidatorType = z.infer<typeof uploadTrackValidator>;
 
 export const playTrackValidator = z.object({
   trackId: z.number(),
+  albumId: z.number().optional(),
+  playlistId: z.number().optional(),
+  favoritesProfileId: z.number().optional(),
+  tracksProfileId: z.number().optional(),
+  history: z.boolean().optional(),
 });
 export type PlayTrackValidatorType = z.infer<typeof playTrackValidator>;
 

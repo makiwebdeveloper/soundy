@@ -4,7 +4,7 @@ const nextConfig = {
     domains: ['utfs.io']
   },
   env: {
-    DATABASE_URL: "postgresql://illia.makovetsky:YD2GixfFmA6b@ep-late-brook-48368888.eu-central-1.aws.neon.tech/soundy?sslmode=require"
+    DATABASE_URL: process.env.DATABASE_URL
   }
 }
 
