@@ -2,15 +2,15 @@ import axios from "axios";
 import { useState } from "react";
 import { RepeatIcon, Repeat1Icon } from "lucide-react";
 import { ContextRepeatType } from "@/types/tracks.types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/cn";
 
 interface Props {
   type: ContextRepeatType;
 }
 
-export default function RepeatButton({ type: initialType }: Props) {
-  const [type, setType] = useState(initialType);
+export default function RepeatButton({ type }: Props) {
+  const queryClient = useQueryClient();
 
   const { mutate: changeRepeat, isLoading } = useMutation({
     mutationFn: async () => {
@@ -18,9 +18,10 @@ export default function RepeatButton({ type: initialType }: Props) {
         "/api/tracks/play/repeat"
       );
 
-      setType(res.data.repeat);
-
       return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["playing track"]);
     },
   });
 

@@ -91,6 +91,16 @@ export default function PlayerAudio({
         onTimeUpdate={(e) => {
           setCurrentTime(e.currentTarget.currentTime);
         }}
+        onEnded={() => {
+          if (!audioRef.current) return;
+          if (playingContext.repeat === "REPEAT-TRACK") {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play();
+          } else {
+            audioRef.current.currentTime = 0;
+            playNextTrack();
+          }
+        }}
       ></audio>
       <div className="flex-center gap-2">
         <ShuffleButton isShuffle={playingContext.isShuffle} />

@@ -29,7 +29,10 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
   }>({
     queryKey: ["playing track"],
     queryFn: async () => {
-      const res = await axios.get("/api/tracks/play");
+      const res = await axios.get<{
+        playingTrack: FullPlayingTrackType | undefined;
+      }>("/api/tracks/play");
+
       return res.data;
     },
     initialData: { playingTrack: initialPlaingTrack },
@@ -41,10 +44,11 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
   }, [audioRef.current, data]);
 
   useEffect(() => {
+    if (!audioRef.current) return;
     if (status === "play") {
-      audioRef.current?.play();
+      audioRef.current.play();
     } else {
-      audioRef.current?.pause();
+      audioRef.current.pause();
     }
   }, [status, data]);
 

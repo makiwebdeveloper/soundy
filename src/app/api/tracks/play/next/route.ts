@@ -2,7 +2,8 @@ import { getAlbumById } from "@/services/albums.service";
 import { clearPlayingContext } from "@/services/playing-contexts.service";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
-import { getRandomTrack, playTrack } from "@/services/tracks.service";
+import { playTrack } from "@/services/tracks.service";
+import { getRandomElementFromArray } from "@/utils/get-random-element-from-array";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -33,10 +34,20 @@ export async function POST(req: Request) {
       (track) => track.id === playingTrack.track.id
     );
 
-    if (currentIndex !== album.tracks.length - 1) {
-      nextTrackId = album.tracks[currentIndex + 1].id;
+    if (playingContext.isShuffle) {
+      const randomTrack = getRandomElementFromArray(album.tracks, currentIndex);
+
+      nextTrackId = randomTrack.id;
     } else {
-      nextTrackId = album.tracks[album.tracks.length - 1].id;
+      if (currentIndex !== album.tracks.length - 1) {
+        nextTrackId = album.tracks[currentIndex + 1].id;
+      } else {
+        if (playingContext.repeat === "REPEAT-ALL") {
+          nextTrackId = album.tracks[0].id;
+        } else {
+          nextTrackId = album.tracks[album.tracks.length - 1].id;
+        }
+      }
     }
   }
 

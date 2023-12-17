@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ShuffleIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 
@@ -10,8 +10,8 @@ interface Props {
   isShuffle: boolean;
 }
 
-export default function ShuffleButton({ isShuffle: initialIsShuffle }: Props) {
-  const [isShuffle, setIsShuffle] = useState(initialIsShuffle);
+export default function ShuffleButton({ isShuffle }: Props) {
+  const queryClient = useQueryClient();
 
   const { mutate: shuffle, isLoading } = useMutation({
     mutationFn: async () => {
@@ -19,9 +19,10 @@ export default function ShuffleButton({ isShuffle: initialIsShuffle }: Props) {
         "/api/tracks/play/shuffle"
       );
 
-      setIsShuffle(res.data.isShuffle);
-
       return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["playing track"]);
     },
   });
 
