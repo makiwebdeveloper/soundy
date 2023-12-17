@@ -5,16 +5,17 @@ import { tracks } from "@/lib/db/schema";
 import { UploadTrackValidatorType } from "@/lib/validators/tracks";
 import { eq, sql } from "drizzle-orm";
 import {
-  PlayingTrackCreationType,
+  PlayingTrackType,
   createPlayingTrack,
   getPlayingTrack,
   updatePlayingTrack,
 } from "@/services/playing-tracks.service";
+import { FullTrackType, TrackWithListeningsType } from "@/types/tracks.types";
 import {
-  FullTrackType,
-  TrackType,
-  TrackWithListeningsType,
-} from "@/types/tracks.types";
+  createListening,
+  getListening,
+  updateListeningDate,
+} from "./listenings.service";
 
 export async function getTrackById(
   trackId: number
@@ -76,18 +77,43 @@ export async function createTrack(
   }
 }
 
-export async function playTrack({
-  profileId,
-  trackId,
-}: PlayingTrackCreationType) {
-  const existPlayingTrack = await getPlayingTrack(profileId);
+export async function playTrack(data: PlayingTrackType) {
+  const existPlayingTrack = await getPlayingTrack(data.profileId);
 
   if (existPlayingTrack) {
-    const playingTrackId = await updatePlayingTrack({ profileId, trackId });
+    const playingTrackId = await updatePlayingTrack(data);
+
+    const existListening = await getListening({
+      profileId: data.profileId,
+      trackId: data.trackId,
+    });
+    if (!existListening) {
+      await createListening({
+        profileId: data.profileId,
+        trackId: data.trackId,
+      });
+    } else {
+      await updateListeningDate(existListening.id);
+    }
+
     return playingTrackId;
   }
 
-  const playingTrackId = await createPlayingTrack({ profileId, trackId });
+  const playingTrackId = await createPlayingTrack(data);
+
+  const existListening = await getListening({
+    profileId: data.profileId,
+    trackId: data.trackId,
+  });
+  if (!existListening) {
+    await createListening({
+      profileId: data.profileId,
+      trackId: data.trackId,
+    });
+  } else {
+    await updateListeningDate(existListening.id);
+  }
+
   return playingTrackId;
 }
 

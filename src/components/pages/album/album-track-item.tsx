@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
 import axios from "axios";
+import { cn } from "@/lib/cn";
 
 interface Props {
   track: TrackWithListeningsType;
@@ -29,7 +30,7 @@ export default function AlbumTrackItem({ track, profile }: Props) {
     mutationFn: async (trackId: number) => {
       const res = await axios.post<{ playingTrackId: number }>(
         "/api/tracks/play",
-        { trackId }
+        { trackId, albumId: track.albumId }
       );
       return res;
     },
@@ -46,7 +47,12 @@ export default function AlbumTrackItem({ track, profile }: Props) {
   });
 
   return (
-    <div className="group flex items-center gap-3 transition hover:bg-white/20 dark:hover:bg-black/40 p-2 rounded-md">
+    <div
+      className={cn(
+        "group flex items-center gap-3 transition hover:bg-white/20 dark:hover:bg-black/40 p-2 rounded-md",
+        playingTrackId === track.id && "bg-white/20 dark:bg-black/40"
+      )}
+    >
       <div className="relative w-[40px] h-[40px]">
         <Image
           fill

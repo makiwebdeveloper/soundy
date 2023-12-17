@@ -2,6 +2,7 @@ import { ProfileType } from "@/types/profiles.types";
 import ProfileCollectionsItem from "./profile-collections-item";
 import { cn } from "@/lib/cn";
 import { Music2Icon } from "lucide-react";
+import { IPlayingContext } from "@/types/playing-contexts.types";
 
 export type CollectionsItemType = {
   id: number;
@@ -15,9 +16,14 @@ export type CollectionsType = "tracks" | "albums" | "playlists" | "favorites";
 interface Props {
   type: CollectionsType;
   items: CollectionsItemType[];
+  context: IPlayingContext;
 }
 
-export default function ProfileCollectionsList({ type, items }: Props) {
+export default function ProfileCollectionsList({
+  type,
+  items,
+  context,
+}: Props) {
   if (items.length === 0) {
     return (
       <div>
@@ -42,7 +48,12 @@ export default function ProfileCollectionsList({ type, items }: Props) {
       )}
     >
       {items.map((item) => (
-        <ProfileCollectionsItem type={type} item={item} key={item.id} />
+        <ProfileCollectionsItem
+          type={type}
+          item={item}
+          context={context}
+          key={item.id}
+        />
       ))}
     </div>
   );

@@ -4,11 +4,6 @@ import { playTrackValidator } from "@/lib/validators/tracks";
 import { playTrack } from "@/services/tracks.service";
 import { z } from "zod";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
-import {
-  createListening,
-  getListening,
-  updateListeningDate,
-} from "@/services/listenings.service";
 
 export async function POST(req: Request) {
   try {
@@ -19,22 +14,13 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { trackId } = playTrackValidator.parse(body);
+    const { trackId, ...contextData } = playTrackValidator.parse(body);
 
     const playingTrackId = await playTrack({
       profileId: currentProfile.id,
       trackId,
+      ...contextData,
     });
-
-    const existListening = await getListening({
-      profileId: currentProfile.id,
-      trackId,
-    });
-    if (!existListening) {
-      await createListening({ profileId: currentProfile.id, trackId });
-    } else {
-      await updateListeningDate(existListening.id);
-    }
 
     return NextResponse.json({ playingTrackId }, { status: 200 });
   } catch (error) {

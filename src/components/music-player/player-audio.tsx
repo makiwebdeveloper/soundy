@@ -1,6 +1,6 @@
 "use client";
 
-import { TrackType } from "@/types/tracks.types";
+import { PlayingContextType, TrackType } from "@/types/tracks.types";
 import { formatTime } from "@/utils/format-time";
 import {
   PauseCircleIcon,
@@ -10,6 +10,10 @@ import {
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { cn } from "@/lib/cn";
+import { RepeatButton, ShuffleButton } from "./buttons";
 
 interface Props {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
@@ -18,6 +22,8 @@ interface Props {
   currentTime: number;
   setCurrentTime: (v: number) => void;
   durationSeconds: number;
+  isPlayingTrackLoading: boolean;
+  playingContext: PlayingContextType;
 }
 
 export default function PlayerAudio({
@@ -27,8 +33,53 @@ export default function PlayerAudio({
   currentTime,
   setCurrentTime,
   durationSeconds,
+  isPlayingTrackLoading,
+  playingContext,
 }: Props) {
-  const { status, toggleStatus, setTrackId } = usePlayingTrackStore();
+  const queryClient = useQueryClient();
+  const { status, toggleStatus, setTrackId, setStatus } =
+    usePlayingTrackStore();
+
+  const { mutate: playNextTrack, isLoading: isNextTrackLoading } = useMutation({
+    mutationFn: async () => {
+      const res = await axios.post<{ playingTrackId: number; trackId: number }>(
+        "/api/tracks/play/next"
+      );
+      return res;
+    },
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries(["playing track"]);
+      queryClient.invalidateQueries([`track ${data.trackId}`]);
+      setTrackId(data.trackId);
+      setStatus("play");
+    },
+    onError: () => {
+      setTrackId(null);
+      setStatus("pause");
+    },
+  });
+
+  const { mutate: playPrevTrack, isLoading: isPrevTrackLoading } = useMutation({
+    mutationFn: async () => {
+      const res = await axios.post<{ playingTrackId: number; trackId: number }>(
+        "/api/tracks/play/prev"
+      );
+      return res;
+    },
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries(["playing track"]);
+      queryClient.invalidateQueries([`track ${data.trackId}`]);
+      setTrackId(data.trackId);
+      setStatus("play");
+    },
+    onError: () => {
+      setTrackId(null);
+      setStatus("pause");
+    },
+  });
+
+  const isLoading =
+    isNextTrackLoading || isPrevTrackLoading || isPlayingTrackLoading;
 
   return (
     <div className="flex-1 flex flex-col justify-between">
@@ -40,9 +91,24 @@ export default function PlayerAudio({
         onTimeUpdate={(e) => {
           setCurrentTime(e.currentTarget.currentTime);
         }}
+        onEnded={() => {
+          if (!audioRef.current) return;
+          if (playingContext.repeat === "REPEAT-TRACK") {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play();
+          } else {
+            audioRef.current.currentTime = 0;
+            playNextTrack();
+          }
+        }}
       ></audio>
       <div className="flex-center gap-2">
-        <button className="w-7 h-7 flex-center">
+        <ShuffleButton isShuffle={playingContext.isShuffle} />
+        <button
+          disabled={isLoading}
+          onClick={() => playPrevTrack()}
+          className={cn("w-7 h-7 flex-center", isLoading && "text-white/50")}
+        >
           <SkipBackIcon className="w-4 h-4" />
         </button>
         <button
@@ -53,14 +119,23 @@ export default function PlayerAudio({
           }}
         >
           {status === "play" ? (
-            <PauseCircleIcon className="w-7 h-7" />
+            <PauseCircleIcon
+              className={cn("w-7 h-7 ", isLoading && "text-white/50")}
+            />
           ) : (
-            <PlayCircleIcon className="w-7 h-7" />
+            <PlayCircleIcon
+              className={cn("w-7 h-7 ", isLoading && "text-white/50")}
+            />
           )}
         </button>
-        <button className="w-7 h-7 flex-center">
+        <button
+          disabled={isLoading}
+          onClick={() => playNextTrack()}
+          className={cn("w-7 h-7 flex-center", isLoading && "text-white/50")}
+        >
           <SkipForwardIcon className="w-4 h-4" />
         </button>
+        <RepeatButton type={playingContext.repeat} />
       </div>
       <div className="flex items-center gap-2">
         <div className="w-[70px] flex-center">

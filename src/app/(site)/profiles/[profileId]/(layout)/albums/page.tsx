@@ -23,6 +23,7 @@ export default async function AlbumsPage({ params }: Props) {
         title: album.title,
         profile: album.profile,
       }))}
+      context={{}}
     />
   );
 }

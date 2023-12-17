@@ -24,12 +24,15 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
   const [durationSeconds, setDurationSeconds] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
-  const { data } = useQuery<{
+  const { data, isLoading } = useQuery<{
     playingTrack: FullPlayingTrackType | undefined;
   }>({
     queryKey: ["playing track"],
     queryFn: async () => {
-      const res = await axios.get("/api/tracks/play");
+      const res = await axios.get<{
+        playingTrack: FullPlayingTrackType | undefined;
+      }>("/api/tracks/play");
+
       return res.data;
     },
     initialData: { playingTrack: initialPlaingTrack },
@@ -41,10 +44,11 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
   }, [audioRef.current, data]);
 
   useEffect(() => {
+    if (!audioRef.current) return;
     if (status === "play") {
-      audioRef.current?.play();
+      audioRef.current.play();
     } else {
-      audioRef.current?.pause();
+      audioRef.current.pause();
     }
   }, [status, data]);
 
@@ -62,7 +66,7 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
     );
   }
 
-  const { track, profile } = data.playingTrack;
+  const { track, playingContext } = data.playingTrack;
 
   function handleVolumeChange(volumeValue: number) {
     if (!audioRef.current) return;
@@ -96,6 +100,8 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
         currentTime={currentTime}
         setCurrentTime={setCurrentTime}
         durationSeconds={durationSeconds}
+        isPlayingTrackLoading={isLoading}
+        playingContext={playingContext}
       />
       <PlayerVolume
         volume={volume}
