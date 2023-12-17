@@ -3,6 +3,7 @@
 import { PlayingContextType, TrackType } from "@/types/tracks.types";
 import { formatTime } from "@/utils/format-time";
 import {
+  Loader2,
   PauseCircleIcon,
   PlayCircleIcon,
   SkipBackIcon,
@@ -118,7 +119,15 @@ export default function PlayerAudio({
             setTrackId(track.id);
           }}
         >
-          {status === "play" ? (
+          {isLoading ? (
+            <div className="rounded-full w-7 h-7 flex-center">
+              <Loader2
+                className={cn(
+                  "w-4 h-4 animate-spin text-zinc-600 dark:text-zinc-300"
+                )}
+              />
+            </div>
+          ) : status === "play" ? (
             <PauseCircleIcon
               className={cn("w-7 h-7 ", isLoading && "text-white/50")}
             />
