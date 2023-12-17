@@ -15,6 +15,9 @@ const inter = Poppins({
 export const metadata: Metadata = {
   title: "Soundy",
   description: "Music platform",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({
