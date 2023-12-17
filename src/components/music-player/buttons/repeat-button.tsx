@@ -12,8 +12,18 @@ interface Props {
 export default function RepeatButton({ type }: Props) {
   const queryClient = useQueryClient();
 
+  const [value, setValue] = useState(type);
+
   const { mutate: changeRepeat, isLoading } = useMutation({
     mutationFn: async () => {
+      if (value === "NO-REPEAT") {
+        setValue("REPEAT-ALL");
+      } else if (value === "REPEAT-ALL") {
+        setValue("REPEAT-TRACK");
+      } else {
+        setValue("NO-REPEAT");
+      }
+
       const res = await axios.patch<{ repeat: ContextRepeatType }>(
         "/api/tracks/play/repeat"
       );
@@ -23,15 +33,18 @@ export default function RepeatButton({ type }: Props) {
     onSuccess: () => {
       queryClient.invalidateQueries(["playing track"]);
     },
+    onError: () => {
+      setValue("NO-REPEAT");
+    },
   });
 
   return (
     <button disabled={isLoading} onClick={() => changeRepeat()}>
-      {type !== "REPEAT-TRACK" ? (
+      {value !== "REPEAT-TRACK" ? (
         <RepeatIcon
           className={cn(
             "w-4 h-4 cursor-pointer",
-            type === "REPEAT-ALL" && "text-black/40 dark:text-green-400"
+            value === "REPEAT-ALL" && "text-black/40 dark:text-green-400"
           )}
         />
       ) : (
