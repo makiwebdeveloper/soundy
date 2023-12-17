@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { playingContexts } from "@/lib/db/schema";
 import { IPlayingContext } from "@/types/playing-contexts.types";
+import { ContextRepeatType } from "@/types/tracks.types";
 
 export type PlayingContextCreationType = IPlayingContext & {
   playingTrackId: number;
@@ -52,4 +53,19 @@ export async function toggleShuffle(
     });
 
   return playingContext[0].isShuffle;
+}
+
+export async function changeRepeat(
+  playingTrackId: number,
+  repeat: ContextRepeatType
+) {
+  const playingContext = await db
+    .update(playingContexts)
+    .set({
+      repeat,
+    })
+    .where(eq(playingContexts.playingTrackId, playingTrackId))
+    .returning({ repeat: playingContexts.repeat });
+
+  return playingContext[0].repeat;
 }
