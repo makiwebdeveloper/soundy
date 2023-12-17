@@ -20,9 +20,7 @@ export async function POST(req: Request) {
 
   const { playingContext } = playingTrack;
 
-  const randomTrack = await getRandomTrack();
-  let nextTrackId = randomTrack.id;
-  let isLastTrack = false;
+  let nextTrackId = playingTrack.track.id;
 
   if (playingContext.albumId) {
     const album = await getAlbumById(playingContext.albumId);
@@ -38,7 +36,7 @@ export async function POST(req: Request) {
     if (currentIndex !== album.tracks.length - 1) {
       nextTrackId = album.tracks[currentIndex + 1].id;
     } else {
-      isLastTrack = true;
+      nextTrackId = album.tracks[album.tracks.length - 1].id;
     }
   }
 
@@ -51,10 +49,6 @@ export async function POST(req: Request) {
     tracksProfileId: playingContext.tracksProfileId || undefined,
     history: playingContext.history || undefined,
   });
-
-  if (isLastTrack) {
-    await clearPlayingContext(newPlayingTrackId);
-  }
 
   return NextResponse.json(
     { playingTrackId: newPlayingTrackId, trackId: nextTrackId },

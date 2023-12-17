@@ -37,11 +37,10 @@ export default function PlayerAudio({
   const { status, toggleStatus, setTrackId, setStatus } =
     usePlayingTrackStore();
 
-  const { mutate: playNextTrack, isLoading: isPlayTrackLoading } = useMutation({
+  const { mutate: playNextTrack, isLoading: isNextTrackLoading } = useMutation({
     mutationFn: async () => {
       const res = await axios.post<{ playingTrackId: number; trackId: number }>(
-        "/api/tracks/play/next",
-        { trackId: track.id }
+        "/api/tracks/play/next"
       );
       return res;
     },
@@ -57,7 +56,27 @@ export default function PlayerAudio({
     },
   });
 
-  const isLoading = isPlayTrackLoading || isPlayingTrackLoading;
+  const { mutate: playPrevTrack, isLoading: isPrevTrackLoading } = useMutation({
+    mutationFn: async () => {
+      const res = await axios.post<{ playingTrackId: number; trackId: number }>(
+        "/api/tracks/play/prev"
+      );
+      return res;
+    },
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries(["playing track"]);
+      queryClient.invalidateQueries([`track ${data.trackId}`]);
+      setTrackId(data.trackId);
+      setStatus("play");
+    },
+    onError: () => {
+      setTrackId(null);
+      setStatus("pause");
+    },
+  });
+
+  const isLoading =
+    isNextTrackLoading || isPrevTrackLoading || isPlayingTrackLoading;
 
   return (
     <div className="flex-1 flex flex-col justify-between">
@@ -73,6 +92,7 @@ export default function PlayerAudio({
       <div className="flex-center gap-2">
         <button
           disabled={isLoading}
+          onClick={() => playPrevTrack()}
           className={cn("w-7 h-7 flex-center", isLoading && "text-white/50")}
         >
           <SkipBackIcon className="w-4 h-4" />
