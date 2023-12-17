@@ -2,6 +2,7 @@ import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   integer,
+  pgEnum,
   pgTable,
   serial,
   text,
@@ -128,6 +129,12 @@ export const playingTracksRelations = relations(playingTracks, ({ one }) => ({
 }));
 
 /****************** PLAYING CONTEXT ******************/
+export const contextRepeatEnum = pgEnum("context_repeat_enum", [
+  "NO-REPEAT",
+  "REPEAT-ALL",
+  "REPEAT-TRACK",
+]);
+
 export const playingContexts = pgTable("playing_contexts", {
   id: serial("id").primaryKey(),
   playingTrackId: integer("playing_track_id")
@@ -139,6 +146,9 @@ export const playingContexts = pgTable("playing_contexts", {
   favoritesProfileId: integer("favorites_profile_id"),
   tracksProfileId: integer("tracks_profile_id"),
   history: boolean("history"),
+
+  isShuffle: boolean("is_shuffle").default(false).notNull(),
+  repeat: contextRepeatEnum("repeat").default("NO-REPEAT").notNull(),
 });
 
 /****************** FAVORITE TRACK ******************/

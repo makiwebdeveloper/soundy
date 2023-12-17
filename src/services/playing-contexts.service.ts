@@ -36,3 +36,20 @@ export async function clearPlayingContext(playingTrackId: number) {
     })
     .where(eq(playingContexts.playingTrackId, playingTrackId));
 }
+
+export async function toggleShuffle(
+  playingTrackId: number,
+  currentIsShuffle: boolean
+): Promise<boolean> {
+  const playingContext = await db
+    .update(playingContexts)
+    .set({
+      isShuffle: !currentIsShuffle,
+    })
+    .where(eq(playingContexts.playingTrackId, playingTrackId))
+    .returning({
+      isShuffle: playingContexts.isShuffle,
+    });
+
+  return playingContext[0].isShuffle;
+}

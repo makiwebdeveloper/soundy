@@ -1,6 +1,6 @@
 "use client";
 
-import { TrackType } from "@/types/tracks.types";
+import { PlayingContextType, TrackType } from "@/types/tracks.types";
 import { formatTime } from "@/utils/format-time";
 import {
   PauseCircleIcon,
@@ -13,6 +13,7 @@ import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { cn } from "@/lib/cn";
+import { RepeatButton, ShuffleButton } from "./buttons";
 
 interface Props {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
@@ -22,6 +23,7 @@ interface Props {
   setCurrentTime: (v: number) => void;
   durationSeconds: number;
   isPlayingTrackLoading: boolean;
+  playingContext: PlayingContextType;
 }
 
 export default function PlayerAudio({
@@ -32,6 +34,7 @@ export default function PlayerAudio({
   setCurrentTime,
   durationSeconds,
   isPlayingTrackLoading,
+  playingContext,
 }: Props) {
   const queryClient = useQueryClient();
   const { status, toggleStatus, setTrackId, setStatus } =
@@ -90,6 +93,7 @@ export default function PlayerAudio({
         }}
       ></audio>
       <div className="flex-center gap-2">
+        <ShuffleButton isShuffle={playingContext.isShuffle} />
         <button
           disabled={isLoading}
           onClick={() => playPrevTrack()}
@@ -121,6 +125,7 @@ export default function PlayerAudio({
         >
           <SkipForwardIcon className="w-4 h-4" />
         </button>
+        <RepeatButton type={playingContext.repeat} />
       </div>
       <div className="flex items-center gap-2">
         <div className="w-[70px] flex-center">

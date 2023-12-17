@@ -9,12 +9,16 @@ import {
   createPlayingContext,
   updatePlayingContext,
 } from "./playing-contexts.service";
+import { FullPlayingTrackType } from "@/types/tracks.types";
+import { getCurrentProfile } from "./profiles.service";
 
 export type PlayingTrackType = PlayTrackValidatorType & {
   profileId: number;
 };
 
-export async function getPlayingTrack(profileId: number) {
+export async function getPlayingTrack(
+  profileId: number
+): Promise<FullPlayingTrackType | undefined> {
   const dbPlayingTrack = await db.query.playingTracks.findFirst({
     where: eq(playingTracks.profileId, profileId),
     with: {

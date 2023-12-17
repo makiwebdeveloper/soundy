@@ -62,7 +62,7 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
     );
   }
 
-  const { track } = data.playingTrack;
+  const { track, playingContext } = data.playingTrack;
 
   function handleVolumeChange(volumeValue: number) {
     if (!audioRef.current) return;
@@ -97,6 +97,7 @@ export default function MusicPlayer({ initialPlaingTrack }: Props) {
         setCurrentTime={setCurrentTime}
         durationSeconds={durationSeconds}
         isPlayingTrackLoading={isLoading}
+        playingContext={playingContext}
       />
       <PlayerVolume
         volume={volume}
