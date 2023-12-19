@@ -1,9 +1,18 @@
-import { getRandomTrack } from "@/services/tracks.service";
+import { PageLayout } from "@/components/page-layout";
+import {
+  HomeForYou,
+  HomeGoodDay,
+  HomeHeader,
+  HomeRecentlyPlayed,
+} from "@/components/pages/home";
 
-export default async function Home() {
+export default async function HomePage() {
   return (
-    <main>
-      <h1>Home</h1>
-    </main>
+    <PageLayout>
+      <HomeHeader />
+      <HomeGoodDay />
+      <HomeForYou />
+      <HomeRecentlyPlayed />
+    </PageLayout>
   );
 }

@@ -153,6 +153,7 @@ export default function PlayerAudio({
         {durationSeconds ? (
           <Slider
             className="w-full"
+            trackStyles="h-[7px] md:h-[5px]"
             min={0}
             max={durationSeconds}
             value={[currentTime]}
