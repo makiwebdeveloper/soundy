@@ -3,7 +3,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import { tracks } from "@/lib/db/schema";
 import { UploadTrackValidatorType } from "@/lib/validators/tracks";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import {
   PlayingTrackType,
   createPlayingTrack,
@@ -120,10 +120,11 @@ export async function playTrack(data: PlayingTrackType) {
 export async function getTracksByProfileId(
   profileId: number,
   limit?: number,
-  orderBy?: "asc" | "desc"
+  orderBy?: "asc" | "desc",
+  onlyPublic?: boolean
 ): Promise<TrackWithListeningsType[]> {
   return db.query.tracks.findMany({
-    where: eq(tracks.profileId, profileId),
+    where: and(eq(tracks.profileId, profileId), eq(tracks.isPublic, true)),
     limit,
     with: {
       listenings: true,
@@ -132,6 +133,43 @@ export async function getTracksByProfileId(
     orderBy: (tracks, { asc, desc }) =>
       orderBy === "desc" ? [desc(tracks.createdAt)] : [asc(tracks.createdAt)],
   });
+}
+
+export async function getTracks({
+  limit,
+  orderBy,
+  random,
+}: {
+  limit?: number;
+  orderBy?: "asc" | "desc";
+  random?: boolean;
+}): Promise<TrackWithListeningsType[]> {
+  if (random) {
+    const dbTracks = await db.query.tracks.findMany({
+      where: eq(tracks.isPublic, true),
+      with: {
+        listenings: true,
+        profile: true,
+      },
+      orderBy: (tracks, { asc, desc }) =>
+        orderBy === "desc" ? [desc(tracks.createdAt)] : [asc(tracks.createdAt)],
+    });
+
+    return dbTracks.sort(() => Math.random() - 0.5).slice(0, limit);
+  } else {
+    const dbTracks = await db.query.tracks.findMany({
+      where: eq(tracks.isPublic, true),
+      limit,
+      with: {
+        listenings: true,
+        profile: true,
+      },
+      orderBy: (tracks, { asc, desc }) =>
+        orderBy === "desc" ? [desc(tracks.createdAt)] : [asc(tracks.createdAt)],
+    });
+
+    return dbTracks;
+  }
 }
 
 export async function getRandomTrack(): Promise<FullTrackType> {

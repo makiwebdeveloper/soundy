@@ -1,4 +1,14 @@
-export default function HomeGoodDay() {
+import { HeartIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+
+interface Props {
+  profileId: number;
+  tracks: { id: number; title: string; imageUrl: string; profileId: number }[];
+  album: { id: number; title: string; imageUrl: string; profileId: number };
+}
+
+export default function HomeGoodDay({ profileId, album, tracks }: Props) {
   const currentTime = new Date().getHours();
   let greetingText = "";
 
@@ -13,14 +23,46 @@ export default function HomeGoodDay() {
   return (
     <section className="flex flex-col gap-1">
       <h6 className="font-semibold text-lg">{greetingText}</h6>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {new Array(6).fill(null).map((item, idx) => (
-          <div
-            key={idx}
-            className="h-[45px] xs:h-[60px] rounded-md bg-black/20"
-          >
-            <div className="bg-black/20 w-[45px] xs:w-[60px] rounded-l-md h-full"></div>
+      <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
+        <Link
+          href={`/profiles/${profileId}/favorites`}
+          className="h-[60px] sm:h-[80px] rounded-md bg-black/20 transition hover:bg-black/30 flex items-center gap-3"
+        >
+          <div className="bg-pink-400/80 w-[60px] sm:w-[80px] rounded-l-md h-full flex-center">
+            <HeartIcon className="sm:w-10 sm:h-10" />
           </div>
+          <p className="font-medium text-lg">Favorite tracks</p>
+        </Link>
+        <Link
+          href={`/profiles/${album.profileId}/albums/${album.id}`}
+          className="h-[60px] sm:h-[80px] rounded-md bg-black/20 transition hover:bg-black/30 flex items-center gap-3"
+        >
+          <div className="relative bg-black/20 w-[60px] sm:w-[80px] rounded-l-md h-full flex-center">
+            <Image
+              fill
+              className="object-cover rounded-l-md bg-white/20 dark:bg-black/20"
+              src={album.imageUrl}
+              alt={album.title}
+            />
+          </div>
+          <p className="font-medium text-lg">{album.title}</p>
+        </Link>
+        {tracks.map((track) => (
+          <Link
+            key={track.id}
+            href={`/profiles/${track.profileId}/tracks/${track.id}`}
+            className="h-[60px] sm:h-[80px] rounded-md bg-black/20 transition hover:bg-black/30 flex items-center gap-3"
+          >
+            <div className="relative bg-black/20 w-[60px] sm:w-[80px] rounded-l-md h-full flex-center">
+              <Image
+                fill
+                className="object-cover rounded-l-md bg-white/20 dark:bg-black/20"
+                src={track.imageUrl}
+                alt={track.title}
+              />
+            </div>
+            <p className="font-medium text-lg">{track.title}</p>
+          </Link>
         ))}
       </div>
     </section>
