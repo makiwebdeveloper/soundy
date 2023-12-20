@@ -14,8 +14,10 @@ import { FullTrackType, TrackWithListeningsType } from "@/types/tracks.types";
 import {
   createListening,
   getListening,
+  getListeningsByProfileId,
   updateListeningDate,
 } from "./listenings.service";
+import { shuffleArray } from "@/utils/shuffle-array";
 
 export async function getTrackById(
   trackId: number
@@ -117,12 +119,17 @@ export async function playTrack(data: PlayingTrackType) {
   return playingTrackId;
 }
 
-export async function getTracksByProfileId(
-  profileId: number,
-  limit?: number,
-  orderBy?: "asc" | "desc",
-  onlyPublic?: boolean
-): Promise<TrackWithListeningsType[]> {
+export async function getTracksByProfileId({
+  profileId,
+  limit,
+  orderBy,
+  onlyPublic,
+}: {
+  profileId: number;
+  limit?: number;
+  orderBy?: "asc" | "desc";
+  onlyPublic?: boolean;
+}): Promise<TrackWithListeningsType[]> {
   return db.query.tracks.findMany({
     where: and(eq(tracks.profileId, profileId), eq(tracks.isPublic, true)),
     limit,
@@ -183,4 +190,70 @@ export async function getRandomTrack(): Promise<FullTrackType> {
   });
 
   return dbTracks[Math.floor(Math.random() * dbTracks.length)];
+}
+
+export async function getTracksByGenre({
+  genre,
+  limit,
+  orderBy,
+}: {
+  genre: string;
+  limit?: number;
+  orderBy?: "asc" | "desc";
+}): Promise<TrackWithListeningsType[]> {
+  return db.query.tracks.findMany({
+    where: and(eq(tracks.genre, genre), eq(tracks.isPublic, true)),
+    limit,
+    with: {
+      listenings: true,
+      profile: true,
+    },
+    orderBy: (tracks, { asc, desc }) =>
+      orderBy === "desc" ? [desc(tracks.createdAt)] : [asc(tracks.createdAt)],
+  });
+}
+
+export async function getRecommendedTracks(profileId: number) {
+  const listeningTracks = await getListeningsByProfileId({
+    profileId,
+  });
+
+  const genres = listeningTracks.map((listening) => listening.track.genre);
+  const commonGenres: string[] = genres.filter(
+    (item): item is string => item !== null
+  );
+  const commonArtists = listeningTracks.map(
+    (listening) => listening.track.profileId
+  );
+
+  let restTracks: TrackWithListeningsType[] = [];
+
+  if (commonGenres.length + commonArtists.length < 6) {
+    const dbTracks = await getTracks({
+      limit: 6 - (commonGenres.length + commonArtists.length),
+    });
+
+    restTracks = [...dbTracks];
+  }
+
+  let artistsTracks: TrackWithListeningsType[] = [];
+
+  for (let i = 0; i < listeningTracks.length; i++) {
+    const dbTracks = await getTracksByProfileId({
+      profileId: commonArtists[i],
+    });
+
+    artistsTracks.push(dbTracks[Math.floor(Math.random() * dbTracks.length)]);
+  }
+
+  let genresTracks: TrackWithListeningsType[] = [];
+  for (let i = 0; i < listeningTracks.length; i++) {
+    const dbTracks = await getTracksByGenre({
+      genre: commonGenres[i],
+    });
+
+    genresTracks.push(dbTracks[Math.floor(Math.random() * dbTracks.length)]);
+  }
+
+  return shuffleArray([...artistsTracks, ...genresTracks, ...restTracks]);
 }
