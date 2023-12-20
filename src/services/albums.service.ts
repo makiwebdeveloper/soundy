@@ -107,3 +107,33 @@ export async function getFullAlbumsByProfileId(
       orderBy === "desc" ? [desc(albums.createdAt)] : [asc(albums.createdAt)],
   });
 }
+
+export async function getAlbums({
+  limit,
+  orderBy,
+  random,
+}: {
+  limit?: number;
+  orderBy?: "asc" | "desc";
+  random?: boolean;
+}): Promise<AlbumType[]> {
+  const dbAlbums = await db.query.albums.findMany({
+    with: {
+      tracks: {
+        with: {
+          listenings: true,
+        },
+      },
+      profile: true,
+    },
+    limit,
+    orderBy: (albums, { asc, desc }) =>
+      orderBy === "desc" ? [desc(albums.createdAt)] : [asc(albums.createdAt)],
+  });
+
+  if (random) {
+    return dbAlbums.sort(() => Math.random() - 0.5);
+  }
+
+  return dbAlbums;
+}

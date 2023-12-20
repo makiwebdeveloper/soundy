@@ -11,7 +11,7 @@ import { auth } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
 import { getProfilePopularity } from "./followings.service";
 
-export async function getCurrentProfile() {
+export async function getCurrentProfile(): Promise<ProfileType | undefined> {
   const { userId } = auth();
 
   if (!userId) {
@@ -23,7 +23,9 @@ export async function getCurrentProfile() {
   return profile;
 }
 
-export async function getProfileByUserId(userId: string) {
+export async function getProfileByUserId(
+  userId: string
+): Promise<ProfileType | undefined> {
   const profile = await db.query.profiles.findFirst({
     where: eq(profiles.userId, userId),
   });

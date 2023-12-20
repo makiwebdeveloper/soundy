@@ -37,3 +37,19 @@ export async function updateListeningDate(id: number) {
   const listeningId = dbListening[0].listeningId;
   return listeningId;
 }
+
+export async function getListeningsByProfileId({
+  profileId,
+  limit,
+}: {
+  profileId: number;
+  limit?: number;
+}) {
+  return db.query.listenings.findMany({
+    where: eq(listenings.profileId, profileId),
+    with: {
+      track: true,
+    },
+    limit,
+  });
+}

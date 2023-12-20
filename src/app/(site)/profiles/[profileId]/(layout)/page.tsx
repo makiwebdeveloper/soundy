@@ -23,7 +23,11 @@ export default async function ProfilePage({ params }: Props) {
   const profileData = getProfileById(profileId);
 
   const limit = 3;
-  const tracksData = getTracksByProfileId(profileId, 2, "desc");
+  const tracksData = getTracksByProfileId({
+    profileId,
+    limit: 2,
+    orderBy: "desc",
+  });
   const albumsData = getFullAlbumsByProfileId(profileId, limit, "desc");
   const playlistsData = getProfilePlaylists(profileId, limit, "desc");
   const favoriteTracksData = getFavoriteTracksByProfileId(

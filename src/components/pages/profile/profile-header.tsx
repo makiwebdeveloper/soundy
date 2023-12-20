@@ -8,6 +8,7 @@ import FollowingButton from "./buttons/following-button";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import EditProfileDialog from "@/components/dialogs/edit-profile-dialog";
+import SignOutButton from "./buttons/sign-out-button";
 
 interface Props {
   initialProfile: FullProfileType;
@@ -45,7 +46,10 @@ export default function ProfileHeader({
       <div className="flex-1 flex flex-col justify-between items-center gap-3 md:items-start md:h-[125px] lg:h-[150px] 2xl:h-[200px]">
         <PageTitle className="break-all">{profile.name}</PageTitle>
         {isCurrentProfile ? (
-          <EditProfileDialog profile={profile} />
+          <div className="flex gap-3">
+            <EditProfileDialog profile={profile} />
+            <SignOutButton />
+          </div>
         ) : (
           <FollowingButton
             profileId={profile.id}
