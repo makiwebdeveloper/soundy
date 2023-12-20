@@ -37,6 +37,7 @@ export default function RootLayout({
           footerActionLink: "text-green-400",
         },
       }}
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
       <html lang="en" suppressHydrationWarning>
         <body className={cn(inter.className, "relative h-screen text-white")}>
