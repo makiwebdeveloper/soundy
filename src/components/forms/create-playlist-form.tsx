@@ -80,7 +80,7 @@ export default function CreatePlaylistForm({
             name="title"
             render={({ field }) => (
               <FormItem className="mt-3">
-                <FormLabel>Playlist title</FormLabel>
+                <FormLabel>Playlist title *</FormLabel>
                 <FormControl>
                   <Input
                     id="title"

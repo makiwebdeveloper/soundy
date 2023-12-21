@@ -20,7 +20,9 @@ export default async function TrackPage({ params }: Props) {
   }
 
   const track = await getTrackById(Number(params.trackId));
-  const playlists = await getProfilePlaylists(currentProfile.id);
+  const playlists = await getProfilePlaylists({
+    profileId: currentProfile.id,
+  });
 
   if (!track) {
     notFound();

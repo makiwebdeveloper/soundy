@@ -130,16 +130,29 @@ export async function getTracksByProfileId({
   orderBy?: "asc" | "desc";
   onlyPublic?: boolean;
 }): Promise<TrackWithListeningsType[]> {
-  return db.query.tracks.findMany({
-    where: and(eq(tracks.profileId, profileId), eq(tracks.isPublic, true)),
-    limit,
-    with: {
-      listenings: true,
-      profile: true,
-    },
-    orderBy: (tracks, { asc, desc }) =>
-      orderBy === "desc" ? [desc(tracks.createdAt)] : [asc(tracks.createdAt)],
-  });
+  if (onlyPublic) {
+    return db.query.tracks.findMany({
+      where: and(eq(tracks.profileId, profileId), eq(tracks.isPublic, true)),
+      limit,
+      with: {
+        listenings: true,
+        profile: true,
+      },
+      orderBy: (tracks, { asc, desc }) =>
+        orderBy === "desc" ? [desc(tracks.createdAt)] : [asc(tracks.createdAt)],
+    });
+  } else {
+    return db.query.tracks.findMany({
+      where: eq(tracks.profileId, profileId),
+      limit,
+      with: {
+        listenings: true,
+        profile: true,
+      },
+      orderBy: (tracks, { asc, desc }) =>
+        orderBy === "desc" ? [desc(tracks.createdAt)] : [asc(tracks.createdAt)],
+    });
+  }
 }
 
 export async function getTracks({

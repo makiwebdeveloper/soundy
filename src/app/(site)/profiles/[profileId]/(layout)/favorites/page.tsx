@@ -20,6 +20,7 @@ export default async function FavoritesPage({ params }: Props) {
         imageUrl: fav.track.imageUrl,
         title: fav.track.title,
         profile: fav.profile,
+        isPublic: fav.track.isPublic,
       }))}
       context={{
         favoritesProfileId: Number(params.profileId),

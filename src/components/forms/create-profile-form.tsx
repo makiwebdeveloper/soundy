@@ -55,7 +55,7 @@ export default function CreateProfileForm() {
           name="imageUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Profile image</FormLabel>
+              <FormLabel>Profile image *</FormLabel>
               <FormControl>
                 <ProfileImageUploader
                   image={field.value}
@@ -70,7 +70,7 @@ export default function CreateProfileForm() {
           name="name"
           render={({ field }) => (
             <FormItem className="mt-2">
-              <FormLabel>Profile name</FormLabel>
+              <FormLabel>Profile name *</FormLabel>
               <FormControl>
                 <Input
                   id="name"

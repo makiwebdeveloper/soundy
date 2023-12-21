@@ -8,7 +8,7 @@ import {
   CollectionsType,
 } from "./profile-collections-list";
 import { Button } from "@/components/ui/button";
-import { PauseIcon, PlayIcon } from "lucide-react";
+import { LockIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { usePlayingTrackStore } from "@/hooks/use-playing-track-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/cn";
@@ -81,6 +81,11 @@ export default function ProfileCollectionsItem({ type, item, context }: Props) {
             <PlayIcon className="w-[38px] h-[38px] absolute top-[50%] translate-x-[-50%] left-[55%] translate-y-[-50%]" />
           )}
         </Button>
+        {!item.isPublic && (
+          <div className="absolute bottom-1 right-1 w-7 h-7 bg-black/80 flex-center rounded-full">
+            <LockIcon className="w-3 h-3" />
+          </div>
+        )}
       </div>
     );
   }

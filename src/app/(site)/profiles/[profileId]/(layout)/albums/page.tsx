@@ -22,6 +22,7 @@ export default async function AlbumsPage({ params }: Props) {
         imageUrl: album.imageUrl,
         title: album.title,
         profile: album.profile,
+        isPublic: true,
       }))}
       context={{}}
     />

@@ -140,7 +140,7 @@ export default function UploadAlbumForm({
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Album image</FormLabel>
+              <FormLabel>Album image *</FormLabel>
               <FormControl>
                 <TrackImageUploader
                   image={field.value}
@@ -155,7 +155,7 @@ export default function UploadAlbumForm({
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Title *</FormLabel>
               <FormControl>
                 <Input
                   id="title"

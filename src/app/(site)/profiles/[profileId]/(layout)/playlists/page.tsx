@@ -1,5 +1,7 @@
 import ProfileCollectionsList from "@/components/profile-collections-list";
 import { getProfilePlaylists } from "@/services/playlists.service";
+import { getCurrentProfile } from "@/services/profiles.service";
+import { redirect } from "next/navigation";
 
 interface Props {
   params: {
@@ -8,11 +10,17 @@ interface Props {
 }
 
 export default async function PlaylistsPage({ params }: Props) {
-  const playlists = await getProfilePlaylists(
-    Number(params.profileId),
-    undefined,
-    "desc"
-  );
+  const currentProfile = await getCurrentProfile();
+
+  if (!currentProfile) {
+    redirect("/create-profile");
+  }
+
+  const playlists = await getProfilePlaylists({
+    profileId: Number(params.profileId),
+    orderBy: "desc",
+    onlyPublic: currentProfile.id === Number(params.profileId) ? false : true,
+  });
 
   return (
     <ProfileCollectionsList
@@ -22,6 +30,7 @@ export default async function PlaylistsPage({ params }: Props) {
         imageUrl: playlist.tracks[0].imageUrl,
         title: playlist.title,
         profile: playlist.profile,
+        isPublic: playlist.isPublic,
       }))}
       context={{}}
     />

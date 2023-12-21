@@ -101,7 +101,7 @@ export default function UploadTrackForm({ track, cancel, profileId }: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Track image</FormLabel>
+              <FormLabel>Track image *</FormLabel>
               <FormControl>
                 <TrackImageUploader
                   image={field.value}
@@ -116,7 +116,7 @@ export default function UploadTrackForm({ track, cancel, profileId }: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Title *</FormLabel>
               <FormControl>
                 <Input
                   id="title"

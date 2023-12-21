@@ -48,7 +48,9 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const playlists = await getProfilePlaylists(currentProfile.id);
+    const playlists = await getProfilePlaylists({
+      profileId: currentProfile.id,
+    });
 
     return NextResponse.json({ playlists }, { status: 200 });
   } catch (error) {

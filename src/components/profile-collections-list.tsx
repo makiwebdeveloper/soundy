@@ -9,6 +9,7 @@ export type CollectionsItemType = {
   imageUrl: string;
   title: string;
   profile: ProfileType;
+  isPublic: boolean;
 };
 
 export type CollectionsType = "tracks" | "albums" | "playlists" | "favorites";

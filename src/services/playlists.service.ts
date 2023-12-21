@@ -7,7 +7,7 @@ import {
   CreatePlaylistValidatorType,
 } from "@/lib/validators/playlists";
 import { PlaylistType, PlaylistWithTracksType } from "@/types/playlists.types";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 type PlaylistCreationType = Pick<
   CreatePlaylistValidatorType,
@@ -16,35 +16,71 @@ type PlaylistCreationType = Pick<
   profileId: number;
 };
 
-export async function getProfilePlaylists(
-  profileId: number,
-  limit?: number,
-  orderBy?: "asc" | "desc"
-): Promise<PlaylistWithTracksType[]> {
-  const dbPlatlists = await db.query.playlists.findMany({
-    where: eq(playlists.profileId, profileId),
-    with: {
-      playlistTracks: {
-        with: {
-          track: true,
+export async function getProfilePlaylists({
+  profileId,
+  limit,
+  orderBy,
+  onlyPublic,
+}: {
+  profileId: number;
+  limit?: number;
+  orderBy?: "asc" | "desc";
+  onlyPublic?: boolean;
+}): Promise<PlaylistWithTracksType[]> {
+  if (onlyPublic) {
+    const dbPlatlists = await db.query.playlists.findMany({
+      where: and(
+        eq(playlists.profileId, profileId),
+        eq(playlists.isPublic, true)
+      ),
+      with: {
+        playlistTracks: {
+          with: {
+            track: true,
+          },
         },
+        profile: true,
       },
-      profile: true,
-    },
-    limit,
-    orderBy: (playlists, { asc, desc }) =>
-      orderBy === "desc"
-        ? [desc(playlists.createdAt)]
-        : [asc(playlists.createdAt)],
-  });
+      limit,
+      orderBy: (playlists, { asc, desc }) =>
+        orderBy === "desc"
+          ? [desc(playlists.createdAt)]
+          : [asc(playlists.createdAt)],
+    });
 
-  return dbPlatlists.map((item) => {
-    const { playlistTracks, ...data } = item;
-    return {
-      tracks: playlistTracks.map((track) => track.track),
-      ...data,
-    };
-  });
+    return dbPlatlists.map((item) => {
+      const { playlistTracks, ...data } = item;
+      return {
+        tracks: playlistTracks.map((track) => track.track),
+        ...data,
+      };
+    });
+  } else {
+    const dbPlatlists = await db.query.playlists.findMany({
+      where: eq(playlists.profileId, profileId),
+      with: {
+        playlistTracks: {
+          with: {
+            track: true,
+          },
+        },
+        profile: true,
+      },
+      limit,
+      orderBy: (playlists, { asc, desc }) =>
+        orderBy === "desc"
+          ? [desc(playlists.createdAt)]
+          : [asc(playlists.createdAt)],
+    });
+
+    return dbPlatlists.map((item) => {
+      const { playlistTracks, ...data } = item;
+      return {
+        tracks: playlistTracks.map((track) => track.track),
+        ...data,
+      };
+    });
+  }
 }
 
 export async function createPlaylist(data: PlaylistCreationType) {
@@ -100,5 +136,13 @@ export async function getPlaylistsByProfileId(
   return db.query.playlists.findMany({
     where: eq(playlists.profileId, profileId),
     limit,
+  });
+}
+
+export async function getPlaylistById(
+  playlistId: number
+): Promise<PlaylistType | undefined> {
+  return db.query.playlists.findFirst({
+    where: eq(playlists.id, playlistId),
   });
 }
