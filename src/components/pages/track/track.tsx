@@ -66,11 +66,7 @@ export default function Track({
 
   return (
     <PageLayout>
-      <TrackHeader
-        title={track.title}
-        imageUrl={track.imageUrl}
-        profile={track.profile}
-      />
+      <TrackHeader track={track} profile={track.profile} />
       <TrackTools
         track={track}
         isFavoriteTrack={isFavoriteTrack}

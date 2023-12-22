@@ -29,12 +29,16 @@ export default async function ProfilePage({ params }: Props) {
     orderBy: "desc",
   });
   const albumsData = getFullAlbumsByProfileId(profileId, limit, "desc");
-  const playlistsData = getProfilePlaylists(profileId, limit, "desc");
-  const favoriteTracksData = getFavoriteTracksByProfileId(
+  const playlistsData = getProfilePlaylists({
     profileId,
     limit,
-    "desc"
-  );
+    orderBy: "desc",
+  });
+  const favoriteTracksData = getFavoriteTracksByProfileId({
+    profileId,
+    limit,
+    orderBy: "desc",
+  });
 
   const [profile, tracks, albums, playlists, favoriteTracks] =
     await Promise.all([

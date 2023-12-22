@@ -8,9 +8,10 @@ interface Props {
 }
 
 export default async function FavoritesPage({ params }: Props) {
-  const favoriteTracks = await getFavoriteTracksByProfileId(
-    Number(params.profileId)
-  );
+  const favoriteTracks = await getFavoriteTracksByProfileId({
+    profileId: Number(params.profileId),
+    orderBy: "desc",
+  });
 
   return (
     <ProfileCollectionsList

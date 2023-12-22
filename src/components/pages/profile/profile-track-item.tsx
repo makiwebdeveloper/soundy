@@ -91,7 +91,7 @@ export default function ProfileTrackItem({ track, profile }: Props) {
           passHref={true}
           className="w-fit text-sm text-white/70 dark:text-white/50 transition hover:underline underline-offset-2 hover:text-white dark:hover:text-white"
         >
-          {profile.name}
+          {track.profile.name}
         </Link>
         <div className="flex gap-2 items-center">
           <p className="flex items-center gap-2 text-white/70">
