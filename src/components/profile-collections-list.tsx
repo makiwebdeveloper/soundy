@@ -3,6 +3,7 @@ import ProfileCollectionsItem from "./profile-collections-item";
 import { cn } from "@/lib/cn";
 import { Music2Icon } from "lucide-react";
 import { IPlayingContext } from "@/types/playing-contexts.types";
+import Link from "next/link";
 
 export type CollectionsItemType = {
   id: number;
@@ -27,11 +28,19 @@ export default function ProfileCollectionsList({
 }: Props) {
   if (items.length === 0) {
     return (
-      <div>
-        <p className="w-fit mx-auto flex items-center gap-2">
+      <div className="flex flex-col items-center">
+        <p className="flex items-center gap-2">
           No {type} yet
           <Music2Icon className="w-4 h-4" />
         </p>
+        {type === "tracks" || type === "albums" ? (
+          <Link
+            href="/upload"
+            className="cursor-pointer text-sm text-white/70 dark:text-white/50 transition hover:underline underline-offset-2 hover:text-white dark:hover:text-white"
+          >
+            Upload {type === "tracks" ? "track" : "album"}
+          </Link>
+        ) : null}
       </div>
     );
   }

@@ -1,4 +1,3 @@
-import { PropsWithChildren } from "react";
 import { redirect } from "next/navigation";
 import Sidebar from "@/components/sidebar/sidebar";
 import MusicPlayer from "@/components/music-player/music-player";
@@ -7,7 +6,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
 
-export default async function SiteLayout({ children }: PropsWithChildren) {
+export default async function SiteLayout({
+  children,
+  search,
+}: {
+  children: React.ReactNode;
+  search: React.ReactNode;
+}) {
   const currentProfile = await getCurrentProfile();
 
   if (!currentProfile) {
@@ -31,6 +36,7 @@ export default async function SiteLayout({ children }: PropsWithChildren) {
         </ScrollArea>
       </article>
       <MusicPlayer initialPlaingTrack={playingTrack} />
+      {search}
     </main>
   );
 }
