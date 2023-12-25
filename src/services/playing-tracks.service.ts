@@ -10,7 +10,6 @@ import {
   updatePlayingContext,
 } from "./playing-contexts.service";
 import { FullPlayingTrackType } from "@/types/tracks.types";
-import { getCurrentProfile } from "./profiles.service";
 
 export type PlayingTrackType = PlayTrackValidatorType & {
   profileId: number;

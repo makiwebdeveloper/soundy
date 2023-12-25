@@ -7,6 +7,8 @@ interface Props {
   };
 }
 
+export const revalidate = 0;
+
 export default async function FavoritesPage({ params }: Props) {
   const favoriteTracks = await getFavoriteTracksByProfileId({
     profileId: Number(params.profileId),

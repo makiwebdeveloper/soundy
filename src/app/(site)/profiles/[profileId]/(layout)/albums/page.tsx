@@ -7,6 +7,8 @@ interface Props {
   };
 }
 
+export const revalidate = 0;
+
 export default async function AlbumsPage({ params }: Props) {
   const albums = await getFullAlbumsByProfileId(
     Number(params.profileId),

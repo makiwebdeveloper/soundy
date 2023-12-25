@@ -1,9 +1,9 @@
 import { getAlbumById } from "@/services/albums.service";
-import { clearPlayingContext } from "@/services/playing-contexts.service";
+import { getFavoriteTracksByProfileId } from "@/services/favorite-tracks.service";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
-import { playTrack } from "@/services/tracks.service";
-import { getRandomElementFromArray } from "@/utils/get-random-element-from-array";
+import { getTracksByProfileId, playTrack } from "@/services/tracks.service";
+import { getNextTrack } from "@/utils/get-next-track";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -23,6 +23,12 @@ export async function POST(req: Request) {
 
   let nextTrackId = playingTrack.track.id;
 
+  const contextInfo = {
+    playingTrackId: playingTrack.track.id,
+    isShuffle: playingContext.isShuffle,
+    repeat: playingContext.repeat,
+  };
+
   if (playingContext.albumId) {
     const album = await getAlbumById(playingContext.albumId);
 
@@ -30,25 +36,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });
     }
 
-    const currentIndex = album.tracks.findIndex(
-      (track) => track.id === playingTrack.track.id
-    );
+    nextTrackId = getNextTrack({
+      tracks: album.tracks,
+      ...contextInfo,
+    });
+  } else if (playingContext.tracksProfileId) {
+    const tracks = await getTracksByProfileId({
+      profileId: playingContext.tracksProfileId,
+      orderBy: "desc",
+      onlyPublic:
+        currentProfile.id === playingContext.tracksProfileId ? false : true,
+    });
 
-    if (playingContext.isShuffle) {
-      const randomTrack = getRandomElementFromArray(album.tracks, currentIndex);
+    nextTrackId = getNextTrack({
+      tracks,
+      ...contextInfo,
+    });
+  } else if (playingContext.favoritesProfileId) {
+    const favoriteTracks = await getFavoriteTracksByProfileId({
+      profileId: currentProfile.id,
+      orderBy: "desc",
+    });
 
-      nextTrackId = randomTrack.id;
-    } else {
-      if (currentIndex !== album.tracks.length - 1) {
-        nextTrackId = album.tracks[currentIndex + 1].id;
-      } else {
-        if (playingContext.repeat === "REPEAT-ALL") {
-          nextTrackId = album.tracks[0].id;
-        } else {
-          nextTrackId = album.tracks[album.tracks.length - 1].id;
-        }
-      }
-    }
+    nextTrackId = getNextTrack({
+      tracks: favoriteTracks.map((fav) => fav.track),
+      ...contextInfo,
+    });
   }
 
   const newPlayingTrackId = await playTrack({

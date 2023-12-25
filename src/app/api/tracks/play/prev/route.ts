@@ -1,7 +1,8 @@
 import { getAlbumById } from "@/services/albums.service";
+import { getFavoriteTracksByProfileId } from "@/services/favorite-tracks.service";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
-import { playTrack } from "@/services/tracks.service";
+import { getTracksByProfileId, playTrack } from "@/services/tracks.service";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -36,6 +37,42 @@ export async function POST(req: Request) {
     if (currentIndex !== 0) {
       isFirstTrack = false;
       prevTrackId = album.tracks[currentIndex - 1].id;
+    } else {
+      isFirstTrack = true;
+    }
+  } else if (playingContext.tracksProfileId) {
+    const tracks = await getTracksByProfileId({
+      profileId: playingContext.tracksProfileId,
+      orderBy: "desc",
+      onlyPublic:
+        currentProfile.id === playingContext.tracksProfileId ? false : true,
+    });
+
+    const currentIndex = tracks.findIndex(
+      (track) => track.id === playingTrack.track.id
+    );
+
+    if (currentIndex !== 0) {
+      isFirstTrack = false;
+      prevTrackId = tracks[currentIndex - 1].id;
+    } else {
+      isFirstTrack = true;
+    }
+  } else if (playingContext.favoritesProfileId) {
+    const favoriteTracks = await getFavoriteTracksByProfileId({
+      profileId: playingContext.favoritesProfileId,
+      orderBy: "desc",
+    });
+
+    const tracks = favoriteTracks.map((fav) => fav.track);
+
+    const currentIndex = tracks.findIndex(
+      (track) => track.id === playingTrack.track.id
+    );
+
+    if (currentIndex !== 0) {
+      isFirstTrack = false;
+      prevTrackId = tracks[currentIndex - 1].id;
     } else {
       isFirstTrack = true;
     }

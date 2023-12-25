@@ -9,6 +9,8 @@ interface Props {
   };
 }
 
+export const revalidate = 0;
+
 export default async function PlaylistsPage({ params }: Props) {
   const currentProfile = await getCurrentProfile();
 
