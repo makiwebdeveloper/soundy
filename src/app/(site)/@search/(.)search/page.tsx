@@ -1,21 +1,20 @@
 "use client";
 
-import { XIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { SearchClient, SearchModalHeader } from "@/components/pages/search";
+import { usePathname } from "next/navigation";
 
 export default function SearchModal() {
-  const router = useRouter();
+  const pathname = usePathname();
+  if (!pathname.includes("search")) {
+    return null;
+  }
 
   return (
-    <div className="transition-all fixed top-0 left-0 w-full h-screen backdrop-blur-sm flex-center">
-      <div className="bg-black/80 text-white p-5 rounded-md w-[600px] h-[300px]">
-        <div className="relative flex items-center justify-center">
-          <p className="text-2xl 2xl:text-4xl font-semibold">Search</p>
-          <button className="absolute right-0" onClick={() => router.back()}>
-            <XIcon className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
+    <div className="transition-all fixed top-0 left-0 w-full h-screen backdrop-blur-sm flex-center bg-white/20 dark:bg-black/20">
+      <article className="w-[600px] flex flex-col gap-3 border border-white/40 bg-white/30 p-6 shadow-lg rounded-lg dark:border-black/60 dark:bg-black/40 backdrop-blur-md">
+        <SearchModalHeader />
+        <SearchClient />
+      </article>
     </div>
   );
 }

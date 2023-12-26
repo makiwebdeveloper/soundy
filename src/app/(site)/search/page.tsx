@@ -1,3 +1,11 @@
-export default function Search() {
-  return <div>Search</div>;
+import { PageHeader, PageLayout, PageTitle } from "@/components/page-layout";
+
+export default function SearchPage() {
+  return (
+    <PageLayout>
+      <PageHeader>
+        <PageTitle>Search</PageTitle>
+      </PageHeader>
+    </PageLayout>
+  );
 }
