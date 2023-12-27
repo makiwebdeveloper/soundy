@@ -7,7 +7,14 @@ import {
 } from "@/components/page-layout";
 import Upload from "@/components/upload";
 import { getCurrentProfile } from "@/services/profiles.service";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Upload | Soundy",
+  description:
+    "Elevate your musical presence with Soundy's Upload Page! Share your unique sound with the world effortlessly. Whether you're an artist, creator, or music lover, our intuitive upload process makes it easy to contribute to the global soundscape. Join us in spreading the rhythm – your music, your way. 🎤🌍 #Soundy #UploadMusic #ShareYourSound",
+};
 
 export default async function UploadPage() {
   const currentProfile = await getCurrentProfile();

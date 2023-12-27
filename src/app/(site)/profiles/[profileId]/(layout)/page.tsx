@@ -9,6 +9,7 @@ import {
 } from "@/components/pages/profile";
 import { getProfileById } from "@/services/profiles.service";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
 interface Props {
   params: {
@@ -17,6 +18,21 @@ interface Props {
 }
 
 export const revalidate = 0;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const profile = await getProfileById(Number(params.profileId));
+
+  if (!profile)
+    return {
+      title: "Not found",
+      description: "The page is not found.",
+    };
+
+  return {
+    title: profile.name,
+    description: `Discover the musical universe of ${profile.name} on Soundy! Explore their favorite tracks, handpicked playlists, and curated albums. ${profile.name}'s profile is a reflection of their unique musical journey, featuring a diverse collection that resonates with their soul. Join the experience, connect with ${profile.name}, and let the music be the language that unites us all. 🎶🔗 #Soundy #UserProfile #MusicDiscovery`,
+  };
+}
 
 export default async function ProfilePage({ params }: Props) {
   const profileId = Number(params.profileId);
