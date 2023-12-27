@@ -31,6 +31,7 @@ export default function SidebarItems({ profileId, className }: Props) {
               pathname === item.path &&
                 "bg-white/20 dark:bg-black/60 hover:bg-white/20 dark:hover:bg-black/50"
             )}
+            scroll={item.path === "/search" && false}
           >
             <item.icon className="w-5 h-5" /> {item.title}
           </Link>

@@ -3,3 +3,4 @@ export { default as UploadTrackForm } from "./upload-track-form";
 export { default as UploadAlbumForm } from "./upload-album-form";
 export { default as SendCommentForm } from "./send-comment-form";
 export { default as EditProfileForm } from "./edit-profile-form";
+export { default as SearchForm } from "./search-form";

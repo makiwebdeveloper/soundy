@@ -8,10 +8,8 @@ import { getCurrentProfile } from "@/services/profiles.service";
 
 export default async function SiteLayout({
   children,
-  search,
 }: {
   children: React.ReactNode;
-  search: React.ReactNode;
 }) {
   const currentProfile = await getCurrentProfile();
 
@@ -36,7 +34,6 @@ export default async function SiteLayout({
         </ScrollArea>
       </article>
       <MusicPlayer initialPlaingTrack={playingTrack} />
-      {search}
     </main>
   );
 }
