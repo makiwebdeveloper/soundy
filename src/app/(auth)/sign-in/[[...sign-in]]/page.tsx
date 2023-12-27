@@ -1,5 +1,3 @@
-"use client";
-
 import { SignIn } from "@clerk/nextjs";
 import { Metadata } from "next";
 
