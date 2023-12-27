@@ -8,6 +8,15 @@ import { TrackWithListeningsType } from "@/types/tracks.types";
 import { and, eq, ilike } from "drizzle-orm";
 
 export async function getSearchItems(value: string): Promise<SearchResult> {
+  if (!value) {
+    return {
+      tracks: [],
+      albums: [],
+      profiles: [],
+      playlists: [],
+    };
+  }
+
   const dbTracks: TrackWithListeningsType[] = await db.query.tracks.findMany({
     where: and(eq(tracks.isPublic, true), ilike(tracks.title, `%${value}%`)),
     with: {

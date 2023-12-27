@@ -8,7 +8,7 @@ interface Props {
 
 export default function SearchItems({ items }: Props) {
   return (
-    <ScrollArea className="mt-3 h-[250px]">
+    <div className="mt-3 space-y-3">
       {items.profiles.length > 0 && (
         <SearchItem
           name="profiles"
@@ -53,6 +53,6 @@ export default function SearchItems({ items }: Props) {
           }))}
         />
       )}
-    </ScrollArea>
+    </div>
   );
 }

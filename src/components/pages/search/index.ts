@@ -1,2 +1,2 @@
 export { default as SearchModalHeader } from "./search-modal-header";
-export { default as SearchClient } from "./search-client";
+export { default as SearchItems } from "./search-items";
