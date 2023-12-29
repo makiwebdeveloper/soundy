@@ -38,7 +38,7 @@ export default function TracksAudioUploader({ setAudioFiles }: Props) {
 
           setAudioFiles(
             res.map((item, index) => ({
-              name: item.name,
+              name: item.name.replace(/\.(mp3|wav)$/i, ""),
               url: item.url,
               position: index,
             }))
