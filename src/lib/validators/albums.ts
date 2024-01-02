@@ -24,3 +24,9 @@ export const uploadAlbumValidator = z.object({
     .optional(),
 });
 export type UploadAlbumValidatorType = z.infer<typeof uploadAlbumValidator>;
+
+export const editAlbumValidator = z.object({
+  imageUrl: z.string().optional(),
+  title: z.string().optional(),
+});
+export type EditAlbumValidatorType = z.infer<typeof editAlbumValidator>;

@@ -4,10 +4,11 @@ import { PageDescription, PageTitle } from "@/components/page-layout";
 import { formatRelativeTime } from "@/utils/format-time";
 import { FullAlbumType } from "@/types/albums.types";
 import { ProfileType } from "@/types/profiles.types";
+import { EditAlbumDialog } from "@/components/dialogs";
 
 interface Props {
-  album: Pick<FullAlbumType, "title" | "imageUrl" | "createdAt">;
-  profile: Pick<ProfileType, "id" | "name">;
+  album: FullAlbumType;
+  profile: ProfileType;
 }
 
 export default function AlbumHeader({ album, profile }: Props) {
@@ -27,14 +28,15 @@ export default function AlbumHeader({ album, profile }: Props) {
           Made by:{" "}
           <Link
             className="transition hover:text-white hover:underline underline-offset-2"
-            href={`/profiles/${profile.id}`}
+            href={`/profiles/${album.profile.id}`}
           >
-            {profile.name}
+            {album.profile.name}
           </Link>
         </PageDescription>
       </div>
-      <div>
+      <div className="flex flex-col gap-1 items-end">
         <p>{formatRelativeTime(new Date(album.createdAt))}</p>
+        {profile.id === album.profile.id && <EditAlbumDialog album={album} />}
       </div>
     </div>
   );

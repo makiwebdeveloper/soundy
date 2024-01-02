@@ -2,7 +2,10 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
-import { UploadAlbumValidatorType } from "@/lib/validators/albums";
+import {
+  EditAlbumValidatorType,
+  UploadAlbumValidatorType,
+} from "@/lib/validators/albums";
 import { createTrack } from "./tracks.service";
 import { albums } from "@/lib/db/schema";
 import { AlbumType, FullAlbumType } from "@/types/albums.types";
@@ -136,4 +139,11 @@ export async function getAlbums({
   }
 
   return dbAlbums;
+}
+
+export async function updateAlbum(
+  albumId: number,
+  data: EditAlbumValidatorType
+) {
+  await db.update(albums).set(data).where(eq(albums.id, albumId));
 }

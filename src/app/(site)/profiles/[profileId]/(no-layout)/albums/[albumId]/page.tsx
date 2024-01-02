@@ -1,8 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { getAlbumById } from "@/services/albums.service";
-import { PageLayout } from "@/components/page-layout";
-import { AlbumHeader, AlbumTracks } from "@/components/pages/album";
+import { Album } from "@/components/pages/album";
 import { Metadata } from "next";
 
 interface Props {
@@ -42,10 +41,5 @@ export default async function AlbumPage({ params }: Props) {
     notFound();
   }
 
-  return (
-    <PageLayout>
-      <AlbumHeader album={album} profile={album.profile} />
-      <AlbumTracks tracks={album.tracks} profile={album.profile} />
-    </PageLayout>
-  );
+  return <Album initialAlbum={album} currentProfile={currentProfile} />;
 }
