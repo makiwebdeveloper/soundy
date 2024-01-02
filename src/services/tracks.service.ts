@@ -2,7 +2,10 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { tracks } from "@/lib/db/schema";
-import { UploadTrackValidatorType } from "@/lib/validators/tracks";
+import {
+  EditTrackValidatorType,
+  UploadTrackValidatorType,
+} from "@/lib/validators/tracks";
 import { and, eq, sql } from "drizzle-orm";
 import {
   PlayingTrackType,
@@ -269,4 +272,11 @@ export async function getRecommendedTracks(profileId: number) {
   }
 
   return shuffleArray([...artistsTracks, ...genresTracks, ...restTracks]);
+}
+
+export async function updateTrack(
+  trackId: number,
+  data: EditTrackValidatorType
+) {
+  await db.update(tracks).set(data).where(eq(tracks.id, trackId));
 }

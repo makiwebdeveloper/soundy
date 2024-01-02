@@ -25,3 +25,11 @@ export const favoriteTrackValidator = z.object({
   trackId: z.number(),
 });
 export type FavoriteTrackValidatorType = z.infer<typeof favoriteTrackValidator>;
+
+export const editTrackValidator = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  genre: z.string().optional(),
+  imageUrl: z.string().optional(),
+});
+export type EditTrackValidatorType = z.infer<typeof editTrackValidator>;

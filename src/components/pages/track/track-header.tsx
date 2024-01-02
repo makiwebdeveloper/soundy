@@ -4,9 +4,10 @@ import { PageDescription, PageTitle } from "@/components/page-layout";
 import { ProfileType } from "@/types/profiles.types";
 import { FullTrackType } from "@/types/tracks.types";
 import { formatRelativeTime } from "@/utils/format-time";
+import { EditTrackDialog } from "@/components/dialogs";
 
 interface Props {
-  track: Pick<FullTrackType, "title" | "imageUrl" | "createdAt">;
+  track: FullTrackType;
   profile: Pick<ProfileType, "id" | "name">;
 }
 
@@ -27,14 +28,15 @@ export default function TrackHeader({ track, profile }: Props) {
           Made by:{" "}
           <Link
             className="transition hover:text-white hover:underline underline-offset-2"
-            href={`/profiles/${profile.id}`}
+            href={`/profiles/${track.profile.id}`}
           >
-            {profile.name}
+            {track.profile.name}
           </Link>
         </PageDescription>
       </div>
-      <div>
+      <div className="flex flex-col gap-1 items-end">
         <p>{formatRelativeTime(new Date(track.createdAt))}</p>
+        {profile.id === track.profile.id && <EditTrackDialog track={track} />}
       </div>
     </div>
   );
