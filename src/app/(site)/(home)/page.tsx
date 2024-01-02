@@ -39,6 +39,7 @@ export default async function HomePage() {
   const listenings = await getListeningsByProfileId({
     profileId: currentProfile.id,
     limit: 6,
+    orderBy: "desc",
   });
 
   return (

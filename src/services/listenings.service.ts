@@ -41,9 +41,11 @@ export async function updateListeningDate(id: number) {
 export async function getListeningsByProfileId({
   profileId,
   limit,
+  orderBy,
 }: {
   profileId: number;
   limit?: number;
+  orderBy?: "asc" | "desc";
 }) {
   return db.query.listenings.findMany({
     where: eq(listenings.profileId, profileId),
@@ -51,5 +53,9 @@ export async function getListeningsByProfileId({
       track: true,
     },
     limit,
+    orderBy: (listening, { asc, desc }) =>
+      orderBy === "asc"
+        ? [asc(listening.updatedAt)]
+        : [desc(listening.updatedAt)],
   });
 }
