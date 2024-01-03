@@ -50,7 +50,13 @@ export default function ProfileCollectionsItem({ type, item, context }: Props) {
 
   if (type === "tracks" || type === "favorites") {
     return (
-      <div className="group relative w-[100px] sm:w-[125px] md:w-full h-[100px] sm:h-[125px] lg:h-[135px] 2xl:h-[180px]">
+      <Link
+        href={`/profiles/${item.profile.id}/tracks/${item.id}`}
+        className={cn(
+          "group relative w-[100px] sm:w-[125px] md:w-full h-[100px] sm:h-[125px] lg:h-[135px] 2xl:h-[180px]",
+          "after:absolute after:rounded-md after:content-[''] after:w-full after:h-full hover:after:bg-gradient-to-t hover:after:from-black/90 hover:after:to-black/20 hover:after:transition"
+        )}
+      >
         <Image
           fill
           src={item.imageUrl}
@@ -73,7 +79,7 @@ export default function ProfileCollectionsItem({ type, item, context }: Props) {
           }}
           disabled={isPlayTrackLoading}
           variant="ghost"
-          className="w-[60px] h-[60px] hidden rounded-full group-hover:flex absolute top-[50%] translate-x-[-50%] left-[50%] translate-y-[-50%] p-0 flex-center bg-green-500/80 hover:bg-green-500"
+          className="w-[60px] h-[60px] hidden rounded-full group-hover:flex absolute z-[10] top-[50%] translate-x-[-50%] left-[50%] translate-y-[-50%] p-0 flex-center bg-green-500/80 hover:bg-green-500"
         >
           {status === "play" && item.id === playingTrackId ? (
             <PauseIcon className="w-[38px] h-[38px] absolute top-[50%] translate-x-[-55%] left-[55%] translate-y-[-50%]" />
@@ -81,12 +87,17 @@ export default function ProfileCollectionsItem({ type, item, context }: Props) {
             <PlayIcon className="w-[38px] h-[38px] absolute top-[50%] translate-x-[-50%] left-[55%] translate-y-[-50%]" />
           )}
         </Button>
+        <div className="absolute hidden group-hover:block z-[10] bottom-1 left-2">
+          <p className="truncate w-[80px] sm:w-[100px] lg:w-[118px] 2xl:w-[160px] text-xs 2xl:text-base font-semibold ">
+            {item.title}
+          </p>
+        </div>
         {!item.isPublic && (
-          <div className="absolute bottom-1 right-1 w-7 h-7 bg-black/80 flex-center rounded-full">
+          <div className="absolute z-[10] top-1 right-1 w-7 h-7 bg-black/80 flex-center rounded-full">
             <LockIcon className="w-3 h-3" />
           </div>
         )}
-      </div>
+      </Link>
     );
   }
 
@@ -94,8 +105,8 @@ export default function ProfileCollectionsItem({ type, item, context }: Props) {
     <Link
       href={`/profiles/${item.profile.id}/${type}/${item.id}`}
       className={cn(
-        "relative w-[100px] sm:w-[125px] md:w-full h-[100px] sm:h-[125px] md:h-[125px] lg:h-[135px] 2xl:h-[180px]",
-        "after:absolute after:rounded-md after:content-[''] after:w-full after:h-full hover:after:bg-black/40 hover:after:transition"
+        "group relative w-[100px] sm:w-[125px] md:w-full h-[100px] sm:h-[125px] md:h-[125px] lg:h-[135px] 2xl:h-[180px]",
+        "after:absolute after:rounded-md after:content-[''] after:w-full after:h-full hover:after:bg-gradient-to-t hover:after:from-black/90 hover:after:to-black/20 hover:after:transition"
       )}
     >
       <Image
@@ -104,6 +115,11 @@ export default function ProfileCollectionsItem({ type, item, context }: Props) {
         alt={item.title}
         className="object-cover rounded-md bg-white/20 dark:bg-black/20"
       />
+      <div className="absolute hidden group-hover:block z-[10] bottom-1 left-2">
+        <p className="truncate w-[80px] sm:w-[100px] lg:w-[118px] 2xl:w-[160px] text-xs 2xl:text-base font-semibold ">
+          {item.title}
+        </p>
+      </div>
     </Link>
   );
 }

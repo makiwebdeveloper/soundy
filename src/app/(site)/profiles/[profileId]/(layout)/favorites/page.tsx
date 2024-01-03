@@ -39,7 +39,7 @@ export default async function FavoritesPage({ params }: Props) {
         id: fav.track.id,
         imageUrl: fav.track.imageUrl,
         title: fav.track.title,
-        profile: fav.profile,
+        profile: fav.track.profile,
         isPublic: fav.track.isPublic,
       }))}
       context={{
