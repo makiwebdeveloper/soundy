@@ -79,12 +79,12 @@ export default function ProfileCollectionsItem({ type, item, context }: Props) {
           }}
           disabled={isPlayTrackLoading}
           variant="ghost"
-          className="w-[60px] h-[60px] hidden rounded-full group-hover:flex absolute z-[10] top-[50%] translate-x-[-50%] left-[50%] translate-y-[-50%] p-0 flex-center bg-green-500/80 hover:bg-green-500"
+          className="w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] hidden rounded-full group-hover:flex absolute z-[10] top-[50%] translate-x-[-50%] left-[50%] translate-y-[-50%] p-0 flex-center bg-green-500/80 hover:bg-green-500"
         >
           {status === "play" && item.id === playingTrackId ? (
-            <PauseIcon className="w-[38px] h-[38px] absolute top-[50%] translate-x-[-55%] left-[55%] translate-y-[-50%]" />
+            <PauseIcon className="w-[30px] h-[30px] 2xl:w-[38px] 2xl:h-[38px] absolute top-[50%] translate-x-[-55%] left-[55%] translate-y-[-50%]" />
           ) : (
-            <PlayIcon className="w-[38px] h-[38px] absolute top-[50%] translate-x-[-50%] left-[55%] translate-y-[-50%]" />
+            <PlayIcon className="w-[30px] h-[30px] 2xl:w-[38px] 2xl:h-[38px] absolute top-[50%] translate-x-[-50%] left-[55%] translate-y-[-50%]" />
           )}
         </Button>
         <div className="absolute hidden group-hover:block z-[10] bottom-1 left-2">
