@@ -28,7 +28,7 @@ export default function HomeLoading() {
       <section className="flex flex-col gap-1">
         <h6 className="font-semibold text-lg">{greetingText}</h6>
         <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
-          <div className="h-[60px] sm:h-[80px] rounded-md bg-white/10 dark:bg-black/20 transition hover:bg-white/20 dark:hover:bg-black/30 flex items-center gap-3">
+          <div className="cursor-pointer h-[60px] sm:h-[80px] rounded-md bg-white/10 dark:bg-black/20 transition hover:bg-white/20 dark:hover:bg-black/30 flex items-center gap-3">
             <div className="bg-pink-400/80 w-[60px] sm:w-[80px] rounded-l-md h-full flex-center">
               <HeartIcon className="sm:w-10 sm:h-10" />
             </div>
@@ -37,7 +37,7 @@ export default function HomeLoading() {
           {new Array(3).fill(null).map((item, idx) => (
             <div
               key={idx}
-              className="h-[60px] sm:h-[80px] rounded-md bg-white/10 dark:bg-black/20 transition hover:bg-white/20 dark:hover:bg-black/30 flex items-center gap-3"
+              className="cursor-pointer h-[60px] sm:h-[80px] rounded-md bg-white/10 dark:bg-black/20 transition hover:bg-white/20 dark:hover:bg-black/30 flex items-center gap-3"
             >
               <div className="rounded-l-md bg-white/10 dark:bg-black/20 w-[60px] sm:w-[80px] h-full flex-center" />
             </div>
@@ -51,7 +51,7 @@ export default function HomeLoading() {
             {new Array(6).fill(null).map((track, idx) => (
               <Skeleton
                 key={idx}
-                className=" w-[138px] h-[138px] md:w-[101px] md:h-[101px] lg:w-[110px] lg:h-[110px] 2xl:w-[147px] 2xl:h-[147px] rounded-md"
+                className="cursor-pointer w-[138px] h-[138px] md:w-[101px] md:h-[101px] lg:w-[110px] lg:h-[110px] 2xl:w-[147px] 2xl:h-[147px] rounded-md"
               />
             ))}
           </div>
@@ -65,7 +65,7 @@ export default function HomeLoading() {
             {new Array(6).fill(null).map((track, idx) => (
               <Skeleton
                 key={idx}
-                className=" w-[138px] h-[138px] md:w-[101px] md:h-[101px] lg:w-[110px] lg:h-[110px] 2xl:w-[147px] 2xl:h-[147px] rounded-md"
+                className="cursor-pointer w-[138px] h-[138px] md:w-[101px] md:h-[101px] lg:w-[110px] lg:h-[110px] 2xl:w-[147px] 2xl:h-[147px] rounded-md"
               />
             ))}
           </div>

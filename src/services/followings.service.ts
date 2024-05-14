@@ -45,3 +45,37 @@ export async function getProfilePopularity(profileId: number) {
     followings: dbFollowings,
   };
 }
+
+export async function getProfileFollowers(profileId: number) {
+  const followers = await db.query.followings.findMany({
+    where: eq(followings.followingId, profileId),
+    with: {
+      follower: {
+        with: {
+          followers: true,
+          tracks: true,
+          albums: true,
+        },
+      },
+    },
+  });
+
+  return followers.map((item) => item.follower);
+}
+
+export async function getProfileFollowings(profileId: number) {
+  const dbFollowings = await db.query.followings.findMany({
+    where: eq(followings.followerId, profileId),
+    with: {
+      following: {
+        with: {
+          followers: true,
+          tracks: true,
+          albums: true,
+        },
+      },
+    },
+  });
+
+  return dbFollowings.map((item) => item.following);
+}

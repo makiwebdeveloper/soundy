@@ -2,7 +2,10 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { listenings } from "@/lib/db/schema";
-import { ListeningCreationType } from "@/types/listenings.types";
+import {
+  ListeningCreationType,
+  ListeningTrackType,
+} from "@/types/listenings.types";
 import { and, eq, sql } from "drizzle-orm";
 
 export async function getListening(data: {
@@ -46,11 +49,15 @@ export async function getListeningsByProfileId({
   profileId: number;
   limit?: number;
   orderBy?: "asc" | "desc";
-}) {
+}): Promise<ListeningTrackType[]> {
   return db.query.listenings.findMany({
     where: eq(listenings.profileId, profileId),
     with: {
-      track: true,
+      track: {
+        with: {
+          listenings: true,
+        },
+      },
     },
     limit,
     orderBy: (listening, { asc, desc }) =>

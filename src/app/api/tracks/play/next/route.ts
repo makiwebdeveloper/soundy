@@ -1,5 +1,6 @@
 import { getAlbumById } from "@/services/albums.service";
 import { getFavoriteTracksByProfileId } from "@/services/favorite-tracks.service";
+import { getListeningsByProfileId } from "@/services/listenings.service";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { getTracksByProfileId, playTrack } from "@/services/tracks.service";
@@ -63,6 +64,17 @@ export async function POST(req: Request) {
       ...contextInfo,
     });
   }
+  // else if (playingContext.history) {
+  //   const listenings = await getListeningsByProfileId({
+  //     profileId: currentProfile.id,
+  //     orderBy: "desc",
+  //   });
+
+  //   nextTrackId = getNextTrack({
+  //     tracks: listenings.map((listening) => listening.track),
+  //     ...contextInfo,
+  //   });
+  // }
 
   const newPlayingTrackId = await playTrack({
     profileId: currentProfile.id,
