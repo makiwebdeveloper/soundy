@@ -63,28 +63,32 @@ export async function POST(req: Request) {
       tracks: favoriteTracks.map((fav) => fav.track),
       ...contextInfo,
     });
+  } else if (playingContext.history) {
+    const listenings = await getListeningsByProfileId({
+      profileId: currentProfile.id,
+      orderBy: "desc",
+    });
+
+    nextTrackId = getNextTrack({
+      tracks: listenings.map((listening) => listening.track),
+      ...contextInfo,
+    });
   }
-  // else if (playingContext.history) {
-  //   const listenings = await getListeningsByProfileId({
-  //     profileId: currentProfile.id,
-  //     orderBy: "desc",
-  //   });
 
-  //   nextTrackId = getNextTrack({
-  //     tracks: listenings.map((listening) => listening.track),
-  //     ...contextInfo,
-  //   });
-  // }
+  const noUpdateDate = playingContext.history ? true : false;
 
-  const newPlayingTrackId = await playTrack({
-    profileId: currentProfile.id,
-    trackId: nextTrackId,
-    albumId: playingContext.albumId || undefined,
-    playlistId: playingContext.playlistId || undefined,
-    favoritesProfileId: playingContext.favoritesProfileId || undefined,
-    tracksProfileId: playingContext.tracksProfileId || undefined,
-    history: playingContext.history || undefined,
-  });
+  const newPlayingTrackId = await playTrack(
+    {
+      profileId: currentProfile.id,
+      trackId: nextTrackId,
+      albumId: playingContext.albumId || undefined,
+      playlistId: playingContext.playlistId || undefined,
+      favoritesProfileId: playingContext.favoritesProfileId || undefined,
+      tracksProfileId: playingContext.tracksProfileId || undefined,
+      history: playingContext.history || undefined,
+    },
+    noUpdateDate
+  );
 
   return NextResponse.json(
     { playingTrackId: newPlayingTrackId, trackId: nextTrackId },

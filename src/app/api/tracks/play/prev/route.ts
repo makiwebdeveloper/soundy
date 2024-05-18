@@ -77,37 +77,41 @@ export async function POST(req: Request) {
     } else {
       isFirstTrack = true;
     }
+  } else if (playingContext.history) {
+    const listenings = await getListeningsByProfileId({
+      profileId: currentProfile.id,
+      orderBy: "desc",
+    });
+
+    const tracks = listenings.map((listening) => listening.track);
+
+    const currentIndex = tracks.findIndex(
+      (track) => track.id === playingTrack.track.id
+    );
+
+    if (currentIndex !== 0) {
+      isFirstTrack = false;
+      prevTrackId = tracks[currentIndex - 1].id;
+    } else {
+      isFirstTrack = true;
+    }
   }
-  // else if (playingContext.history) {
-  //   const listenings = await getListeningsByProfileId({
-  //     profileId: currentProfile.id,
-  //     orderBy: "desc",
-  //   });
-
-  //   const tracks = listenings.map((listening) => listening.track);
-
-  //   const currentIndex = tracks.findIndex(
-  //     (track) => track.id === playingTrack.track.id
-  //   );
-
-  //   if (currentIndex !== 0) {
-  //     isFirstTrack = false;
-  //     prevTrackId = tracks[currentIndex - 1].id;
-  //   } else {
-  //     isFirstTrack = true;
-  //   }
-  // }
 
   if (!isFirstTrack) {
-    const newPlayingTrackId = await playTrack({
-      profileId: currentProfile.id,
-      trackId: prevTrackId,
-      albumId: playingContext.albumId || undefined,
-      playlistId: playingContext.playlistId || undefined,
-      favoritesProfileId: playingContext.favoritesProfileId || undefined,
-      tracksProfileId: playingContext.tracksProfileId || undefined,
-      history: playingContext.history || undefined,
-    });
+    const noUpdateDate = playingContext.history ? true : false;
+
+    const newPlayingTrackId = await playTrack(
+      {
+        profileId: currentProfile.id,
+        trackId: prevTrackId,
+        albumId: playingContext.albumId || undefined,
+        playlistId: playingContext.playlistId || undefined,
+        favoritesProfileId: playingContext.favoritesProfileId || undefined,
+        tracksProfileId: playingContext.tracksProfileId || undefined,
+        history: playingContext.history || undefined,
+      },
+      noUpdateDate
+    );
 
     return NextResponse.json(
       { playingTrackId: newPlayingTrackId, trackId: prevTrackId },

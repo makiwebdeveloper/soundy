@@ -82,7 +82,10 @@ export async function createTrack(
   }
 }
 
-export async function playTrack(data: PlayingTrackType) {
+export async function playTrack(
+  data: PlayingTrackType,
+  noUpdateDate?: boolean
+) {
   const existPlayingTrack = await getPlayingTrack(data.profileId);
 
   if (existPlayingTrack) {
@@ -98,7 +101,9 @@ export async function playTrack(data: PlayingTrackType) {
         trackId: data.trackId,
       });
     } else {
-      await updateListeningDate(existListening.id);
+      if (!noUpdateDate) {
+        await updateListeningDate(existListening.id);
+      }
     }
 
     return playingTrackId;
@@ -116,7 +121,9 @@ export async function playTrack(data: PlayingTrackType) {
       trackId: data.trackId,
     });
   } else {
-    await updateListeningDate(existListening.id);
+    if (!noUpdateDate) {
+      await updateListeningDate(existListening.id);
+    }
   }
 
   return playingTrackId;
