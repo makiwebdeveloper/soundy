@@ -15,6 +15,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { cn } from "@/lib/cn";
 import { RepeatButton, ShuffleButton } from "./buttons";
+import { useEffect } from "react";
 
 interface Props {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
@@ -78,6 +79,15 @@ export default function PlayerAudio({
       setStatus("pause");
     },
   });
+
+  useEffect(() => {
+    document.body.onkeyup = function (e) {
+      if (e.key == " " || e.code == "Space" || e.keyCode == 32) {
+        toggleStatus();
+        setTrackId(track.id);
+      }
+    };
+  }, []);
 
   const isLoading =
     isNextTrackLoading || isPrevTrackLoading || isPlayingTrackLoading;
