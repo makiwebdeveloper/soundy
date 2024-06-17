@@ -81,11 +81,19 @@ export default function PlayerAudio({
   });
 
   useEffect(() => {
-    document.body.onkeyup = function (e) {
-      if (e.key == " " || e.code == "Space" || e.keyCode == 32) {
+    document.body.onkeyup = function (e: any) {
+      if (
+        e.target.tagName !== "INPUT" &&
+        e.target.tagName !== "TEXTAREA" &&
+        (e.key === " " || e.code === "Space" || e.keyCode === 32)
+      ) {
         toggleStatus();
         setTrackId(track.id);
       }
+    };
+
+    return () => {
+      document.body.onkeyup = null;
     };
   }, []);
 
