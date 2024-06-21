@@ -6,7 +6,11 @@ import {
   AddToPlaylistValidatorType,
   CreatePlaylistValidatorType,
 } from "@/lib/validators/playlists";
-import { PlaylistType, PlaylistWithTracksType } from "@/types/playlists.types";
+import {
+  PlaylistTracksType,
+  PlaylistType,
+  PlaylistWithTracksType,
+} from "@/types/playlists.types";
 import { and, eq } from "drizzle-orm";
 
 type PlaylistCreationType = Pick<
@@ -36,7 +40,11 @@ export async function getProfilePlaylists({
       with: {
         playlistTracks: {
           with: {
-            track: true,
+            track: {
+              with: {
+                listenings: true,
+              },
+            },
           },
         },
         profile: true,
@@ -61,7 +69,11 @@ export async function getProfilePlaylists({
       with: {
         playlistTracks: {
           with: {
-            track: true,
+            track: {
+              with: {
+                listenings: true,
+              },
+            },
           },
         },
         profile: true,
@@ -141,8 +153,31 @@ export async function getPlaylistsByProfileId(
 
 export async function getPlaylistById(
   playlistId: number
-): Promise<PlaylistType | undefined> {
-  return db.query.playlists.findFirst({
+): Promise<PlaylistWithTracksType | undefined> {
+  const dbPlaylist = await db.query.playlists.findFirst({
     where: eq(playlists.id, playlistId),
+    with: {
+      playlistTracks: {
+        with: {
+          track: {
+            with: {
+              listenings: true,
+            },
+          },
+        },
+      },
+      profile: true,
+    },
   });
+
+  if (!dbPlaylist) return undefined;
+
+  return {
+    ...dbPlaylist,
+    tracks: dbPlaylist.playlistTracks.map((item) => item.track),
+  };
+}
+
+export async function updatePlaylistTitle(playlistId: number, title?: string) {
+  await db.update(playlists).set({ title }).where(eq(playlists.id, playlistId));
 }

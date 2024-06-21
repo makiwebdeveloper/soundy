@@ -14,3 +14,16 @@ export const addToPlaylistValidator = z.object({
   trackId: z.number(),
 });
 export type AddToPlaylistValidatorType = z.infer<typeof addToPlaylistValidator>;
+
+export const deleteFromPlaylistValidator = z.object({
+  playlistId: z.number(),
+  trackId: z.number(),
+});
+export type DeleteFromValidatorType = z.infer<
+  typeof deleteFromPlaylistValidator
+>;
+
+export const editPlaylistValidator = z.object({
+  title: z.string().optional(),
+});
+export type EditPlaylistValidatorType = z.infer<typeof editPlaylistValidator>;

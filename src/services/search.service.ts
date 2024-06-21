@@ -44,7 +44,11 @@ export async function getSearchItems(value: string): Promise<SearchResult> {
     with: {
       playlistTracks: {
         with: {
-          track: true,
+          track: {
+            with: {
+              listenings: true,
+            },
+          },
         },
       },
       profile: true,

@@ -2,6 +2,7 @@ import { getAlbumById } from "@/services/albums.service";
 import { getFavoriteTracksByProfileId } from "@/services/favorite-tracks.service";
 import { getListeningsByProfileId } from "@/services/listenings.service";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
+import { getPlaylistById } from "@/services/playlists.service";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { getTracksByProfileId, playTrack } from "@/services/tracks.service";
 import { NextResponse } from "next/server";
@@ -38,6 +39,23 @@ export async function POST(req: Request) {
     if (currentIndex !== 0) {
       isFirstTrack = false;
       prevTrackId = album.tracks[currentIndex - 1].id;
+    } else {
+      isFirstTrack = true;
+    }
+  } else if (playingContext.playlistId) {
+    const playlist = await getPlaylistById(playingContext.playlistId);
+
+    if (!playlist) {
+      return NextResponse.json({ error: "Bad request" }, { status: 400 });
+    }
+
+    const currentIndex = playlist.tracks.findIndex(
+      (track) => track.id === playingTrack.track.id
+    );
+
+    if (currentIndex !== 0) {
+      isFirstTrack = false;
+      prevTrackId = playlist.tracks[currentIndex - 1].id;
     } else {
       isFirstTrack = true;
     }

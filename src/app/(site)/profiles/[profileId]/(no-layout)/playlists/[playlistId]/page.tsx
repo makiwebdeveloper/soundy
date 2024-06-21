@@ -1,3 +1,4 @@
+import { Playlist } from "@/components/pages/playlist";
 import { getPlaylistById } from "@/services/playlists.service";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { Metadata } from "next";
@@ -44,5 +45,5 @@ export default async function PlaylistPage({ params }: Props) {
     notFound();
   }
 
-  return <div>PlaylistPage</div>;
+  return <Playlist initialPlaylist={playlist} profile={currentProfile} />;
 }

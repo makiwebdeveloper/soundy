@@ -2,6 +2,7 @@ import { getAlbumById } from "@/services/albums.service";
 import { getFavoriteTracksByProfileId } from "@/services/favorite-tracks.service";
 import { getListeningsByProfileId } from "@/services/listenings.service";
 import { getPlayingTrack } from "@/services/playing-tracks.service";
+import { getPlaylistById } from "@/services/playlists.service";
 import { getCurrentProfile } from "@/services/profiles.service";
 import { getTracksByProfileId, playTrack } from "@/services/tracks.service";
 import { getNextTrack } from "@/utils/get-next-track";
@@ -39,6 +40,17 @@ export async function POST(req: Request) {
 
     nextTrackId = getNextTrack({
       tracks: album.tracks,
+      ...contextInfo,
+    });
+  } else if (playingContext.playlistId) {
+    const playlist = await getPlaylistById(playingContext.playlistId);
+
+    if (!playlist) {
+      return NextResponse.json({ error: "Bad request" }, { status: 400 });
+    }
+
+    nextTrackId = getNextTrack({
+      tracks: playlist.tracks,
       ...contextInfo,
     });
   } else if (playingContext.tracksProfileId) {
