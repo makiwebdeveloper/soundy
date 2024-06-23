@@ -19,7 +19,7 @@ export default function SearchItem({ name, items }: Props) {
         <Link
           key={item.id}
           href={item.url}
-          className="flex items-center gap-3 p-3 transition dark:hover:bg-black/40 rounded-md"
+          className="flex items-center gap-3 p-3 transition hover:bg-white/20 dark:hover:bg-black/40 rounded-md"
         >
           <div className="relative w-[50px] h-[50px] rounded-md">
             <Image
