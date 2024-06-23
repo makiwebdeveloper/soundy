@@ -9,6 +9,8 @@ interface Props {
 }
 
 export default function HomeForYou({ recommendedTracks }: Props) {
+  if (recommendedTracks.length === 0) return null;
+
   return (
     <section className="flex flex-col gap-1">
       <h6 className="font-semibold text-lg">For you</h6>

@@ -47,18 +47,26 @@ export default async function HomePage() {
       <HomeHeader currentProfile={currentProfile} />
       <HomeGoodDay
         profileId={currentProfile.id}
-        album={{
-          id: albums[0].id,
-          title: albums[0].title,
-          imageUrl: albums[0].imageUrl,
-          profileId: albums[0].profileId,
-        }}
-        tracks={tracks.map((track) => ({
-          id: track.id,
-          title: track.title,
-          imageUrl: track.imageUrl,
-          profileId: track.profileId,
-        }))}
+        album={
+          albums.length > 0
+            ? {
+                id: albums[0].id,
+                title: albums[0].title,
+                imageUrl: albums[0].imageUrl,
+                profileId: albums[0].profileId,
+              }
+            : null
+        }
+        tracks={
+          tracks.length > 0
+            ? tracks.map((track) => ({
+                id: track.id,
+                title: track.title,
+                imageUrl: track.imageUrl,
+                profileId: track.profileId,
+              }))
+            : null
+        }
       />
       <HomeForYou recommendedTracks={recommendedTracks} />
       <HomeRecentlyPlayed
